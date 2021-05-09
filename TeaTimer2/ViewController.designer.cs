@@ -13,10 +13,10 @@ namespace TeaTimer
 	partial class ViewController
 	{
 		[Outlet]
-		AppKit.NSTextFieldCell TimerLabel { get; set; }
+		AppKit.NSTextField TimerLabel { get; set; }
 
-		[Action ("StartClicked:")]
-		partial void StartClicked (Foundation.NSObject sender);
+		[Action ("ButtonClicked:")]
+		partial void ButtonClicked (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{

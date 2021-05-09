@@ -172,13 +172,13 @@
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mYz-xh-jcA">
                                 <rect key="frame" x="383" y="63" width="83" height="32"/>
-                                <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="j0B-LP-xsO">
+                                <buttonCell key="cell" type="push" title="Start" alternateTitle="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="j0B-LP-xsO">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system" size="20"/>
-                                    <connections>
-                                        <action selector="StartClicked:" target="XfG-lQ-9wD" id="Qbh-jT-Nwa"/>
-                                    </connections>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="ButtonClicked:" target="XfG-lQ-9wD" id="3oo-ad-ngM"/>
+                                </connections>
                             </button>
                         </subviews>
                         <constraints>
@@ -189,7 +189,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="TimerLabel" destination="h8j-PX-aFD" id="0qT-QS-8Q4"/>
+                        <outlet property="TimerLabel" destination="bQ6-VY-b9N" id="EkP-RI-mJg"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
