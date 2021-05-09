@@ -16,7 +16,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Tea Timer" systemMenu="apple" id="uQy-DD-JDr">
                                     <items>
-                                        <menuItem title="About TeaTimer2" id="5kV-Vb-QxS">
+                                        <menuItem title="About Tea Timer" id="5kV-Vb-QxS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
@@ -48,7 +48,7 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                                        <menuItem title="Quit TeaTimer2" keyEquivalent="q" id="4sb-4s-VLi">
+                                        <menuItem title="Quit Tea Timer" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
                                                 <action selector="terminate:" target="Ady-hI-5gd" id="Te7-pn-YzF"/>
                                             </connections>
@@ -150,56 +150,51 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="120"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mYz-xh-jcA">
-                                <rect key="frame" x="304" y="179" width="121" height="32"/>
-                                <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="j0B-LP-xsO">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system" size="22"/>
-                                </buttonCell>
-                            </button>
-                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SrZ-fG-0f4">
-                                <rect key="frame" x="62" y="179" width="224" height="27"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="221" id="kTa-xd-4DG"/>
-                                </constraints>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" bezelStyle="round" completes="NO" numberOfVisibleItems="5" id="sJm-cj-435">
-                                    <font key="font" metaFont="system" size="22"/>
+                            <comboBox verticalHuggingPriority="750" id="SrZ-fG-0f4">
+                                <rect key="frame" x="20" y="66" width="223" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="Tea Varieties" bezelStyle="round" completes="NO" numberOfVisibleItems="5" id="sJm-cj-435">
+                                    <font key="font" metaFont="system" size="16"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <objectValues>
-                                        <string>Item 1</string>
-                                        <string>Item 2</string>
-                                        <string>Item 3</string>
-                                    </objectValues>
                                 </comboBoxCell>
                             </comboBox>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wa5-Pj-hep">
-                                <rect key="frame" x="62" y="123" width="356" height="31"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="Choose a Variety" drawsBackground="YES" id="Hic-9a-fXu">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bQ6-VY-b9N">
+                                <rect key="frame" x="156" y="28" width="169" height="26"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Choose a Variety" id="h8j-PX-aFD">
                                     <font key="font" metaFont="system" size="22"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mYz-xh-jcA">
+                                <rect key="frame" x="383" y="63" width="83" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="j0B-LP-xsO">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system" size="20"/>
+                                    <connections>
+                                        <action selector="StartClicked:" target="XfG-lQ-9wD" id="Qbh-jT-Nwa"/>
+                                    </connections>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="wa5-Pj-hep" firstAttribute="top" secondItem="mYz-xh-jcA" secondAttribute="bottom" constant="32" id="7fg-J3-fCK"/>
-                            <constraint firstItem="wa5-Pj-hep" firstAttribute="top" secondItem="SrZ-fG-0f4" secondAttribute="bottom" constant="29" id="CkO-vg-pV5"/>
-                            <constraint firstItem="mYz-xh-jcA" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="63" id="F8d-BH-fHo"/>
-                            <constraint firstItem="wa5-Pj-hep" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="UfA-yv-wY6"/>
-                            <constraint firstItem="mYz-xh-jcA" firstAttribute="trailing" secondItem="wa5-Pj-hep" secondAttribute="trailing" id="cJL-d7-hLc"/>
-                            <constraint firstItem="mYz-xh-jcA" firstAttribute="leading" secondItem="SrZ-fG-0f4" secondAttribute="trailing" constant="27" id="g5j-7G-MKA"/>
-                            <constraint firstItem="SrZ-fG-0f4" firstAttribute="leading" secondItem="wa5-Pj-hep" secondAttribute="leading" id="lJT-gw-Iuh"/>
-                            <constraint firstItem="SrZ-fG-0f4" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="62" id="pgC-ZU-aga"/>
+                            <constraint firstItem="bQ6-VY-b9N" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="f30-P6-uAl"/>
+                            <constraint firstItem="mYz-xh-jcA" firstAttribute="centerY" secondItem="SrZ-fG-0f4" secondAttribute="centerY" id="hcL-V3-iKE"/>
+                            <constraint firstAttribute="trailing" secondItem="mYz-xh-jcA" secondAttribute="trailing" constant="20" symbolic="YES" id="mRp-pF-DnO"/>
+                            <constraint firstItem="bQ6-VY-b9N" firstAttribute="top" secondItem="SrZ-fG-0f4" secondAttribute="bottom" constant="16" id="qgS-BU-svM"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="TimerLabel" destination="h8j-PX-aFD" id="0qT-QS-8Q4"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="75" y="704"/>
         </scene>
     </scenes>
 </document>
