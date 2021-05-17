@@ -12,11 +12,9 @@ namespace TeaTimer
         private int _brewTemp;
 
         [Export("Name")]
-        public string Name {
-            get
-            {
-                return _name;
-            }
+        public string Name
+        {
+            get => _name;
             set
             {
                 WillChangeValue("Name");
@@ -27,10 +25,8 @@ namespace TeaTimer
 
         [Export("SteepTime")]
         public TimeSpan SteepTime
-        { get
-            {
-                return _steepTime;
-            }
+        {
+            get => _steepTime;
             set
             {
                 WillChangeValue("SteepTime");
@@ -42,10 +38,7 @@ namespace TeaTimer
         [Export("BrewTemp")]
         public int BrewTemp
         {
-            get
-            {
-                return _brewTemp;
-            }
+            get => _brewTemp;
             set
             {
                 WillChangeValue("BrewTemp");

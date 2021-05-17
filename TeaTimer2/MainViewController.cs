@@ -7,7 +7,7 @@ namespace TeaTimer
 {
     public partial class ViewController : NSViewController
     {
-        private static Timer timer = new Timer(1000.0);
+        private static readonly Timer timer = new Timer(1000.0);
         private TimeSpan steepTime;
         private NSButton startStopButton;
 
@@ -22,7 +22,7 @@ namespace TeaTimer
             // Do any additional setup after loading the view.
             // Setup the timer callback
             timer.AutoReset = true;
-            timer.Elapsed += elapsedEventHandler;
+            timer.Elapsed += ElapsedEventHandler;
         }
 
         partial void ButtonClicked(NSObject sender)
@@ -47,18 +47,11 @@ namespace TeaTimer
 
         public override NSObject RepresentedObject
         {
-            get
-            {
-                return base.RepresentedObject;
-            }
-            set
-            {
-                base.RepresentedObject = value;
-                // Update the view, if already loaded.
-            }
+            get => base.RepresentedObject;
+            set => base.RepresentedObject = value;// Update the view, if already loaded.
         }
 
-        private void elapsedEventHandler(object source, ElapsedEventArgs args)
+        private void ElapsedEventHandler(object source, ElapsedEventArgs args)
         {
             TimerLabel.InvokeOnMainThread(() => UpdateLabel()) ;
         }

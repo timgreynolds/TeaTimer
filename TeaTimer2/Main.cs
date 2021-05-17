@@ -2,9 +2,9 @@
 
 namespace TeaTimer
 {
-    static class MainClass
+    public static class MainClass
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             NSApplication.Init();
             NSApplication.Main(args);

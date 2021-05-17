@@ -5,11 +5,10 @@
 // Manual changes to this file may not be handled correctly.
 //
 using Foundation;
-using System.CodeDom.Compiler;
 
 namespace TeaTimer
 {
-	[Register ("ViewController")]
+    [Register ("ViewController")]
 	partial class ViewController
 	{
 		[Outlet]
