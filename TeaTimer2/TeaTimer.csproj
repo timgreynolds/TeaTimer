@@ -47,6 +47,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
+    <Reference Include="System.Data" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -76,7 +78,12 @@
     <Compile Include="MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tea.cs" />
+    <Compile Include="TeaModel.cs" />
+    <Compile Include="TeaViewController.cs" />
+    <Compile Include="TeaViewController.designer.cs">
+      <DependentUpon>TeaViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TeaVarietiesDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
