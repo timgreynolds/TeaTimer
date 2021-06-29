@@ -7,9 +7,9 @@ namespace TeaTimer
 {
     public partial class ViewController : NSViewController
     {
-        private static readonly Timer timer = new Timer(1000.0);
-        private TimeSpan steepTime;
-        private NSButton startStopButton;
+        private Timer _timer = new Timer(1000.0);
+        private TimeSpan _steepTime;
+        private NSButton _startStopButton;
 
         public ViewController(IntPtr handle) : base(handle)
         {
@@ -21,34 +21,35 @@ namespace TeaTimer
 
             // Do any additional setup after loading the view.
             // Setup the timer callback
-            timer.AutoReset = true;
-            timer.Elapsed += ElapsedEventHandler;
+            _timer.AutoReset = true;
+            _timer.Elapsed += ElapsedEventHandler;
         }
 
         partial void ButtonClicked(NSObject sender)
         {
-            startStopButton = (NSButton)sender;
+            _startStopButton = (NSButton)sender;
 
-            if (timer.Enabled)
+            if (_timer.Enabled)
             {
-                timer.Stop();
-                steepTime = new TimeSpan(0, 0, 30);
-                startStopButton.Title = "Start";
+                _timer.Stop();
+                _steepTime = new TimeSpan(0, 0, 30);
+                _startStopButton.Title = "Start";
                 TimerLabel.StringValue = "Choose a Variety";
             }
             else
             {
-                steepTime = new TimeSpan(0, 0, 30);
-                timer.Start();
-                startStopButton.Title = "Stop";
-                TimerLabel.StringValue = steepTime.ToString();
+                _steepTime = new TimeSpan(0, 0, 30);
+                _timer.Start();
+                _startStopButton.Title = "Stop";
+                TimerLabel.StringValue = _steepTime.ToString();
             }
         }
 
         public override NSObject RepresentedObject
         {
             get => base.RepresentedObject;
-            set => base.RepresentedObject = value;// Update the view, if already loaded.
+            // Update the view, if already loaded.
+            set => base.RepresentedObject = value;
         }
 
         private void ElapsedEventHandler(object source, ElapsedEventArgs args)
@@ -58,19 +59,18 @@ namespace TeaTimer
 
         private void UpdateLabel()
         {
-            if (steepTime.TotalSeconds > 0)
+            if (_steepTime.TotalSeconds > 0)
             {
 
-                steepTime = steepTime.Subtract(new TimeSpan(0, 0, 1));
-                TimerLabel.StringValue = steepTime.ToString();
+                _steepTime = _steepTime.Subtract(new TimeSpan(0, 0, 1));
+                TimerLabel.StringValue = _steepTime.ToString();
             }
             else
             {
-                timer.Stop();
-                startStopButton.Title = "Start";
+                _timer.Stop();
+                _startStopButton.Title = "Start";
                 TimerLabel.StringValue = "Tea is Ready!";
             }
-
         }
     }
 }
