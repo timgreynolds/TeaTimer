@@ -7,7 +7,7 @@ using Foundation;
 namespace TeaTimer
 {
     public partial class TeaViewController : NSViewController
-	{
+    {
 		public TeaViewController (IntPtr handle) : base (handle)
 		{	
 		}
@@ -17,7 +17,6 @@ namespace TeaTimer
 			base.ViewDidLoad();
 
 			// Do any additional setup after loading the view.
-
 		}
 
 		public override NSObject RepresentedObject
@@ -26,12 +25,5 @@ namespace TeaTimer
             // Update the view, if already loaded.
             set => base.RepresentedObject = value;
 		}
-
-		partial void SaveButtonClicked(NSObject sender)
-        {
-            TeaTextField.StringValue = "Earl Grey";
-			SteepTimeTextField.StringValue = "1:20";
-            BrewTempTextField.StringValue = "185";
-        }
 	}
 }
