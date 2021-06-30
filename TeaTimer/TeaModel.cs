@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace TeaTimer
 {
@@ -15,6 +16,7 @@ namespace TeaTimer
         #endregion
 
         #region Constructors
+        [JsonConstructor]
         public TeaModel(string name, TimeSpan steepTime, int brewTemp)
         {
             Name = name;
@@ -42,10 +44,6 @@ namespace TeaTimer
             SteepTime = new TimeSpan(0, 0, steepSeconds);
             BrewTemp = 212;
         }
-
-        //public TeaModel()
-        //{
-        //}
         #endregion
 
         #region methods
