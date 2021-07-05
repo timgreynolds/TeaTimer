@@ -19,19 +19,26 @@ namespace TeaTimer
         private static nint _recordCount = _teas.Count;
 
         // No need for a real database. Save the teas as Json file.
-        private static readonly string _dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TeaTimer", "TeaVarieties.json");        
+        private static readonly string _dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TeaTimer", "TeaVarieties.json");
         #endregion
 
         #region Computed Properties
-        public static nint RecordCount
+        public nint RecordCount
         {
             get => _recordCount;
         }
 
-        public static List<TeaModel> Teas
+        public List<TeaModel> Teas
         {
             get => _teas;
             set => _teas = value;
+        }
+        #endregion
+
+        #region constructors
+        public TeaVarietiesDataSource()
+        {
+            _teas = InitializeDatabase();
         }
         #endregion
 
@@ -43,12 +50,12 @@ namespace TeaTimer
 
         public override NSObject ObjectValueForItem(NSComboBox comboBox, nint index)
         {
-            throw new NotImplementedException();
+            return FromObject(_teas[(int)index].Name);
         }
 
         public override nint IndexOfItem(NSComboBox comboBox, string value)
         {
-            throw new NotImplementedException();
+            return _teas.FindIndex(n => n.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public override string CompletedString(NSComboBox comboBox, string uncompletedString)
@@ -57,27 +64,66 @@ namespace TeaTimer
         }
         #endregion
 
-        #region methods
-        public static List<TeaModel> InitializeDatabase()
+        #region private methods
+        private List<TeaModel> InitializeDatabase()
         {
             if (File.Exists(_dbPath))
             {
                 // Tea database already exists. Assume the Json contains a List of teas and return it.
-                _teas = JsonConvert.DeserializeObject<List<TeaModel>>(File.ReadAllText(_dbPath));
+                try
+                {
+                    _teas = JsonConvert.DeserializeObject<List<TeaModel>>(File.ReadAllText(_dbPath));
+                }
+                catch (Exception ex)
+                {
+                    NSAlert alert = new NSAlert()
+                    {
+                        AlertStyle = NSAlertStyle.Critical,
+                        MessageText = "An error occurred trying to open the tea varieties database.",
+                        InformativeText = $"Message: {ex.Message}"
+                    };
+                    alert.RunModal();
+                }
                 _recordCount = _teas.Count;
                 return _teas;
             }
             else
             {
                 // Tea database doesn't already exist so it needs to be created.
-                Directory.CreateDirectory(Path.GetDirectoryName(_dbPath));
-                
-                using (StreamWriter writer = new StreamWriter(_dbPath, append: true))
+                try
                 {
-                    writer.WriteLine(JsonConvert.SerializeObject(_teas));
+                    Directory.CreateDirectory(Path.GetDirectoryName(_dbPath));
+
+                    using (StreamWriter writer = new StreamWriter(_dbPath, append: true))
+                    {
+                        writer.WriteLine(JsonConvert.SerializeObject(_teas));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    NSAlert alert = new NSAlert()
+                    {
+                        AlertStyle = NSAlertStyle.Critical,
+                        MessageText = "An error occurred trying to create the tea varieties database.",
+                        InformativeText = $"Message: {ex.Message}"
+                    };
+                    alert.RunModal();
                 }
                 // Return the contents of the newly created Json file. This helps to ensure future deserialization will be successful.
-                _teas = JsonConvert.DeserializeObject<List<TeaModel>>(File.ReadAllText(_dbPath));
+                try
+                {
+                    _teas = JsonConvert.DeserializeObject<List<TeaModel>>(File.ReadAllText(_dbPath));
+                }
+                catch (Exception ex)
+                {
+                    NSAlert alert = new NSAlert()
+                    {
+                        AlertStyle = NSAlertStyle.Critical,
+                        MessageText = "An error occurred trying to open the tea varieties database.",
+                        InformativeText = $"Message: {ex.Message}"
+                    };
+                    alert.RunModal();
+                }
                 _recordCount = _teas.Count;
                 return _teas;
             }
