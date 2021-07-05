@@ -5,44 +5,33 @@ using Foundation;
 
 namespace TeaTimer
 {
-    public partial class ViewController : NSViewController
+    public partial class MainViewController : NSViewController
     {
+        #region private fields
+        private TeaModel _selectedTea;
+        private TeaVarietiesDataSource _datasource = new TeaVarietiesDataSource();
         private Timer _timer = new Timer(1000.0);
         private TimeSpan _steepTime;
         private NSButton _startStopButton;
+        #endregion
 
-        public ViewController(IntPtr handle) : base(handle)
+        public MainViewController(IntPtr handle) : base(handle)
         {
         }
 
+        #region override methods
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
             // Do any additional setup after loading the view.
+            // Setup the ComboBox datasource
+            TeaSelector.DataSource = _datasource;
+            TeaSelector.SelectionChanged += (sender, e) => SelectionChanged();
+
             // Setup the timer callback
             _timer.AutoReset = true;
-            _timer.Elapsed += ElapsedEventHandler;
-        }
-
-        partial void ButtonClicked(NSObject sender)
-        {
-            _startStopButton = (NSButton)sender;
-
-            if (_timer.Enabled)
-            {
-                _timer.Stop();
-                _steepTime = new TimeSpan(0, 0, 30);
-                _startStopButton.Title = "Start";
-                TimerLabel.StringValue = "Choose a Variety";
-            }
-            else
-            {
-                _steepTime = new TimeSpan(0, 0, 30);
-                _timer.Start();
-                _startStopButton.Title = "Stop";
-                TimerLabel.StringValue = _steepTime.ToString();
-            }
+            _timer.Elapsed += (sender, e) => TimerLabel.InvokeOnMainThread(UpdateLabel);
         }
 
         public override NSObject RepresentedObject
@@ -51,10 +40,23 @@ namespace TeaTimer
             // Update the view, if already loaded.
             set => base.RepresentedObject = value;
         }
+        #endregion
 
-        private void ElapsedEventHandler(object source, ElapsedEventArgs args)
+        #region methods
+        partial void ButtonClicked(NSObject sender)
         {
-            TimerLabel.InvokeOnMainThread(() => UpdateLabel()) ;
+            _startStopButton = (NSButton)sender;
+
+            if (_timer.Enabled)
+            {
+                _timer.Stop();
+                _startStopButton.Title = "Start";
+            }
+            else
+            {
+                _timer.Start();
+                _startStopButton.Title = "Stop";
+            }
         }
 
         private void UpdateLabel()
@@ -72,5 +74,14 @@ namespace TeaTimer
                 TimerLabel.StringValue = "Tea is Ready!";
             }
         }
+
+        private void SelectionChanged()
+        {
+            _selectedTea = _datasource.Teas[(int)TeaSelector.SelectedIndex];
+            _timer.Stop();
+            _steepTime = _selectedTea.SteepTime;
+            TimerLabel.StringValue = _steepTime.ToString();
+        }
+        #endregion
     }
 }
