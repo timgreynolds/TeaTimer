@@ -10,8 +10,11 @@ using System.CodeDom.Compiler;
 namespace TeaTimer
 {
 	[Register ("MainViewController")]
-	partial class ViewController
+	partial class MainViewController
 	{
+		[Outlet]
+		AppKit.NSComboBox TeaSelector { get; set; }
+
 		[Outlet]
 		AppKit.NSTextField TimerLabel { get; set; }
 
@@ -20,6 +23,11 @@ namespace TeaTimer
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (TeaSelector != null) {
+				TeaSelector.Dispose ();
+				TeaSelector = null;
+			}
+
 			if (TimerLabel != null) {
 				TimerLabel.Dispose ();
 				TimerLabel = null;
