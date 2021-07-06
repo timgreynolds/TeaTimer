@@ -4,13 +4,12 @@
 // actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
-using Foundation;
 using AppKit;
-using System.CodeDom.Compiler;
+using Foundation;
 
 namespace TeaTimer
 {
-	[Register ("TeaViewController")]
+    [Register ("TeaViewController")]
 	partial class TeaViewController
 	{
 		[Outlet]
@@ -20,7 +19,7 @@ namespace TeaTimer
 		NSTextField SteepTimeTextField { get; set; }
 
 		[Outlet]
-		NSTextFieldCell TeaTextField { get; set; }
+		NSTextField TeaTextField { get; set; }
 
 		[Action ("SaveButtonClicked:")]
 		partial void SaveButtonClicked (NSObject sender);
