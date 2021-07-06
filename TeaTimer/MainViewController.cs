@@ -20,18 +20,30 @@ namespace TeaTimer
         }
 
         #region override methods
+        public override void ViewWillAppear()
+        {
+            base.ViewWillAppear();
+
+            try
+            {
+                 // Setup the ComboBox datasource
+                TeaSelector.DataSource = _datasource;
+                TeaSelector.SelectionChanged += (sender, e) => SelectionChanged();
+                // Setup the timer callback
+                _timer.AutoReset = true;
+                _timer.Elapsed += (sender, e) => TimerLabel.InvokeOnMainThread(UpdateLabel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
             // Do any additional setup after loading the view.
-            // Setup the ComboBox datasource
-            TeaSelector.DataSource = _datasource;
-            TeaSelector.SelectionChanged += (sender, e) => SelectionChanged();
-
-            // Setup the timer callback
-            _timer.AutoReset = true;
-            _timer.Elapsed += (sender, e) => TimerLabel.InvokeOnMainThread(UpdateLabel);
         }
 
         public override NSObject RepresentedObject
