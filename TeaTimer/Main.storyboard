@@ -274,10 +274,10 @@
                                     <action selector="ButtonClicked:" target="XfG-lQ-9wD" id="3oo-ad-ngM"/>
                                 </connections>
                             </button>
-                            <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7nq-BS-neJ">
+                            <comboBox identifier="TeaSelector" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7nq-BS-neJ">
                                 <rect key="frame" x="21" y="67" width="229" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Select a tea..." drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="3" id="eAK-QO-Ttb">
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Select a tea..." drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="eAK-QO-Ttb">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -290,6 +290,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="TeaSelector" destination="7nq-BS-neJ" id="WBF-gq-Zsd"/>
                         <outlet property="TimerLabel" destination="bQ6-VY-b9N" id="EkP-RI-mJg"/>
                     </connections>
                 </viewController>
@@ -299,6 +300,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="HU5-0S-KMp"/>
+        <segue reference="5ju-QW-xfY"/>
     </inferredMetricsTieBreakers>
 </document>
