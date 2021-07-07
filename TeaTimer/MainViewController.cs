@@ -9,7 +9,7 @@ namespace TeaTimer
     {
         #region private fields
         private TeaModel _selectedTea;
-        private TeaVarietiesDataSource _datasource = new TeaVarietiesDataSource();
+        private TeaVarietiesDataSource _datasource;
         private Timer _timer = new Timer(1000.0);
         private TimeSpan _steepTime;
         private NSButton _startStopButton;
@@ -26,7 +26,8 @@ namespace TeaTimer
 
             try
             {
-                 // Setup the ComboBox datasource
+                // Setup the ComboBox datasource
+                _datasource = new TeaVarietiesDataSource();
                 TeaSelector.DataSource = _datasource;
                 TeaSelector.SelectionChanged += (sender, e) => SelectionChanged();
                 // Setup the timer callback

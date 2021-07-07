@@ -11,12 +11,7 @@ namespace TeaTimer
     public class TeaVarietiesDataSource : NSComboBoxDataSource
     {
         #region Private Variables
-        // First tea to be used when initializing the tea database.
-        // TODO: May want to expand this to a larger list in the future.
-        private static List<TeaModel> _teas = new List<TeaModel> { new TeaModel("Earl Grey", 120, 212) };
-
-        // Probably don't really need this. Can be inferred from the length of List<TeaModel>
-        private static nint _recordCount = _teas.Count;
+        private static List<TeaModel> _teas;
 
         // No need for a real database. Save the teas as Json file.
         private static readonly string _dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TeaTimer", "TeaVarieties.json");
@@ -25,13 +20,12 @@ namespace TeaTimer
         #region Computed Properties
         public nint RecordCount
         {
-            get => _recordCount;
+            get => _teas.Count;
         }
 
         public List<TeaModel> Teas
         {
             get => _teas;
-            set => _teas = value;
         }
         #endregion
 
@@ -84,7 +78,6 @@ namespace TeaTimer
                     };
                     alert.RunModal();
                 }
-                _recordCount = _teas.Count;
                 return _teas;
             }
             else
@@ -94,9 +87,9 @@ namespace TeaTimer
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(_dbPath));
 
-                    using (StreamWriter writer = new StreamWriter(_dbPath, append: true))
+                    using (StreamWriter writer = new StreamWriter(_dbPath, false))
                     {
-                        writer.WriteLine(JsonConvert.SerializeObject(_teas));
+                        writer.WriteLine(JsonConvert.SerializeObject(new List<TeaModel> { new TeaModel("Earl Grey", 120, 212) }));
                     }
                 }
                 catch (Exception ex)
@@ -124,7 +117,6 @@ namespace TeaTimer
                     };
                     alert.RunModal();
                 }
-                _recordCount = _teas.Count;
                 return _teas;
             }
         }
