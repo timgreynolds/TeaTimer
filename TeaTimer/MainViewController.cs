@@ -55,6 +55,25 @@ namespace TeaTimer
         #endregion
 
         #region methods
+        [Action("openEditWindow:")]
+        public void OpenEditWindow(NSObject sender)
+        {
+            TeaViewController teaViewController = Storyboard.InstantiateControllerWithIdentifier("TeaViewController") as TeaViewController;
+            teaViewController.Tea = _selectedTea;
+            PresentViewControllerAsModalWindow(teaViewController);
+        }
+
+        [Action("validateMenuItem:")]
+        public bool ValidateMenuItem(NSMenuItem item)
+        {
+            switch (item.Identifier)
+            {
+                case "EditTeaMenuItem":
+                    return _selectedTea != null;
+            }
+            return true;
+        }
+
         partial void ButtonClicked(NSObject sender)
         {
             _startStopButton = (NSButton)sender;
@@ -84,6 +103,7 @@ namespace TeaTimer
                 _timer.Stop();
                 _startStopButton.Title = "Start";
                 TimerLabel.StringValue = "Tea is Ready!";
+                _steepTime = _selectedTea.SteepTime;
             }
         }
 

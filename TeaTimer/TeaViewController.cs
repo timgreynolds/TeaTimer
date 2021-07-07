@@ -8,11 +8,26 @@ namespace TeaTimer
 {
     public partial class TeaViewController : NSViewController
     {
+		public TeaModel Tea { get; set; }
+
 		public TeaViewController (IntPtr handle) : base (handle)
 		{	
 		}
 
-		public override void ViewDidLoad()
+        public override void ViewWillAppear()
+        {
+            base.ViewWillAppear();
+
+            // Do any additional setup before loading the view.
+            if (Tea != null)
+            {
+                TeaTextField.StringValue = Tea.Name;
+                SteepTimeTextField.StringValue = Tea.SteepTime.ToString();
+                BrewTempTextField.StringValue = Tea.BrewTemp.ToString();
+            }
+        }
+
+        public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 
