@@ -45,9 +45,5 @@ namespace TeaTimer
             BrewTemp = 212;
         }
         #endregion
-
-        #region methods
-
-        #endregion
     }
 }

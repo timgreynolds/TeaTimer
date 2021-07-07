@@ -29,10 +29,10 @@ namespace TeaTimer
         }
         #endregion
 
-        #region constructors
+        #region Constructors
         public TeaVarietiesDataSource()
         {
-            _teas = InitializeDatabase();
+            InitializeDatabase();
         }
         #endregion
 
@@ -58,27 +58,20 @@ namespace TeaTimer
         }
         #endregion
 
-        #region private methods
-        private List<TeaModel> InitializeDatabase()
+        #region Private Methods
+        private void InitializeDatabase()
         {
             if (File.Exists(_dbPath))
             {
                 // Tea database already exists. Assume the Json contains a List of teas and return it.
                 try
                 {
-                    _teas = JsonConvert.DeserializeObject<List<TeaModel>>(File.ReadAllText(_dbPath));
+                    ReloadTeas();
                 }
                 catch (Exception ex)
                 {
-                    NSAlert alert = new NSAlert()
-                    {
-                        AlertStyle = NSAlertStyle.Critical,
-                        MessageText = "An error occurred trying to open the tea varieties database.",
-                        InformativeText = $"Message: {ex.Message}"
-                    };
-                    alert.RunModal();
+                    ShowAlert(ex);
                 }
-                return _teas;
             }
             else
             {
@@ -91,35 +84,35 @@ namespace TeaTimer
                     {
                         writer.WriteLine(JsonConvert.SerializeObject(new List<TeaModel> { new TeaModel("Earl Grey", 120, 212) }));
                     }
+                    // Reset _teas to the contents of the newly created Json file. This helps to ensure future deserialization will be successful.
+                    ReloadTeas();
                 }
                 catch (Exception ex)
                 {
-                    NSAlert alert = new NSAlert()
-                    {
-                        AlertStyle = NSAlertStyle.Critical,
-                        MessageText = "An error occurred trying to create the tea varieties database.",
-                        InformativeText = $"Message: {ex.Message}"
-                    };
-                    alert.RunModal();
+                    ShowAlert(ex);
                 }
-                // Return the contents of the newly created Json file. This helps to ensure future deserialization will be successful.
-                try
-                {
-                    _teas = JsonConvert.DeserializeObject<List<TeaModel>>(File.ReadAllText(_dbPath));
-                }
-                catch (Exception ex)
-                {
-                    NSAlert alert = new NSAlert()
-                    {
-                        AlertStyle = NSAlertStyle.Critical,
-                        MessageText = "An error occurred trying to open the tea varieties database.",
-                        InformativeText = $"Message: {ex.Message}"
-                    };
-                    alert.RunModal();
-                }
-                return _teas;
             }
         }
+
+        private static void ShowAlert(Exception ex)
+        {
+            NSAlert alert = new NSAlert()
+            {
+                AlertStyle = NSAlertStyle.Critical,
+                MessageText = "An error occurred trying to open the tea varieties database.",
+                InformativeText = $"Message: {ex.Message}"
+            };
+            alert.RunModal();
+        }
+
+        private static void ReloadTeas()
+        {
+            _teas = JsonConvert.DeserializeObject<List<TeaModel>>(File.ReadAllText(_dbPath));
+        }
+        #endregion
+
+        #region Public Methods
+
         #endregion
     }
 }

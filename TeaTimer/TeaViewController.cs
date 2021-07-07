@@ -8,12 +8,17 @@ namespace TeaTimer
 {
     public partial class TeaViewController : NSViewController
     {
-		public TeaModel Tea { get; set; }
+        #region Computed Properties
+        public TeaModel Tea { get; set; }
+        #endregion
 
-		public TeaViewController (IntPtr handle) : base (handle)
+        #region Constructors
+        public TeaViewController (IntPtr handle) : base (handle)
 		{	
 		}
+        #endregion
 
+        #region Override Methods
         public override void ViewWillAppear()
         {
             base.ViewWillAppear();
@@ -40,5 +45,6 @@ namespace TeaTimer
             // Update the view, if already loaded.
             set => base.RepresentedObject = value;
 		}
-	}
+        #endregion
+    }
 }
