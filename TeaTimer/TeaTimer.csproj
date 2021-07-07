@@ -88,10 +88,10 @@
       <DependentUpon>TeaViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="TeaVarietiesDataSource.cs" />
+    <Compile Include="TeaModelException.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
-    <InterfaceDefinition Include="Resources\Main~.storyboard" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
