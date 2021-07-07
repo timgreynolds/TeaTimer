@@ -84,9 +84,9 @@
                                                 <action selector="openEditWindow:" target="Ady-hI-5gd" id="V54-1i-cs3"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Add Tea" keyEquivalent="n" id="WGV-KW-3a2">
+                                        <menuItem title="Add Tea" keyEquivalent="n" identifier="AddTeaMenuItem" id="WGV-KW-3a2">
                                             <connections>
-                                                <segue destination="htY-U2-DW6" kind="show" identifier="EditTeaSegue" id="5ju-QW-xfY"/>
+                                                <segue destination="htY-U2-DW6" kind="modal" identifier="EditTeaSegue" id="5ju-QW-xfY"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -240,7 +240,7 @@
                     <connections>
                         <outlet property="BrewTempTextField" destination="EgM-ci-TPo" id="K28-QF-YcS"/>
                         <outlet property="SteepTimeTextField" destination="RBD-D8-c4v" id="M8g-6y-ypC"/>
-                        <outlet property="TeaTextField" destination="IMe-rI-sNA" id="oas-Dy-x1i"/>
+                        <outlet property="TeaTextField" destination="ziL-of-Fzh" id="yH2-7p-R2d"/>
                     </connections>
                 </viewController>
                 <customObject id="nPt-M9-kxz" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
