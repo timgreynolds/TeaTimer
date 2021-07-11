@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using AppKit;
 using Foundation;
 using Newtonsoft.Json;
@@ -18,11 +19,6 @@ namespace TeaTimer
         #endregion
 
         #region Computed Properties
-        public nint RecordCount
-        {
-            get => _teas.Count;
-        }
-
         public List<TeaModel> Teas
         {
             get => _teas;
@@ -39,7 +35,7 @@ namespace TeaTimer
         #region Override Methods
         public override nint ItemCount(NSComboBox comboBox)
         {
-            return RecordCount;
+            return _teas.Count;
         }
 
         public override NSObject ObjectValueForItem(NSComboBox comboBox, nint index)
@@ -49,7 +45,7 @@ namespace TeaTimer
 
         public override nint IndexOfItem(NSComboBox comboBox, string value)
         {
-            return _teas.FindIndex(n => n.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
+            return _teas.FindIndex(tea => tea.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public override string CompletedString(NSComboBox comboBox, string uncompletedString)
@@ -63,14 +59,14 @@ namespace TeaTimer
         {
             if (File.Exists(_dbPath))
             {
-                // Tea database already exists. Assume the Json contains a List of teas and return it.
+                // Tea database already exists. Assume the Json contains a List of teas and set _teas.
                 try
                 {
                     ReloadTeas();
                 }
                 catch (Exception ex)
                 {
-                    ShowAlert(ex);
+                    ShowAlert(ex, "An error occurred trying to read the tea varieties database.");
                 }
             }
             else
@@ -78,28 +74,28 @@ namespace TeaTimer
                 // Tea database doesn't already exist so it needs to be created.
                 try
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(_dbPath));
+                    Directory.CreateDirectory(_dbPath);
 
                     using (StreamWriter writer = new StreamWriter(_dbPath, false))
                     {
-                        writer.WriteLine(JsonConvert.SerializeObject(new List<TeaModel> { new TeaModel("Earl Grey", 120, 212) }));
+                        writer.WriteLine(JsonConvert.SerializeObject(new List<TeaModel> { new TeaModel("Earl Grey", 120) }));
                     }
                     // Reset _teas to the contents of the newly created Json file. This helps to ensure future deserialization will be successful.
                     ReloadTeas();
                 }
                 catch (Exception ex)
                 {
-                    ShowAlert(ex);
+                    ShowAlert(ex, "An error occurred trying to create the initial tea varieties database.");
                 }
             }
         }
 
-        private static void ShowAlert(Exception ex)
+        private static void ShowAlert(Exception ex, string messageText)
         {
             NSAlert alert = new NSAlert()
             {
                 AlertStyle = NSAlertStyle.Critical,
-                MessageText = "An error occurred trying to open the tea varieties database.",
+                MessageText = messageText,
                 InformativeText = $"Message: {ex.Message}"
             };
             alert.RunModal();
@@ -112,7 +108,28 @@ namespace TeaTimer
         #endregion
 
         #region Public Methods
+        internal static bool UpdateTea(TeaModel tea)
+        {            
+            List<TeaModel> old = _teas.Where(o => o.Name.Equals(tea.Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            foreach(TeaModel t in old)
+            {
+                _teas.Remove(t);
+            }
+            _teas.Add(tea);
+            using (StreamWriter writer = new StreamWriter(_dbPath, false))
+            {
+                writer.WriteLine(JsonConvert.SerializeObject(_teas));
+            }
+            ReloadTeas();
+            return _teas.FindIndex(t => t.Name.Equals(tea.Name, StringComparison.InvariantCultureIgnoreCase)) > -1;
+        }
 
+        internal static bool AddTea(TeaModel tea)
+        {
+            bool success = UpdateTea(tea);
+            ReloadTeas();
+            return success;
+        }
         #endregion
     }
 }
