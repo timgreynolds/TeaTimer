@@ -24,11 +24,19 @@ namespace TeaTimer
             BrewTemp = brewTemp;
         }
 
-        public TeaModel(string name, int steepSeconds, int brewTemp)
+        public TeaModel(string name, string steepTime, string brewTemp)
         {
             Name = name;
-            SteepTime = new TimeSpan(0, 0, steepSeconds);
-            BrewTemp = brewTemp;
+            if(Convert.ToInt32(brewTemp) > 212)
+            {
+                BrewTemp = 212;
+            }
+            else
+            {
+                BrewTemp = Convert.ToInt32(brewTemp);
+            }
+            string[] hhmmss = steepTime.Split(":");
+            SteepTime = new TimeSpan(Convert.ToInt32(hhmmss[0]), Convert.ToInt32(hhmmss[1]), Convert.ToInt32(hhmmss[2]));
         }
 
         public TeaModel(string name, TimeSpan steepTime)
