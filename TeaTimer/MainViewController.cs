@@ -7,7 +7,7 @@ namespace TeaTimer
 {
     public partial class MainViewController : NSViewController
     {
-        #region private fields
+        #region Private Fields
         private TeaModel _selectedTea;
         private TeaVarietiesDataSource _datasource;
         private Timer _timer = new Timer(1000.0);
@@ -29,7 +29,7 @@ namespace TeaTimer
                 // Setup the ComboBox datasource
                 _datasource = new TeaVarietiesDataSource();
                 TeaSelector.DataSource = _datasource;
-                TeaSelector.SelectionChanged += (sender, e) => SelectionChanged();
+                TeaSelector.SelectionChanged += (sender, e) => SelectionChanged(sender, e);
                 // Setup the timer callback
                 _timer.AutoReset = true;
                 _timer.Elapsed += (sender, e) => TimerLabel.InvokeOnMainThread(UpdateLabel);
@@ -62,6 +62,8 @@ namespace TeaTimer
             TeaViewController teaViewController = Storyboard.InstantiateControllerWithIdentifier("TeaViewController") as TeaViewController;
             teaViewController.Tea = _selectedTea;
             PresentViewControllerAsModalWindow(teaViewController);
+            nint selectedIndex = TeaSelector.SelectedIndex;
+            TeaSelector.DeselectItem(selectedIndex);
         }
 
         [Action("validateMenuItem:")]
@@ -108,12 +110,15 @@ namespace TeaTimer
             }
         }
 
-        private void SelectionChanged()
+        private void SelectionChanged(Object sender, EventArgs e)
         {
-            _selectedTea = _datasource.Teas[(int)TeaSelector.SelectedIndex];
-            _timer.Stop();
-            _steepTime = _selectedTea.SteepTime;
-            TimerLabel.StringValue = _steepTime.ToString();
+            if (TeaSelector.SelectedIndex > -1)
+            {
+                _selectedTea = _datasource.Teas[(int)TeaSelector.SelectedIndex];
+                _timer.Stop();
+                _steepTime = _selectedTea.SteepTime;
+                TimerLabel.StringValue = _steepTime.ToString();
+            }
         }
         #endregion
     }
