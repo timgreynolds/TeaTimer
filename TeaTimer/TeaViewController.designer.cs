@@ -4,31 +4,34 @@
 // actions made in the UI designer. If it is removed, they will be lost.
 // Manual changes to this file may not be handled correctly.
 //
-using AppKit;
 using Foundation;
+using System.CodeDom.Compiler;
 
 namespace TeaTimer
 {
-    [Register ("TeaViewController")]
+	[Register ("TeaViewController")]
 	partial class TeaViewController
 	{
 		[Outlet]
-		NSTextField BrewTempTextField { get; set; }
+		AppKit.NSTextField BrewTempTextField { get; set; }
 
 		[Outlet]
-		NSTextField SteepTimeTextField { get; set; }
+		AppKit.NSButton SaveButton { get; set; }
 
 		[Outlet]
-		NSTextField TeaTextField { get; set; }
+		AppKit.NSTextField SteepTimeTextField { get; set; }
+
+		[Outlet]
+		AppKit.NSTextField TeaTextField { get; set; }
 
 		[Action ("SaveButtonClicked:")]
-		partial void SaveButtonClicked (NSObject sender);
+		partial void SaveButtonClicked (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (TeaTextField != null) {
-				TeaTextField.Dispose ();
-				TeaTextField = null;
+			if (BrewTempTextField != null) {
+				BrewTempTextField.Dispose ();
+				BrewTempTextField = null;
 			}
 
 			if (SteepTimeTextField != null) {
@@ -36,9 +39,14 @@ namespace TeaTimer
 				SteepTimeTextField = null;
 			}
 
-			if (BrewTempTextField != null) {
-				BrewTempTextField.Dispose ();
-				BrewTempTextField = null;
+			if (TeaTextField != null) {
+				TeaTextField.Dispose ();
+				TeaTextField = null;
+			}
+
+			if (SaveButton != null) {
+				SaveButton.Dispose ();
+				SaveButton = null;
 			}
 		}
 	}
