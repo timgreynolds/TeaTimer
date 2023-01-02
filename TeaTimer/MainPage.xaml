@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:datamodel="clr-namespace:com.mahonkin.tim.maui.TeaTimer.DataModel"
+             x:Class="com.mahonkin.tim.maui.TeaTimer.MainPage"
+             x:DataType="datamodel:TeaModel">
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+            <Label x:Name="MainLabel"
+                Text="00:00"
+                FontFamily="OpenSansRegular"
+		        FontSize="Title"
+                HorizontalOptions="Center"
+                VerticalOptions="Start" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Picker x:Name="TeaPicker"                    
+                        Grid.Column="1"
+                        Title="Select Tea Variety"
+                        FontFamily="OpenSansRegular"
+                        HorizontalOptions="CenterAndExpand"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedIndexChanged="TeaPicker_SelectedIndexChanged" />
+            </Grid>
+            <Button x:Name="StartStopBtn"
+                    Text="Start"
+                    FontFamily="OpenSansRegular"
+                    SemanticProperties.Hint="Starts or stops the countdown."
+                    Clicked="StartStopBtn_Clicked"
+                    HorizontalOptions="Center"
+                    IsEnabled="False" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
