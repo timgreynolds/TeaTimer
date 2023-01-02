@@ -68,8 +68,12 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Resources\Images\back_icon.svg" />
+	  <None Remove="ViewModel\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Resources\Images\back_icon.svg" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="ViewModel\" />
 	</ItemGroup>
 </Project>
