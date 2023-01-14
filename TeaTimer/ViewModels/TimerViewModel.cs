@@ -10,13 +10,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class TimerViewModel : BaseViewModel
     {
         #region Private Fields
-        private string _teaName = string.Empty;
         private string _buttonText = "Start";
         private string _viewTitle = string.Empty;
         private bool _isButtonEnabled;
         private bool _isViewLabelVisible;
-        private int _brewTemp;// = 212;
-        private TimeSpan _steepTime;// = TimeSpan.FromMinutes(2);
         private TimeSpan _countdownLabel = new TimeSpan(0);
         private IList _teas = TeaModel.Teas;
         private IDispatcherTimer _countdown = App.Current.Dispatcher.CreateTimer();
@@ -24,17 +21,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Public Properties
-        public string TeaName
-        {
-            get => _teaName;
-            set => SetProperty(ref _teaName, value);
-        }
-
-        public TimeSpan SteepTime
-        {
-            get => _steepTime;
-            set => SetProperty(ref _steepTime, value);
-        }
 
         public string ButtonText
         {
@@ -46,12 +32,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         {
             get => _viewTitle;
             set => SetProperty(ref _viewTitle, value); 
-        }
-
-        public int BrewTemp
-        {
-            get => _brewTemp;
-            set => SetProperty(ref _brewTemp, value);
         }
 
         public bool IsButtonEnabled
@@ -111,9 +91,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             if (SelectedTea != null && _countdown.IsRunning == false)
             {
                 CountdownLabel = SelectedTea.SteepTime;
-                //TeaName = SelectedTea.Name;
-                //BrewTemp = SelectedTea.BrewTemp;
-                //SteepTime = SelectedTea.SteepTime;
                 IsViewLabelVisible = true;
                 IsButtonEnabled = true;
             }
@@ -121,16 +98,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             {
                 _countdown.Stop();
                 CountdownLabel = SelectedTea.SteepTime;
-                //TeaName = SelectedTea.Name;
-                //BrewTemp = SelectedTea.BrewTemp;
-                //SteepTime = SelectedTea.SteepTime;
                 IsViewLabelVisible = true;
                 IsButtonEnabled = true;
             }
             else
             {
                 _countdown.Stop();
-                TeaName = string.Empty;
                 IsViewLabelVisible = false;
                 IsButtonEnabled = false;
             }
