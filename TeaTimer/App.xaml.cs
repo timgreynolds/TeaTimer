@@ -1,12 +1,12 @@
+using System.Reflection;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
-using Microsoft.Maui.ApplicationModel;
-using System.Reflection;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
 /// <summary>
-/// <inheritdoc cref="Microsoft.Maui.Controls.Application" />
+/// <inheritdoc cref="Application" />
 /// </summary>
 public partial class App : Application
 {
@@ -17,15 +17,15 @@ public partial class App : Application
     #endregion
 
     /// <summary>
-    /// <inheritdoc cref="Microsoft.Maui.Controls.Application.Application()" />
+    /// <inheritdoc cref="Application.Application()" />
     /// </summary>
-    public App()
-	{
-		InitializeComponent();
-		MainPage = new AppShell();
+    public App(AppShell shell)
+    {
+        InitializeComponent();
+        MainPage = shell;
         UseCelsius = Preferences.Get(nameof(UseCelsius), false, SharedPrefsName);
         CurrentAppTheme = (AppTheme)Preferences.Get(nameof(CurrentAppTheme), (int)RequestedTheme, SharedPrefsName);
         UserAppTheme = CurrentAppTheme;
-	}
+    }
 }
 

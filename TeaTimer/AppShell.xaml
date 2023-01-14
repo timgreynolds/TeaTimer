@@ -4,24 +4,25 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:com.mahonkin.tim.maui.TeaTimer"
-    xmlns:datamodel="clr-namespace:com.mahonkin.tim.maui.TeaTimer.DataModel"
-    x:DataType="datamodel:TeaModel"
+    xmlns:pages="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Pages"
+    x:DataType="local:AppShell"
     Shell.FlyoutBehavior="Disabled">
     <TabBar x:Name="TabBar">
         <Tab x:Name="TimerTab"
-             Route="Timer"
              Title="Timer"
-             Icon="timer_icon.png">
-            <ShellContent Title="Welcome to Tea Timer!"
-                ContentTemplate="{DataTemplate local:MainPage}"
-                Route="MainPage" />
+             Icon="timer_icon.png"
+             Route="TimerPage">
+            <ShellContent ContentTemplate="{DataTemplate pages:TimerPage}"
+                          Title="Welcome to Tea Timer!"
+                          Route="TimerPage" />
         </Tab>
-        <Tab x:Name="TeasTab"
+        <Tab x:Name="TeaListTab"
              Title="Tea List"
-             Icon="tea_icon.png">
-            <ShellContent Title="Tea List"
-                ContentTemplate="{DataTemplate local:TeaList}"
-                Route="TeaList" />
+             Icon="tea_icon.png"
+             Route="TeaListPage">
+            <ShellContent ContentTemplate="{DataTemplate local:TeaList}"
+                          Title="Tea List"
+                          Route="TeaListPage" />
         </Tab>
     </TabBar>
 </Shell>

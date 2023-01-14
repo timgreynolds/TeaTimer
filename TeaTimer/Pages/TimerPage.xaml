@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
+             xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
+             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TimerPage"
+             x:DataType="viewmodels:TimerViewModel">
+    <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+        <VerticalStackLayout.Resources>
+            <converters:ViewLabelConverter x:Key="ViewLabelConverter" />
+        </VerticalStackLayout.Resources>
+        <Label x:Name="ViewTitle"
+               FontFamily="OpenSansRegular"
+               FontSize="Medium"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               IsVisible="{Binding IsViewLabelVisible}">
+            <Label.Text>
+                <MultiBinding Converter="{StaticResource ViewLabelConverter}" StringFormat="{}{0} {1} {2}">
+                    <Binding Path="SelectedTea.Name" />
+                    <Binding Path="SelectedTea.BrewTemp" />
+                    <Binding Path="SelectedTea.SteepTime" />
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <Label x:Name="CountdownLabel"
+               Text="{Binding CountdownLabel, StringFormat='{}{0:mm\\:ss}'}" 
+               FontFamily="OpenSansRegular"
+		       FontSize="Large"
+               HorizontalOptions="Center"
+               VerticalOptions="Start" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Picker x:Name="TeaPicker"                    
+                    Grid.Column="1"
+                    FontFamily="OpenSansRegular"
+                    FontSize="Medium"
+                    HorizontalOptions="CenterAndExpand"
+                    Title="Select a Tea Variety"
+                    ItemsSource="{Binding Teas}"
+                    ItemDisplayBinding="{Binding Name}"
+                    SelectedItem="{Binding SelectedTea}" />
+        </Grid>
+        <Button x:Name="TimerButton"
+                Text="{Binding ButtonText}"
+                FontFamily="OpenSansRegular"
+                FontSize="Large"
+                SemanticProperties.Hint="Starts or stops the countdown."
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsButtonEnabled}"
+                Command="{Binding TimerButtonPressed}"/>
+    </VerticalStackLayout>
+</ContentPage>

@@ -11,26 +11,27 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         /// <inheritdoc cref="IValueConverter.Convert(object, Type, object, CultureInfo)" />
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(App.UseCelsius)
+            if (App.UseCelsius)
             {
-                return UnitConverters.FahrenheitToCelsius((int)value);
+                double celsius = UnitConverters.FahrenheitToCelsius((int)value);
+                return celsius.ToString();
             }
             else
             {
-                return value;
+                return value.ToString();
             }
         }
 
         /// <inheritdoc cref="IValueConverter.ConvertBack(object, Type, object, CultureInfo)" />
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(App.UseCelsius)
+            if (App.UseCelsius)
             {
-                return UnitConverters.CelsiusToFahrenheit((int)value);
+                return (int)UnitConverters.CelsiusToFahrenheit(double.Parse((string)value));
             }
             else
             {
-                return value;
+                return int.Parse((string)value);
             }
         }
     }
