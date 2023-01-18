@@ -29,7 +29,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             {
                 if (value is not null && _selectedTea != value)
                 {
-                    OnSelectedTeaChanged();
+                    OnSelectedTeaChanged(value);
                 }
                 SetProperty(ref _selectedTea, value);
             }
@@ -64,9 +64,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             NavigationService.NavigateToAsync(nameof(Pages.EditPage));
         }
 
-        private void OnSelectedTeaChanged()
+        private void OnSelectedTeaChanged(TeaModel tea)
         {
-            NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", _selectedTea } });
+            NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", tea } });
         }
         #endregion Private Methods
     }

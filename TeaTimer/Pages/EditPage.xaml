@@ -48,7 +48,6 @@
                        VerticalOptions="Center"
                        HorizontalOptions="Fill"
                        Grid.Column="1"/>
-                       <!--TextChanged="TeaProperty_TextChanged" /> -->
                 <Entry x:Name="BrewTempEntry"
                        Placeholder="Brew Temperature"
                        Text="{Binding BrewTemp}"
@@ -57,7 +56,6 @@
                        HorizontalOptions="Fill"
                        Grid.Column="1"
                        Grid.Row="1" />
-<!--                       TextChanged="TeaProperty_TextChanged" /> -->
                 <Entry x:Name="SteepTimeEntry"
                        Placeholder="Steep Time"
                        Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:mm\\:ss}'}"
@@ -66,7 +64,6 @@
                        HorizontalOptions="Fill"
                        Grid.Column="1" 
                        Grid.Row="2" />
-<!--                       TextChanged="TeaProperty_TextChanged" /> -->
             </Grid>
             <Button x:Name="SaveBtn"
                     Text="Save"
@@ -74,8 +71,8 @@
                     SemanticProperties.Hint="Saves the current tea information to the database."
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
-                    IsEnabled="False" />
-<!--                    Clicked="SaveBtn_Clicked" /> -->
+                    IsEnabled="{Binding IsPageDirty}"
+                    Command="{Binding SaveBtnPressed}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
