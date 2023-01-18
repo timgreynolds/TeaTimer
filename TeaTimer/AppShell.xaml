@@ -20,7 +20,7 @@
              Title="Tea List"
              Icon="tea_icon.png"
              Route="TeaListPage">
-            <ShellContent ContentTemplate="{DataTemplate local:TeaList}"
+            <ShellContent ContentTemplate="{DataTemplate pages:TeaListPage}"
                           Title="Tea List"
                           Route="TeaListPage" />
         </Tab>

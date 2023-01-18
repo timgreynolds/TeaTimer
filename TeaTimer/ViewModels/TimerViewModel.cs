@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
+using com.mahonkin.tim.maui.TeaTimer.Services;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
 
@@ -10,6 +11,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class TimerViewModel : BaseViewModel
     {
         #region Private Fields
+        INavigationService _navigationService;
         private string _buttonText = "Start";
         private string _viewTitle = string.Empty;
         private bool _isButtonEnabled;
@@ -76,8 +78,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Constructor
-        public TimerViewModel()
+        public TimerViewModel(INavigationService navigationService) : base(navigationService)
         {
+            _navigationService = navigationService;
             TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;

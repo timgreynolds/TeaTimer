@@ -3,10 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:datamodel="clr-namespace:com.mahonkin.tim.maui.TeaTimer.DataModel"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
-             x:Class="com.mahonkin.tim.maui.TeaTimer.EditPage"
-             x:DataType="datamodel:TeaModel"
-             Title="Edit Tea"
-             Routing.Route="EditPage">
+             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.EditPage"
+             Routing.Route="EditPage"
+             Title="Edit Tea">
     <ScrollView>
         <VerticalStackLayout 
             Spacing="25"
@@ -48,8 +47,8 @@
                        FontFamily="OpenSansRegular"
                        VerticalOptions="Center"
                        HorizontalOptions="Fill"
-                       Grid.Column="1"
-                       TextChanged="TeaProperty_TextChanged" />
+                       Grid.Column="1"/>
+                       <!--TextChanged="TeaProperty_TextChanged" /> -->
                 <Entry x:Name="BrewTempEntry"
                        Placeholder="Brew Temperature"
                        Text="{Binding BrewTemp}"
@@ -57,8 +56,8 @@
                        VerticalOptions="Center"
                        HorizontalOptions="Fill"
                        Grid.Column="1"
-                       Grid.Row="1"
-                       TextChanged="TeaProperty_TextChanged" />
+                       Grid.Row="1" />
+<!--                       TextChanged="TeaProperty_TextChanged" /> -->
                 <Entry x:Name="SteepTimeEntry"
                        Placeholder="Steep Time"
                        Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:mm\\:ss}'}"
@@ -66,8 +65,8 @@
                        VerticalOptions="Center"
                        HorizontalOptions="Fill"
                        Grid.Column="1" 
-                       Grid.Row="2"
-                       TextChanged="TeaProperty_TextChanged" />
+                       Grid.Row="2" />
+<!--                       TextChanged="TeaProperty_TextChanged" /> -->
             </Grid>
             <Button x:Name="SaveBtn"
                     Text="Save"
@@ -75,8 +74,8 @@
                     SemanticProperties.Hint="Saves the current tea information to the database."
                     VerticalOptions="Center"
                     HorizontalOptions="Center"
-                    IsEnabled="False"
-                    Clicked="SaveBtn_Clicked" />
+                    IsEnabled="False" />
+<!--                    Clicked="SaveBtn_Clicked" /> -->
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

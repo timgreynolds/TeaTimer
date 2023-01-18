@@ -1,4 +1,5 @@
 using System.Reflection;
+using com.mahonkin.tim.maui.TeaTimer.Services;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
@@ -19,10 +20,10 @@ public partial class App : Application
     /// <summary>
     /// <inheritdoc cref="Application.Application()" />
     /// </summary>
-    public App(AppShell shell)
+    public App(INavigationService navigationService)
     {
         InitializeComponent();
-        MainPage = shell;
+        MainPage = new AppShell(navigationService);
         UseCelsius = Preferences.Get(nameof(UseCelsius), false, SharedPrefsName);
         CurrentAppTheme = (AppTheme)Preferences.Get(nameof(CurrentAppTheme), (int)RequestedTheme, SharedPrefsName);
         UserAppTheme = CurrentAppTheme;

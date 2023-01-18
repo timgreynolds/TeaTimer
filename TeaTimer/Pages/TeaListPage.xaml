@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
+             xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
+             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage">
+    <VerticalStackLayout>
+        <ListView x:Name="TeaListView"
+              ItemsSource="{Binding Teas}"
+              IsPullToRefreshEnabled="True"
+              RefreshCommand="{Binding RefreshList}"
+              SelectionMode="Single"
+              SelectedItem="{Binding SelectedTea}">
+            <ListView.Resources>
+                <converters:TemperatureConverter x:Key="TemperatureConverter" />
+                <converters:TimespanConverter x:Key="TimespanConverter" />
+            </ListView.Resources>
+            <ListView.Header>
+                <VerticalStackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Tea Name"
+                           FontFamily="OpenSansRegular"
+                           Padding="10"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Start"
+                           Grid.Column="0" />
+                        <Label Text="Brew Temp"
+                           FontFamily="OpenSansRegular"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Start"
+                           Grid.Column="1" />
+                        <Label Text="Steep Time"
+                           FontFamily="OpenSansRegular"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Start"
+                           Grid.Column="2" />
+                    </Grid>
+                </VerticalStackLayout>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell x:Name="TeaListTeaCell">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Path=Name}"
+                               FontFamily="OpenSansRegular"
+                               Padding="10,10"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"
+                               Grid.Column="0" />
+                            <Label Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}}"
+                               FontFamily="OpenSansRegular"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"
+                               Grid.Column="1" />
+                            <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:mm\\:ss}'}"
+                               FontFamily="OpenSansRegular"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"
+                               Grid.Column="2" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <Label/>
+            </ListView.Footer>
+        </ListView>
+        <Button x:Name="AddTeaBtn"
+                ImageSource="add_icon.png"
+                HorizontalOptions="End"
+                Command="{Binding AddTeaCommand}" />
+    </VerticalStackLayout>
+</ContentPage>
