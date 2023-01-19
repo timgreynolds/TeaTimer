@@ -6,7 +6,7 @@ using Microsoft.Maui.Media;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Converters
 {
-	internal class ViewLabelConverter : IMultiValueConverter
+    internal class ViewLabelConverter : IMultiValueConverter
     {
         const string csym = "\u2103";
         const string fsym = "\u2109";

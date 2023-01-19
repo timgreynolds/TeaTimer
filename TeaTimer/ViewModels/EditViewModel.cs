@@ -62,16 +62,20 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         }
         #endregion Public Properties
 
-        public EditViewModel(INavigationService navigationService) : base(navigationService)
+        public EditViewModel(INavigationService navigationService, IDisplayService displayService) : base(navigationService, displayService)
         {
             SaveBtnPressed = new Command(() => Save());
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
+            if (query.Count <= 0)
+            {
+                query.Add("Tea", new TeaModel(string.Empty));
+            }
             if (query.TryGetValue("Tea", out object param))
             {
-                if(param.GetType().IsAssignableTo(typeof(TeaModel)))
+                if (param.GetType().IsAssignableTo(typeof(TeaModel)))
                 {
                     TeaModel tea = param as TeaModel;
                     Name = tea.Name;
@@ -81,18 +85,18 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 else
                 {
-                    Console.WriteLine("Query parmater could not be interpreted as a Tea.");
+                    DisplayService.ShowAlertAsync("Error", "Query parmater could not be interpreted as a Tea.");
                 }
             }
             else
             {
-                Console.WriteLine("No query parameter matching 'Tea' was passed.");
+                DisplayService.ShowAlertAsync("Error", "No query parameter matching 'Tea' was passed.");
             }
         }
 
         private void Save()
         {
-            Console.WriteLine("Save button pressed.");
+            DisplayService.ShowAlertAsync("Action", "Save button pressed");
         }
     }
 }

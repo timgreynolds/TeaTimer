@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
-	public interface INavigationService
+    public interface INavigationService
 	{
 		Task InitializeAsync();
 
@@ -15,4 +14,3 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
 		Task GoBackAsync();
 	}
 }
-

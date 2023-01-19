@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using com.mahonkin.tim.maui.TeaTimer.ViewModels;
+﻿using com.mahonkin.tim.maui.TeaTimer.ViewModels;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Pages;

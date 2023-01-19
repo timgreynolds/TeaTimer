@@ -78,7 +78,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Constructor
-        public TimerViewModel(INavigationService navigationService) : base(navigationService)
+        public TimerViewModel(INavigationService navigationService, IDisplayService displayService) : base(navigationService, displayService)
         {
             _navigationService = navigationService;
             TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());

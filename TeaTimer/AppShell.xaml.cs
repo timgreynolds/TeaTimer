@@ -1,7 +1,6 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using com.mahonkin.tim.maui.TeaTimer.Pages;
+﻿using com.mahonkin.tim.maui.TeaTimer.Pages;
 using com.mahonkin.tim.maui.TeaTimer.Services;
+using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 

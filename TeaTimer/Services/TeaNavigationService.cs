@@ -5,7 +5,7 @@ using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
-	public class TeaNavigationService : INavigationService
+    public class TeaNavigationService : INavigationService
 	{
 		public TeaNavigationService()
 		{

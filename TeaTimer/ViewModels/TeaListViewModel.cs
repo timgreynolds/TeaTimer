@@ -49,7 +49,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Public Properties
 
         #region Constructors
-        public TeaListViewModel(INavigationService navigationService) : base(navigationService)
+        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService) : base(navigationService, displayService)
         {
             RefreshList = new Command(() => _teas = TeaModel.Teas);
             AddTeaCommand = new Command(() => AddTea());
