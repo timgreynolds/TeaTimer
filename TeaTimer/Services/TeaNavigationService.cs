@@ -11,23 +11,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
 		{
 		}
 
-        public Task GoBackAsync()
-        {
-            throw new NotImplementedException();
-        }
+        Task INavigationService.PopAsync() => throw new NotImplementedException();
+        
+        public Task GoBackAsync() => throw new NotImplementedException();
 
         public Task InitializeAsync() => NavigateToAsync(nameof(Pages.TimerPage));
         
         public Task NavigateToAsync(string route, IDictionary<string, object> routeParameters = null)
         {
             ShellNavigationState state = new ShellNavigationState(route);
-            return (routeParameters is null) ? Shell.Current.GoToAsync(state) : Shell.Current.GoToAsync(state, routeParameters);
-        }
-
-        Task INavigationService.PopAsync()
-        {
-            throw new NotImplementedException();
-        }
+            return (routeParameters is null) ? AppShell.Current.GoToAsync(state) : AppShell.Current.GoToAsync(state, routeParameters);
+        }        
     }
 }
 
