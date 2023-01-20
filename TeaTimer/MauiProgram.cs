@@ -19,10 +19,10 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<Pages.TimerPage>();
         builder.Services.AddSingleton<Pages.TeaListPage>();
-        builder.Services.AddSingleton<Pages.EditPage>();
+        builder.Services.AddTransient<Pages.EditPage>();
         builder.Services.AddSingleton<ViewModels.TimerViewModel>();
         builder.Services.AddSingleton<ViewModels.TeaListViewModel>();
-        builder.Services.AddSingleton<ViewModels.EditViewModel>();
+        builder.Services.AddTransient<ViewModels.EditViewModel>();
 
         builder.Services.AddSingleton<Services.INavigationService, Services.TeaNavigationService>();
         builder.Services.AddSingleton<Services.IDisplayService, Services.DisplayService>();
