@@ -11,6 +11,6 @@ public partial class TeaList : ContentPage
 {
     public TeaList()
     {
-        InitializeComponent();
+        //InitializeComponent();
     }
 }

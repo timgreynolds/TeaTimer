@@ -10,11 +10,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 		public INavigationService NavigationService { get; private set; }
 		public IDisplayService DisplayService { get; private set; }
+		public IDispatcherService DispatcherService { get; private set; }
 
-        public BaseViewModel(INavigationService navigationService, IDisplayService displayService)
+        public BaseViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService)
 		{
 			NavigationService = navigationService;
 			DisplayService = displayService;
+			DispatcherService = dispatcherService;
 		}
 
 		protected virtual void SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)

@@ -62,7 +62,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         }
         #endregion Public Properties
 
-        public EditViewModel(INavigationService navigationService, IDisplayService displayService) : base(navigationService, displayService)
+        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService) :
+            base(navigationService, displayService, dispatcherService)
         {
             SaveBtnPressed = new Command(() => Save());
         }

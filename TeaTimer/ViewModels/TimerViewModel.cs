@@ -18,7 +18,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private bool _isViewLabelVisible;
         private TimeSpan _countdownLabel = new TimeSpan(0);
         private IList _teas = TeaModel.Teas;
-        private IDispatcherTimer _countdown = App.Current.Dispatcher.CreateTimer();
+        private IDispatcherTimer _countdown;
         private TeaModel _selectedTea;
         #endregion
 
@@ -78,9 +78,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Constructor
-        public TimerViewModel(INavigationService navigationService, IDisplayService displayService) : base(navigationService, displayService)
+        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService) : base(navigationService, displayService, dispatcherService)
         {
             _navigationService = navigationService;
+            _countdown = DispatcherService.CreateTimer();
             TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;
