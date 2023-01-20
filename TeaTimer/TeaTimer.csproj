@@ -91,5 +91,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Remove="MainPage.xaml.cs" />
+	  <Compile Remove="TeaList.xaml.cs" />
 	</ItemGroup>
 </Project>

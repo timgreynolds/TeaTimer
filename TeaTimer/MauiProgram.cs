@@ -17,7 +17,6 @@ public static class MauiProgram
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
         });
 
-        //builder.Services.AddSingleton<AppShell>();
         builder.Services.AddSingleton<Pages.TimerPage>();
         builder.Services.AddSingleton<Pages.TeaListPage>();
         builder.Services.AddSingleton<Pages.EditPage>();
