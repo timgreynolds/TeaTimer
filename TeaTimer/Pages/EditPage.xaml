@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:datamodel="clr-namespace:com.mahonkin.tim.maui.TeaTimer.DataModel"
+             xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.EditPage"
              Routing.Route="EditPage"
              Title="Edit Tea">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackButtonCommand}"
+                            TextOverride="{Binding BackButtonLabel}" />
+    </Shell.BackButtonBehavior>
     <ScrollView>
         <VerticalStackLayout 
             Spacing="25"

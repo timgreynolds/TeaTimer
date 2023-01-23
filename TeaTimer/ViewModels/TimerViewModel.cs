@@ -11,13 +11,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class TimerViewModel : BaseViewModel
     {
         #region Private Fields
-        INavigationService _navigationService;
+        private INavigationService _navigationService;
         private string _buttonText = "Start";
         private string _viewTitle = string.Empty;
         private bool _isButtonEnabled;
         private bool _isViewLabelVisible;
         private TimeSpan _countdownLabel = new TimeSpan(0);
         private IList _teas = TeaModel.Teas;
+        private IDispatcherService _dispatcher;
         private IDispatcherTimer _countdown;
         private TeaModel _selectedTea;
         #endregion
@@ -81,8 +82,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService) : base(navigationService, displayService, dispatcherService)
         {
             _navigationService = navigationService;
-            _countdown = DispatcherService.CreateTimer();
+            _dispatcher = dispatcherService;
             TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
+            _countdown = _dispatcher.CreateTimer();
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;
             _countdown.Tick += (sender, e) => ExecuteTimer();

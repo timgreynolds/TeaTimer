@@ -6,22 +6,22 @@ using Microsoft.Maui.Controls;
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
     public class TeaNavigationService : INavigationService
-	{
-		public TeaNavigationService()
-		{
-		}
+    {
+        public TeaNavigationService()
+        {
+        }
 
-        Task INavigationService.PopAsync() => throw new NotImplementedException();
-        
-        public Task GoBackAsync() => throw new NotImplementedException();
+        public Task PopAsync() => AppShell.Current.Navigation.PopAsync();
+
+        public Task GoBackAsync() => AppShell.Current.GoToAsync("..");
 
         public Task InitializeAsync() => NavigateToAsync(nameof(Pages.TimerPage));
-        
+
         public Task NavigateToAsync(string route, IDictionary<string, object> routeParameters = null)
         {
             ShellNavigationState state = new ShellNavigationState(route);
             return (routeParameters is null) ? AppShell.Current.GoToAsync(state) : AppShell.Current.GoToAsync(state, routeParameters);
-        }        
+        }
     }
 }
 

@@ -11,6 +11,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     {
         #region Private Fields
         private string _name;
+        private string _backButtonLabel = "Back";
         private int _brewTemp;
         private bool _isPageDirty;
         private TimeSpan _steepTime;
@@ -21,6 +22,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         {
             get => _name;
             set => SetProperty(ref _name, value);
+        }
+
+        public string BackButtonLabel
+        {
+            get => _backButtonLabel;
+            private set => SetProperty(ref _backButtonLabel, value);
         }
 
         public int BrewTemp
@@ -39,7 +46,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public bool IsPageDirty
         {
             get => _isPageDirty;
-            set => SetProperty(ref _isPageDirty, value);
+            private set => SetProperty(ref _isPageDirty, value);
         }
 
         public TimeSpan SteepTime
@@ -55,6 +62,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
+        public ICommand BackButtonCommand
+        {
+            get;
+            private set;
+        }
+
         public ICommand SaveBtnPressed
         {
             get;
@@ -62,10 +75,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         }
         #endregion Public Properties
 
-        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService) :
-            base(navigationService, displayService, dispatcherService)
+        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService)
+           : base(navigationService, displayService, dispatcherService)
         {
             SaveBtnPressed = new Command(() => Save());
+            BackButtonCommand = new Command(() => NavigateBack());
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -73,6 +87,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             if (query.Count <= 0)
             {
                 query.Add("Tea", new TeaModel(string.Empty));
+                IsPageDirty = false;
             }
             if (query.TryGetValue("Tea", out object param))
             {
@@ -98,6 +113,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private void Save()
         {
             DisplayService.ShowAlertAsync("Action", "Save button pressed");
+        }
+
+        private void NavigateBack()
+        {
+            NavigationService.GoBackAsync();
         }
     }
 }
