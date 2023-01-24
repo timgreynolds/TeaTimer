@@ -18,7 +18,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         {
             TimeSpan steepTime = new TimeSpan();
 
-            TimeSpan.TryParseExact((string)value, @"mm\:ss", null, out steepTime);
+            TimeSpan.TryParseExact((string)value, @"m\:ss", null, out steepTime);
                         
             return steepTime;
         }

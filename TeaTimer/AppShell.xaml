@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:com.mahonkin.tim.maui.TeaTimer"
     xmlns:pages="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Pages"
     x:DataType="local:AppShell"
-    Shell.FlyoutBehavior="Disabled">
+    FlyoutBehavior="Disabled">
     <TabBar x:Name="TabBar">
         <Tab x:Name="TimerTab"
              Title="Timer"

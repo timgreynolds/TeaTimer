@@ -27,7 +27,7 @@
             </Label.Text>
         </Label>
         <Label x:Name="CountdownLabel"
-               Text="{Binding CountdownLabel, StringFormat='{}{0:mm\\:ss}'}" 
+               Text="{Binding CountdownLabel, StringFormat='{}{0:m\\:ss}'}" 
                FontFamily="OpenSansRegular"
 		       FontSize="Large"
                HorizontalOptions="Center"

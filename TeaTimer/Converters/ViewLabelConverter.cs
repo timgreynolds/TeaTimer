@@ -11,6 +11,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         const string csym = "\u2103";
         const string fsym = "\u2109";
 
+        private bool _useCelsius;
         public ViewLabelConverter() 
 		{
 		}
@@ -20,7 +21,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
             string viewLabel = string.Empty;
             viewLabel += $"Tea: {values.OfType<string>().FirstOrDefault()}, ";
             viewLabel += $"Brew Temp: {ConvertBrewTemp(values.OfType<int>().FirstOrDefault())}, ";
-            viewLabel += $"Steep Time: {values.OfType<TimeSpan>().FirstOrDefault().ToString(@"mm\:ss")}";
+            viewLabel += $"Steep Time: {values.OfType<TimeSpan>().FirstOrDefault().ToString(@"m\:ss")}";
             return viewLabel.Trim();
         }
 
@@ -31,7 +32,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
 
         private string ConvertBrewTemp(int value)
         {
-            if(App.UseCelsius)
+            if(_useCelsius)
             {
                 return UnitConverters.FahrenheitToCelsius(value).ToString() + csym;
             }
