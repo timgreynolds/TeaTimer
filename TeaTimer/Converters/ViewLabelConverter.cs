@@ -3,19 +3,32 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Media;
+using com.mahonkin.tim.maui.TeaTimer.Services;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Converters
 {
+    ///<inheritdoc cref="IMultiValueConverter"></inheritdoc>
     internal class ViewLabelConverter : IMultiValueConverter
     {
+        #region Constants
         const string csym = "\u2103";
         const string fsym = "\u2109";
+        #endregion Constants
 
-        private bool _useCelsius;
-        public ViewLabelConverter() 
-		{
-		}
+        #region Private Fields
+        private TeaSettingsService _settingsService;
+        #endregion Private Fields
 
+        #region Constructors
+        ///<Summary>Constructor</Summary>
+        public ViewLabelConverter()
+        {
+            _settingsService = new TeaSettingsService();
+        }
+        #endregion Constructors
+
+        #region Interface Methods
+        ///<inheritdoc cref="IMultiValueConverter.Convert(object[], Type, object, CultureInfo)" />
         object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             string viewLabel = string.Empty;
@@ -25,14 +38,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
             return viewLabel.Trim();
         }
 
+        ///<inheritdoc cref="IMultiValueConverter.ConvertBack(object, Type[], object, CultureInfo)" />
         object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             return null;
         }
+        #endregion Interface Methods
 
+        #region Private Methods
         private string ConvertBrewTemp(int value)
         {
-            if(_useCelsius)
+            if (_settingsService.Get<bool>("UseCelsius", false))
             {
                 return UnitConverters.FahrenheitToCelsius(value).ToString() + csym;
             }
@@ -41,6 +57,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
                 return value + fsym;
             }
         }
+        #endregion Private Methods
     }
 }
-

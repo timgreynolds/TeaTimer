@@ -73,13 +73,21 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             get;
             private set;
         }
+
+        public ICommand SettingsBtnPressed
+        {
+            get;
+            private set;
+        }
+
         #endregion Public Properties
 
-        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService)
-           : base(navigationService, displayService, dispatcherService)
+        public EditViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSettingsService settingsService)
+           : base(navigationService, displayService, settingsService)
         {
             SaveBtnPressed = new Command(() => Save());
             BackButtonCommand = new Command(() => NavigateBack());
+            SettingsBtnPressed = new Command(() => TeaNavigationService.NavigateToAsync(nameof(Pages.SettingsPage)));
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -101,23 +109,23 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 else
                 {
-                    DisplayService.ShowAlertAsync("Error", "Query parmater could not be interpreted as a Tea.");
+                    TeaDisplayService.ShowAlertAsync("Error", "Query parmater could not be interpreted as a Tea.");
                 }
             }
             else
             {
-                DisplayService.ShowAlertAsync("Error", "No query parameter matching 'Tea' was passed.");
+                TeaDisplayService.ShowAlertAsync("Error", "No query parameter matching 'Tea' was passed.");
             }
         }
 
         private void Save()
         {
-            DisplayService.ShowAlertAsync("Action", "Save button pressed");
+            TeaDisplayService.ShowAlertAsync("Action", "Save button pressed");
         }
 
         private void NavigateBack()
         {
-            NavigationService.GoBackAsync();
+            TeaNavigationService.GoBackAsync();
         }
     }
 }

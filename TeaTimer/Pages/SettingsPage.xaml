@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.SettingsPage"
+             Title="Settings">
+    <HorizontalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+        <Label Text="Use Celsius"
+               FontFamily="OpenSansRegular"
+               FontSize="Medium"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+        <Switch IsToggled="{Binding UseCelsius}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
+    </HorizontalStackLayout>
+</ContentPage>

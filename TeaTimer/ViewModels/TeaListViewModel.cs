@@ -49,7 +49,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Public Properties
 
         #region Constructors
-        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService) : base(navigationService, displayService, dispatcherService)
+        public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSettingsService settingsService)
+            : base(navigationService, displayService, settingsService)
         {
             RefreshList = new Command(() => _teas = TeaModel.Teas);
             AddTeaCommand = new Command(() => AddTea());
@@ -61,12 +62,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private void AddTea()
         {
             System.Console.WriteLine("Add Tea");
-            NavigationService.NavigateToAsync(nameof(Pages.EditPage));
+            TeaNavigationService.NavigateToAsync(nameof(Pages.EditPage));
         }
 
         private void OnSelectedTeaChanged(TeaModel tea)
         {
-            NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", tea } });
+            TeaNavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", tea } });
         }
         #endregion Private Methods
     }

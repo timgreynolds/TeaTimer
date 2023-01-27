@@ -62,7 +62,7 @@
                                VerticalTextAlignment="Center"
                                HorizontalTextAlignment="Start"
                                Grid.Column="1" />
-                            <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:mm\\:ss}'}"
+                            <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
                                FontFamily="OpenSansRegular"
                                VerticalTextAlignment="Center"
                                HorizontalTextAlignment="Start"

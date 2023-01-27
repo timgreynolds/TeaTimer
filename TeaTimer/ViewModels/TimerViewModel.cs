@@ -11,16 +11,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class TimerViewModel : BaseViewModel
     {
         #region Private Fields
-        private INavigationService _navigationService;
         private string _buttonText = "Start";
         private string _viewTitle = string.Empty;
         private bool _isButtonEnabled;
         private bool _isViewLabelVisible;
         private TimeSpan _countdownLabel = new TimeSpan(0);
         private IList _teas = TeaModel.Teas;
-        private IDispatcherService _dispatcher;
         private IDispatcherTimer _countdown;
         private TeaModel _selectedTea;
+        //private TeaNavigationService _navigationService;
         #endregion
 
         #region Public Properties
@@ -34,7 +33,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public string ViewTitle
         {
             get => _viewTitle;
-            set => SetProperty(ref _viewTitle, value); 
+            set => SetProperty(ref _viewTitle, value);
         }
 
         public bool IsButtonEnabled
@@ -79,15 +78,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Constructor
-        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDispatcherService dispatcherService) : base(navigationService, displayService, dispatcherService)
+        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService, TeaSettingsService settingsService)
+            : base(navigationService, displayService, settingsService)
         {
-            _navigationService = navigationService;
-            _dispatcher = dispatcherService;
-            TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
-            _countdown = _dispatcher.CreateTimer();
+            //_navigationService = navigationService;
+            _countdown = dispatcherService.CreateDispatcher().CreateTimer();
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;
             _countdown.Tick += (sender, e) => ExecuteTimer();
+            TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
         }
         #endregion
 

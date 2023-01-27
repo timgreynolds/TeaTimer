@@ -10,9 +10,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         public TeaNavigationService()
         {
         }
-
-        public Task PopAsync() => AppShell.Current.Navigation.PopAsync();
-
+        
         public Task GoBackAsync() => AppShell.Current.GoToAsync("..");
 
         public Task InitializeAsync() => NavigateToAsync(nameof(Pages.TimerPage));

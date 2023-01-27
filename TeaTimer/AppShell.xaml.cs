@@ -4,16 +4,12 @@ using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
-
 public partial class AppShell : Shell
 {
-    private readonly INavigationService _navigationService;
-
-    public AppShell(INavigationService navigationService)
+    public AppShell(TeaNavigationService navigationService)
     {
-        _navigationService = navigationService;
-
         Routing.RegisterRoute(nameof(EditPage), typeof(EditPage));
+        Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
 
         InitializeComponent();
     }
