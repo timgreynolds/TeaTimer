@@ -8,7 +8,6 @@ public partial class TeaListPage : ContentPage
     public TeaListPage(TeaListViewModel viewModel)
     {
         InitializeComponent();
-
         BindingContext = viewModel;
     }
 }

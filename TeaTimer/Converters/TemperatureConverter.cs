@@ -17,6 +17,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         /// <Summary>Constructor</Summary>
         public TemperatureConverter()
         {
+            _settingService = new TeaSettingsService();
         }
         #endregion Constructors
 

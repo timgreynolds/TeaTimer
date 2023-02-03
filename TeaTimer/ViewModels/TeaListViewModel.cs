@@ -52,13 +52,18 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSettingsService settingsService)
             : base(navigationService, displayService, settingsService)
         {
-            RefreshList = new Command(() => _teas = TeaModel.Teas);
+            RefreshList = new Command(() => RefreshTeas());
             AddTeaCommand = new Command(() => AddTea());
-            _teas = TeaModel.Teas;
+            RefreshTeas();
         }
         #endregion Constructors
 
         #region Private Methods
+        private void RefreshTeas()
+        {
+            _teas = TeaModel.Teas;
+        }
+
         private void AddTea()
         {
             System.Console.WriteLine("Add Tea");
