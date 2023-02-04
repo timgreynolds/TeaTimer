@@ -51,10 +51,6 @@
 	<ItemGroup>
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.4" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="4.0.0" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
-		<PackageReference Include="CommunityToolkit.Maui.Markup" Version="2.1.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Remove="MainPage.xaml" />
