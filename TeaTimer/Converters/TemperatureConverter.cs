@@ -9,6 +9,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
     /// <inheritdoc cref="IValueConverter"/>
     internal class TemperatureConverter : IValueConverter
     {
+        #region Constants
+        const string csym = "\u2103";
+        const string fsym = "\u2109";
+        #endregion Constants
+
         #region Private Fields
         private TeaSettingsService _settingService;
         #endregion Private Fields
@@ -28,11 +33,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
             if ((_settingService.Get<bool>("UseCelsius", false)))
             {
                 double celsius = UnitConverters.FahrenheitToCelsius((int)value);
-                return celsius.ToString();
+                return celsius.ToString() + csym;
             }
             else
             {
-                return value.ToString();
+                return value.ToString() + fsym;
             }
         }
 
