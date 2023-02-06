@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
-             xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage">
-    <VerticalStackLayout>
+    <VerticalStackLayout x:Name="MainLayout">
         <ListView x:Name="TeaListView"
               ItemsSource="{Binding Teas}"
               IsPullToRefreshEnabled="True"
@@ -29,11 +28,24 @@
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="0" />
-                        <Label Text="Brew Temp"
+                        <Label Text=""
                            FontFamily="OpenSansRegular"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
-                           Grid.Column="1" />
+                           Grid.Column="1">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding UseCelsius}"
+                                             Value="True">
+                                    <Setter Property="Text" Value="Brew Temp &#x2103;" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label"
+                                             Binding="{Binding UseCelsius}"
+                                             Value="False">
+                                    <Setter Property="Text" Value="Brew Temp &#x2109;" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
                         <Label Text="Steep Time"
                            FontFamily="OpenSansRegular"
                            VerticalTextAlignment="Center"
@@ -57,12 +69,12 @@
                                VerticalTextAlignment="Center"
                                HorizontalTextAlignment="Start"
                                Grid.Column="0" />
-                            <Label Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}}"
+                            <Label Text="{Binding Path=BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
                                FontFamily="OpenSansRegular"
                                VerticalTextAlignment="Center"
                                HorizontalTextAlignment="Start"
                                Grid.Column="1" />
-                            <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
+                            <Label Text="{Binding Path=SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
                                FontFamily="OpenSansRegular"
                                VerticalTextAlignment="Center"
                                HorizontalTextAlignment="Start"
@@ -72,7 +84,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.Footer>
-                <Label/>
+                <Label />
             </ListView.Footer>
         </ListView>
         <Button x:Name="AddTeaBtn"

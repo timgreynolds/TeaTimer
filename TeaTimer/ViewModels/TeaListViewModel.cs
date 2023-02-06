@@ -13,6 +13,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Fields
         private IList _teas;
         private TeaModel _selectedTea;
+        private bool _useCelsius;
         #endregion Private Fields
 
         #region Public Properties
@@ -27,12 +28,18 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             get => _selectedTea;
             set
             {
-                if (value is not null && _selectedTea != value)
-                {
-                    OnSelectedTeaChanged(value);
-                }
                 SetProperty(ref _selectedTea, value);
+                if (value is not null) //&& _selectedTea != value)
+                {
+                    OnSelectedTeaChanged();
+                }
             }
+        }
+
+        public bool UseCelsius
+        {
+            get => _useCelsius;
+            private set { }
         }
 
         public ICommand RefreshList
@@ -52,6 +59,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSettingsService settingsService)
             : base(navigationService, displayService, settingsService)
         {
+            _useCelsius = settingsService.Get(nameof(UseCelsius), false);
             RefreshList = new Command(() => RefreshTeas());
             AddTeaCommand = new Command(() => AddTea());
             RefreshTeas();
@@ -70,9 +78,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             TeaNavigationService.NavigateToAsync(nameof(Pages.EditPage));
         }
 
-        private void OnSelectedTeaChanged(TeaModel tea)
+        private void OnSelectedTeaChanged()
         {
-            TeaNavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", tea } });
+            TeaNavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", _selectedTea } });
         }
         #endregion Private Methods
     }

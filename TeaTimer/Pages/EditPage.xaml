@@ -33,11 +33,23 @@
                    VerticalOptions="Center" 
                    HorizontalOptions="End" />
             <Label x:Name="BrewTempLabel"
-                   Text="Brew Temp"
                    FontFamily="OpenSansRegular"
                    VerticalOptions="Center" 
                    HorizontalOptions="End"
-                   Grid.Row="1"/>
+                   Grid.Row="1">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding UseCelsius}"
+                                 Value="True">
+                        <Setter Property="Text" Value="Brew Temp &#x2103;" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding UseCelsius}"
+                                 Value="False">
+                        <Setter Property="Text" Value="Brew Temp &#x2109;" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
             <Label x:Name="SteepTimeLabel"
                    Text="Steep Time"
                    FontFamily="OpenSansRegular"
@@ -53,7 +65,7 @@
                    Grid.Column="1"/>
             <Entry x:Name="BrewTempEntry"
                    Placeholder="Brew Temperature"
-                   Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}}"
+                   Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{0:D}'}"
                    FontFamily="OpenSansRegular"
                    VerticalOptions="Center"
                    HorizontalOptions="Fill"
