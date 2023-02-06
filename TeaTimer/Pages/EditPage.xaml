@@ -14,6 +14,7 @@
             Padding="30,0"
             VerticalOptions="Center">
         <VerticalStackLayout.Resources>
+            <converters:TemperatureConverter x:Key="TemperatureConverter"/>
             <converters:TimespanConverter x:Key="TimespanConverter"/>
         </VerticalStackLayout.Resources>
         <Grid RowSpacing="25" ColumnSpacing="25">
@@ -52,7 +53,7 @@
                    Grid.Column="1"/>
             <Entry x:Name="BrewTempEntry"
                    Placeholder="Brew Temperature"
-                   Text="{Binding BrewTemp}"
+                   Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}}"
                    FontFamily="OpenSansRegular"
                    VerticalOptions="Center"
                    HorizontalOptions="Fill"

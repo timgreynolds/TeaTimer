@@ -33,11 +33,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
             if ((_settingService.Get<bool>("UseCelsius", false)))
             {
                 double celsius = UnitConverters.FahrenheitToCelsius((int)value);
-                return celsius.ToString() + csym;
+                return celsius;//.ToString() + csym;
             }
             else
             {
-                return value.ToString() + fsym;
+                return value;//.ToString() + fsym;
             }
         }
 
