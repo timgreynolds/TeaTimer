@@ -51,7 +51,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public ICommand AddTeaCommand
         {
             get;
-            set;
+            private set;
         }
         #endregion Public Properties
 
