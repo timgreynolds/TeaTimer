@@ -17,6 +17,7 @@
                FontSize="Medium"
                HorizontalOptions="Center"
                VerticalOptions="Start"
+               HorizontalTextAlignment="Center"
                IsVisible="{Binding IsViewLabelVisible}">
             <Label.Text>
                 <MultiBinding Converter="{StaticResource ViewLabelConverter}" StringFormat="{}{0} {1} {2}">

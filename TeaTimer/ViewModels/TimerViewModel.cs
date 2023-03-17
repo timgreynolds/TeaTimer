@@ -19,11 +19,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private IList _teas = TeaModel.Teas;
         private IDispatcherTimer _countdown;
         private TeaModel _selectedTea;
-        //private TeaNavigationService _navigationService;
         #endregion
 
         #region Public Properties
-
         public string ButtonText
         {
             get => _buttonText;
@@ -78,10 +76,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Constructor
-        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService, TeaSettingsService settingsService)
-            : base(navigationService, displayService, settingsService)
+        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService)//, TeaSettingsService settingsService)
+            : base(navigationService, displayService)//, settingsService)
         {
-            //_navigationService = navigationService;
             _countdown = dispatcherService.CreateDispatcher().CreateTimer();
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;

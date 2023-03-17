@@ -9,7 +9,6 @@ public partial class AppShell : Shell
     public AppShell(TeaNavigationService navigationService)
     {
         Routing.RegisterRoute(nameof(EditPage), typeof(EditPage));
-        Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
 
         InitializeComponent();
     }

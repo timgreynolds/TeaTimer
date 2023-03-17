@@ -14,7 +14,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private string _backButtonLabel = "Back";
         private int _brewTemp;
         private bool _isPageDirty;
-        private bool _useCelsius;
         private TimeSpan _steepTime;
         #endregion Private Fields
 
@@ -50,12 +49,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             private set => SetProperty(ref _isPageDirty, value);
         }
 
-        public bool UseCelsius
-        {
-            get => _useCelsius;
-            private set { }
-        }
-
         public TimeSpan SteepTime
         {
             get => _steepTime;
@@ -80,21 +73,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             get;
             private set;
         }
-
-        public ICommand SettingsBtnPressed
-        {
-            get;
-            private set;
-        }
         #endregion Public Properties
 
-        public EditViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSettingsService settingsService)
-           : base(navigationService, displayService, settingsService)
+        public EditViewModel(TeaNavigationService navigationService, TeaDisplayService displayService)
+           : base(navigationService, displayService)
         {
             SaveBtnPressed = new Command(() => Save());
             BackButtonCommand = new Command(() => NavigateBack());
-            SettingsBtnPressed = new Command(() => TeaNavigationService.NavigateToAsync(nameof(Pages.SettingsPage)));
-            _useCelsius = settingsService.Get(nameof(UseCelsius), false);
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)

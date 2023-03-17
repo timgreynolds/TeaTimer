@@ -14,7 +14,7 @@ public partial class App : Application
     {
         InitializeComponent();
         MainPage = new AppShell(navigationService);
-        UserAppTheme = RequestedTheme;
+        UserAppTheme = AppTheme.Light;
         RequestedThemeChanged += (sender, args) => UserAppTheme = args.RequestedTheme;
     }
 }

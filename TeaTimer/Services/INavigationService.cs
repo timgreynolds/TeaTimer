@@ -7,8 +7,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
 	public interface INavigationService
 	{
         Task InitializeAsync();
-        Task NavigateToAsync(string route, IDictionary<string, object> routeParameters = null);
-        Task GoBackAsync();
+        Task NavigateToAsync(string route, IDictionary<string, object> routeParameters);
+        Task GoBackAsync(bool animate);
     }	 
 }
 

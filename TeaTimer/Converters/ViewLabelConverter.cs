@@ -16,14 +16,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         #endregion Constants
 
         #region Private Fields
-        private TeaSettingsService _settingsService;
+        //private TeaSettingsService _settingsService;
         #endregion Private Fields
 
         #region Constructors
         ///<Summary>Constructor</Summary>
         public ViewLabelConverter()
         {
-            _settingsService = new TeaSettingsService();
+            //_settingsService = new TeaSettingsService();
         }
         #endregion Constructors
 
@@ -48,14 +48,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         #region Private Methods
         private string ConvertBrewTemp(int value)
         {
-            if (_settingsService.Get<bool>("UseCelsius", false))
-            {
-                return UnitConverters.FahrenheitToCelsius(value).ToString() + csym;
-            }
-            else
-            {
+            //if (_settingsService.Get<bool>("UseCelsius", false))
+            //{
+            //    return UnitConverters.FahrenheitToCelsius(value).ToString() + csym;
+            //}
+            //else
+            //{
                 return value + fsym;
-            }
+            //}
         }
         #endregion Private Methods
     }

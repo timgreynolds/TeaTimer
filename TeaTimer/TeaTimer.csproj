@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup><SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage></PropertyGroup>
+	<PropertyGroup>
+		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+	</PropertyGroup>
 	<PropertyGroup>
 		<TargetFrameworks>net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
 		<!-- Uncomment to also build the Android app.  -->
@@ -21,7 +23,7 @@
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">13.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
@@ -55,6 +57,7 @@
 	<ItemGroup>
 	  <MauiXaml Remove="MainPage.xaml" />
 	  <MauiXaml Remove="TeaList.xaml" />
+	  <MauiXaml Remove="Pages\SettingsPage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="TeaTable.xaml">
@@ -89,5 +92,9 @@
 	<ItemGroup>
 	  <Compile Remove="MainPage.xaml.cs" />
 	  <Compile Remove="TeaList.xaml.cs" />
+	  <Compile Remove="Services\TeaSettingsService.cs" />
+	  <Compile Remove="Services\ISettingsService.cs" />
+	  <Compile Remove="ViewModels\SettingsViewModel.cs" />
+	  <Compile Remove="Pages\SettingsPage.xaml.cs" />
 	</ItemGroup>
 </Project>

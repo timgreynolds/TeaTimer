@@ -13,7 +13,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Fields
         private IList _teas;
         private TeaModel _selectedTea;
-        private bool _useCelsius;
         #endregion Private Fields
 
         #region Public Properties
@@ -29,17 +28,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             set
             {
                 SetProperty(ref _selectedTea, value);
-                if (value is not null) //&& _selectedTea != value)
+                if (value is not null) 
                 {
                     OnSelectedTeaChanged();
                 }
             }
-        }
-
-        public bool UseCelsius
-        {
-            get => _useCelsius;
-            private set { }
         }
 
         public ICommand RefreshList
@@ -56,10 +49,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Public Properties
 
         #region Constructors
-        public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSettingsService settingsService)
-            : base(navigationService, displayService, settingsService)
+        public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService)
+            : base(navigationService, displayService)
         {
-            _useCelsius = settingsService.Get(nameof(UseCelsius), false);
             RefreshList = new Command(() => RefreshTeas());
             AddTeaCommand = new Command(() => AddTea());
             RefreshTeas();

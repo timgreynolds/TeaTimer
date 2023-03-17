@@ -24,7 +24,7 @@
                           Title="Tea List"
                           Route="TeaListPage" />
         </Tab>
-        <Tab x:Name="SettingsTab"
+<!--        <Tab x:Name="SettingsTab"
              Title="Settings"
              Icon="settings_icon.png"
              Route="SettingsPage">
@@ -32,6 +32,7 @@
                           Title="Settings"
                           Route="SettingsPage" />
         </Tab>
+-->
     </TabBar>
 </Shell>
 

@@ -5,11 +5,14 @@
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage">
     <VerticalStackLayout x:Name="MainLayout">
         <ListView x:Name="TeaListView"
-              ItemsSource="{Binding Teas}"
-              IsPullToRefreshEnabled="True"
-              RefreshCommand="{Binding RefreshList}"
-              SelectionMode="Single"
-              SelectedItem="{Binding SelectedTea}">
+                  BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}"
+                  HeightRequest="100"
+                  SeparatorColor="White"
+                  ItemsSource="{Binding Teas}"
+                  IsPullToRefreshEnabled="True"
+                  RefreshCommand="{Binding RefreshList}"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedTea}">
             <ListView.Resources>
                 <converters:TemperatureConverter x:Key="TemperatureConverter" />
                 <converters:TimespanConverter x:Key="TimespanConverter" />
@@ -23,16 +26,18 @@
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
                         <Label Text="Tea Name"
-                           FontFamily="OpenSansRegular"
-                           Padding="10"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Start"
-                           Grid.Column="0" />
+                               TextColor="White"
+                               FontFamily="OpenSansRegular"
+                               Padding="10"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"
+                               Grid.Column="0" />
                         <Label Text=""
-                           FontFamily="OpenSansRegular"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Start"
-                           Grid.Column="1">
+                               TextColor="White"
+                               FontFamily="OpenSansRegular"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"
+                               Grid.Column="1">
                             <Label.Triggers>
                                 <DataTrigger TargetType="Label"
                                              Binding="{Binding UseCelsius}"
@@ -47,10 +52,11 @@
                             </Label.Triggers>
                         </Label>
                         <Label Text="Steep Time"
-                           FontFamily="OpenSansRegular"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Start"
-                           Grid.Column="2" />
+                               TextColor="White"
+                               FontFamily="OpenSansRegular"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"
+                               Grid.Column="2" />
                     </Grid>
                 </VerticalStackLayout>
             </ListView.Header>
@@ -64,21 +70,24 @@
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
                             <Label Text="{Binding Path=Name}"
-                               FontFamily="OpenSansRegular"
-                               Padding="10,10"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Start"
-                               Grid.Column="0" />
+                                   TextColor="White"
+                                   FontFamily="OpenSansRegular"
+                                   Padding="10,10"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Start"
+                                   Grid.Column="0" />
                             <Label Text="{Binding Path=BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
-                               FontFamily="OpenSansRegular"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Start"
-                               Grid.Column="1" />
+                                   TextColor="White"
+                                   FontFamily="OpenSansRegular"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Start"
+                                   Grid.Column="1" />
                             <Label Text="{Binding Path=SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
-                               FontFamily="OpenSansRegular"
-                               VerticalTextAlignment="Center"
-                               HorizontalTextAlignment="Start"
-                               Grid.Column="2" />
+                                   TextColor="White"
+                                   FontFamily="OpenSansRegular"
+                                   VerticalTextAlignment="Center"
+                                   HorizontalTextAlignment="Start"
+                                   Grid.Column="2" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
@@ -87,9 +96,14 @@
                 <Label />
             </ListView.Footer>
         </ListView>
-        <Button x:Name="AddTeaBtn"
-                ImageSource="add_icon.png"
-                HorizontalOptions="End"
-                Command="{Binding AddTeaCommand}" />
+        <StackLayout
+            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
+            <ImageButton x:Name="AddTeaBtn"
+                         Source="add_icon_dk.png"
+                         HorizontalOptions="End"
+                         Padding="10,10"
+                         Margin="10,10"
+                         Command="{Binding AddTeaCommand}" />
+        </StackLayout>
     </VerticalStackLayout>
 </ContentPage>
