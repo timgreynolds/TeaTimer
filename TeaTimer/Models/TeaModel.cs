@@ -81,7 +81,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         [SQLite.Ignore]
         public static IList Teas
         {
-            get => GetTeas();
+            get => GetTeasAsync().Result;   
         }
         #endregion Non-SQL Properties
 
@@ -197,7 +197,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
             return tea;
         }
 
-        private static List<TeaModel> GetTeas()
+        private static async Task<List<TeaModel>> GetTeasAsync()
         {
             if (File.Exists(_dbFileName) == false)
             {
@@ -205,9 +205,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
             }
             else
             {
-                using (SQLiteConnection connection = new SQLiteConnection(_dbFileName))
+                SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
                 {
-                    return connection.Table<TeaModel>().ToList();
+                    return await connection.Table<TeaModel>().ToListAsync();
                 }
             }
         }
@@ -221,15 +221,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <returns>The tea identified by the supplied unique identifier.</returns>
         /// <exception cref="SQLiteException"></exception>
         /// <exception cref="Exception"></exception>
-        internal static TeaModel GetById(int id)
+        internal static async Task<TeaModel> GetByIdAsync(int id)
         {
             TeaModel tea = null;
 
             try
             {
-                using (SQLiteConnection connection = new SQLiteConnection(_dbFileName))
+                SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
                 {
-                    tea = connection.Get<TeaModel>(id);
+                    tea = await connection.GetAsync<TeaModel>(id);
                 }
             }
             catch (SQLiteException ex)
