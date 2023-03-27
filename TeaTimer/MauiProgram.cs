@@ -27,6 +27,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<Services.TeaNavigationService, Services.TeaNavigationService>();
         builder.Services.AddSingleton<Services.TeaDisplayService, Services.TeaDisplayService>();
         builder.Services.AddSingleton<Services.TeaDispatcherService, Services.TeaDispatcherService>();
+        builder.Services.AddSingleton<Services.TeaSqlService, Services.TeaSqlService>();
 
         return builder.Build();
     }

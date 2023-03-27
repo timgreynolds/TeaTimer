@@ -44,6 +44,7 @@
                     FontFamily="OpenSansRegular"
                     FontSize="Medium"
                     HorizontalOptions="CenterAndExpand"
+                    HorizontalTextAlignment="Center"
                     Title="Select a Tea Variety"
                     ItemsSource="{Binding Teas}"
                     ItemDisplayBinding="{Binding Name}"

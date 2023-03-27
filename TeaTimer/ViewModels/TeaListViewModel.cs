@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -11,11 +10,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class TeaListViewModel : BaseViewModel
     {
         #region Private Fields
+        private TeaSqlService _sqlService;
         private IList _teas;
         private TeaModel _selectedTea;
         #endregion Private Fields
 
         #region Public Properties
+        public bool UseCelsius => false;
+
         public IList Teas
         {
             get => _teas;
@@ -49,11 +51,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Public Properties
 
         #region Constructors
-        public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService)
-            : base(navigationService, displayService)
+        public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
+            : base(navigationService, displayService, sqlService)
         {
             RefreshList = new Command(() => RefreshTeas());
             AddTeaCommand = new Command(() => AddTea());
+            _sqlService = sqlService;
             RefreshTeas();
         }
         #endregion Constructors
@@ -61,18 +64,18 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Methods
         private void RefreshTeas()
         {
-            _teas = TeaModel.Teas;
+            _teas = _sqlService.Get();
         }
 
         private void AddTea()
         {
             System.Console.WriteLine("Add Tea");
-            TeaNavigationService.NavigateToAsync(nameof(Pages.EditPage));
+            NavigationService.NavigateToAsync(nameof(Pages.EditPage));
         }
 
         private void OnSelectedTeaChanged()
         {
-            TeaNavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", _selectedTea } });
+            NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", _selectedTea } });
         }
         #endregion Private Methods
     }

@@ -75,8 +75,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         }
         #endregion Public Properties
 
-        public EditViewModel(TeaNavigationService navigationService, TeaDisplayService displayService)
-           : base(navigationService, displayService)
+        public EditViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
+           : base(navigationService, displayService, sqlService)
         {
             SaveBtnPressed = new Command(() => Save());
             BackButtonCommand = new Command(() => NavigateBack());
@@ -101,23 +101,23 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 else
                 {
-                    TeaDisplayService.ShowAlertAsync("Error", "Query parmater could not be interpreted as a Tea.");
+                    DisplayService.ShowAlertAsync("Error", "Query parmater could not be interpreted as a Tea.");
                 }
             }
             else
             {
-                TeaDisplayService.ShowAlertAsync("Error", "No query parameter matching 'Tea' was passed.");
+                DisplayService.ShowAlertAsync("Error", "No query parameter matching 'Tea' was passed.");
             }
         }
 
         private void Save()
         {
-            TeaDisplayService.ShowAlertAsync("Action", "Save button pressed");
+            DisplayService.ShowAlertAsync("Action", "Save button pressed");
         }
 
         private void NavigateBack()
         {
-            TeaNavigationService.GoBackAsync();
+            NavigationService.GoBackAsync();
         }
     }
 }

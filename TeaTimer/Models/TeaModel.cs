@@ -5,7 +5,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Maui.Storage;
 using SQLite;
 
 namespace com.mahonkin.tim.maui.TeaTimer.DataModel
@@ -18,12 +17,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
     {
         #region Private Fields
         private int _id;
+        private int _brewTemp;
         private string _name;
         private TimeSpan _steepTime;
-        private int _brewTemp;
-        private static readonly string _appDataFolder = FileSystem.AppDataDirectory;
-        private static readonly string _appConfigFolder = Path.Combine(_appDataFolder, "TeaTimer");
-        private static readonly string _dbFileName = Path.Combine(_appConfigFolder, "TeaVarieties.db3");
         #endregion Private Fields      
 
         #region Public Properties
@@ -72,18 +68,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
             set => _brewTemp = value;
         }
         #endregion Public Properties
-
-        #region Non-SQL Public Properties
-        /// <summary>
-        /// The list of all tea varieties in the current tea database.
-        /// <br>Primarily to be used for data binding the selection/picker.</br>
-        /// </summary>
-        [SQLite.Ignore]
-        public static IList Teas
-        {
-            get => GetTeasAsync().Result;   
-        }
-        #endregion Non-SQL Properties
 
         #region Constructors
         /// <summary>
@@ -144,40 +128,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         #endregion Constructors
 
         #region Private Methods
-        private static List<TeaModel> CreateDatabase()
-        {
-            List<TeaModel> teas = new List<TeaModel>();
-
-            // The DbFile must be created, and populated with at least one initial tea variety.
-            // The routines *should* all be non-destructive, relying on 'CreateIfNotExist' patterns, but I added some extra checks just to be sure.
-            try
-            {
-                Directory.CreateDirectory(_appConfigFolder);
-                using (SQLiteConnection connection = new SQLiteConnection(_dbFileName, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
-                {
-                    TableMapping mapping = connection.TableMappings.Where(m => m.TableName.Equals("TeaVarieties", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
-                    if (mapping is null)
-                    {
-                        connection.CreateTable<TeaModel>();
-                    }
-                    if (connection.Table<TeaModel>().Count() < 1)
-                    {
-                        connection.Insert(new TeaModel("Earl Grey"));
-                    }
-                    teas = connection.Table<TeaModel>().ToList();
-                }
-            }
-            catch (SQLiteException ex)
-            {
-                throw SQLiteException.New(ex.Result, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-            return teas;
-        }
-
         private static TeaModel ValidateTea(TeaModel tea)
         {
             tea.Name = tea.Name.Trim();
@@ -195,22 +145,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
             }
 
             return tea;
-        }
-
-        private static async Task<List<TeaModel>> GetTeasAsync()
-        {
-            if (File.Exists(_dbFileName) == false)
-            {
-                return CreateDatabase();
-            }
-            else
-            {
-                SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-                {
-                    return await connection.Table<TeaModel>().ToListAsync();
-                }
-            }
-        }
+        }        
         #endregion Private Methods
 
         #region Internal Methods
@@ -221,27 +156,27 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <returns>The tea identified by the supplied unique identifier.</returns>
         /// <exception cref="SQLiteException"></exception>
         /// <exception cref="Exception"></exception>
-        internal static async Task<TeaModel> GetByIdAsync(int id)
-        {
-            TeaModel tea = null;
+        //internal static async Task<TeaModel> GetByIdAsync(int id)
+        //{
+        //    TeaModel tea = null;
 
-            try
-            {
-                SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-                {
-                    tea = await connection.GetAsync<TeaModel>(id);
-                }
-            }
-            catch (SQLiteException ex)
-            {
-                throw SQLiteException.New(ex.Result, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-            return tea;
-        }
+        //    try
+        //    {
+        //        SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
+        //        {
+        //            tea = await connection.GetAsync<TeaModel>(id);
+        //        }
+        //    }
+        //    catch (SQLiteException ex)
+        //    {
+        //        throw SQLiteException.New(ex.Result, ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message, ex);
+        //    }
+        //    return tea;
+        //}
 
         /// <summary>
         /// Adds the supplied tea object to the Tea Varieties database.
@@ -249,31 +184,31 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <param name="tea">The specific tea to add to the database.</param>
         /// <returns>The newly added tea with its unique database ID filled in.</returns>
         /// <exception cref="Exception"></exception>
-        internal static async Task<TeaModel> AddAsync(TeaModel tea)
-        {
-            tea = ValidateTea(tea);
-            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-            try
-            {
-                if (await connection.InsertAsync(tea) < 1)
-                {
-                    throw new Exception("Could not add the tea to the database.");
-                }
-            }
-            catch (SQLiteException ex)
-            {
-                throw SQLiteException.New(ex.Result, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-            return tea;
-        }
+        //internal static async Task<TeaModel> AddAsync(TeaModel tea)
+        //{
+        //    tea = ValidateTea(tea);
+        //    SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
+        //    try
+        //    {
+        //        if (await connection.InsertAsync(tea) < 1)
+        //        {
+        //            throw new Exception("Could not add the tea to the database.");
+        //        }
+        //    }
+        //    catch (SQLiteException ex)
+        //    {
+        //        throw SQLiteException.New(ex.Result, ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message, ex);
+        //    }
+        //    finally
+        //    {
+        //        await connection.CloseAsync();
+        //    }
+        //    return tea;
+        //}
 
         /// <summary>
         /// Updates the database entry with the same unique ID as the provided tea.
@@ -281,32 +216,32 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <param name="tea">The tea with updated values.</param>
         /// <returns>True if the database is updated and false otherwise.</returns>
         /// <exception cref="Exception"></exception>
-        internal static async Task<bool> UpdateAsync(TeaModel tea)
-        {
-            bool success = false;
-            tea = ValidateTea(tea);
-            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-            try
-            {
-                if (await connection.UpdateAsync(tea) > 0)
-                {
-                    success = true;
-                }
-            }
-            catch (SQLiteException ex)
-            {
-                throw SQLiteException.New(ex.Result, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-            return success;
-        }
+        //internal static async Task<bool> UpdateAsync(TeaModel tea)
+        //{
+        //    bool success = false;
+        //    tea = ValidateTea(tea);
+        //    SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
+        //    try
+        //    {
+        //        if (await connection.UpdateAsync(tea) > 0)
+        //        {
+        //            success = true;
+        //        }
+        //    }
+        //    catch (SQLiteException ex)
+        //    {
+        //        throw SQLiteException.New(ex.Result, ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message, ex);
+        //    }
+        //    finally
+        //    {
+        //        await connection.CloseAsync();
+        //    }
+        //    return success;
+        //}
 
         /// <summary>
         /// Deletes the database entry with the same unique ID as the provided tea.
@@ -314,32 +249,31 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <param name="tea">The tea to be deleted.</param>
         /// <returns>True if the database is updated and false otherwise.</returns>
         /// <exception cref="Exception"></exception>
-        internal static async Task<bool> DeleteAsync(TeaModel tea)
-        {
-            bool success = false;
-            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-            try
-            {
-                if (await connection.DeleteAsync(tea) > 0)
-                {
-                    success = true;
-                }
-            }
-            catch (SQLiteException ex)
-            {
-                throw SQLiteException.New(ex.Result, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-            finally
-            {
-                await connection.CloseAsync();
-            }
-            return success;
-        }
+        //internal static async Task<bool> DeleteAsync(TeaModel tea)
+        //{
+        //    bool success = false;
+        //    SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
+        //    try
+        //    {
+        //        if (await connection.DeleteAsync(tea) > 0)
+        //        {
+        //            success = true;
+        //        }
+        //    }
+        //    catch (SQLiteException ex)
+        //    {
+        //        throw SQLiteException.New(ex.Result, ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message, ex);
+        //    }
+        //    finally
+        //    {
+        //        await connection.CloseAsync();
+        //    }
+        //    return success;
+        //}
         #endregion Internal Methods
     }
-
 }

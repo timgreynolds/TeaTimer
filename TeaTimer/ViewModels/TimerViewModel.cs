@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -16,7 +18,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private bool _isButtonEnabled;
         private bool _isViewLabelVisible;
         private TimeSpan _countdownLabel = new TimeSpan(0);
-        private IList _teas = TeaModel.Teas;
+        private List<TeaModel> _teas = new List<TeaModel>();
         private IDispatcherTimer _countdown;
         private TeaModel _selectedTea;
         #endregion
@@ -52,7 +54,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             set => SetProperty(ref _countdownLabel, value);
         }
 
-        public IList Teas
+        public List<TeaModel> Teas
         {
             get => _teas;
             set => SetProperty(ref _teas, value);
@@ -76,9 +78,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Constructor
-        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService)//, TeaSettingsService settingsService)
-            : base(navigationService, displayService)//, settingsService)
+        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService, TeaSqlService sqlService)//, TeaSettingsService settingsService)
+            : base(navigationService, displayService, sqlService)//, settingsService)
         {
+            _teas = sqlService.Get();
             _countdown = dispatcherService.CreateDispatcher().CreateTimer();
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;

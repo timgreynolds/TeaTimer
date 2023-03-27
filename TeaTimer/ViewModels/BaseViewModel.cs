@@ -8,13 +8,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public TeaNavigationService TeaNavigationService { get; private set; }
-        public TeaDisplayService TeaDisplayService { get; private set; }
+        public TeaNavigationService NavigationService { get; private set; }
+        public TeaDisplayService DisplayService { get; private set; }
+        public TeaSqlService SqlService { get; private set; }
 
-        public BaseViewModel(TeaNavigationService navigationService, TeaDisplayService displayService)
+        public BaseViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
         {
-            TeaNavigationService = navigationService;
-            TeaDisplayService = displayService;
+            NavigationService = navigationService;
+            DisplayService = displayService;
+            SqlService = sqlService;
         }
 
         protected virtual void SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
