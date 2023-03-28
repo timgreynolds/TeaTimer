@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -10,18 +11,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class TeaListViewModel : BaseViewModel
     {
         #region Private Fields
-        private TeaSqlService _sqlService;
         private IList _teas;
         private TeaModel _selectedTea;
         #endregion Private Fields
 
         #region Public Properties
-        public bool UseCelsius => false;
+        public bool UseCelsius { get; }
 
         public IList Teas
         {
             get => _teas;
-            private set { }
+            private set => SetProperty(ref _teas, value);
         }
 
         public TeaModel SelectedTea
@@ -54,17 +54,16 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
             : base(navigationService, displayService, sqlService)
         {
-            RefreshList = new Command(() => RefreshTeas());
+            RefreshList = new Command(async () => await  RefreshTeas());
             AddTeaCommand = new Command(() => AddTea());
-            _sqlService = sqlService;
             RefreshTeas();
         }
         #endregion Constructors
 
         #region Private Methods
-        private void RefreshTeas()
+        private async Task RefreshTeas()
         {
-            _teas = _sqlService.Get();
+            Teas = await SqlService.GetAsync();
         }
 
         private void AddTea()

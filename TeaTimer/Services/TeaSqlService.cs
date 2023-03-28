@@ -46,10 +46,22 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             {
                 Initialize();
             }
-            using (SQLiteConnection connection = new SQLiteConnection(_dbFileName, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
+            using (SQLiteConnection connection = new SQLiteConnection(_dbFileName, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
             {
                 teas = connection.Table<TeaModel>().ToList();
             }
+            return teas;
+        }
+
+        public async Task<List<TeaModel>> GetAsync()
+        {
+            List<TeaModel> teas = new List<TeaModel>();
+            if (_initialized == false)
+            {
+                Initialize();
+            }
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
+            teas = await connection.Table<TeaModel>().ToListAsync().ConfigureAwait(false);
             return teas;
         }
 

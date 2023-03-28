@@ -10,7 +10,7 @@ using SQLite;
 namespace com.mahonkin.tim.maui.TeaTimer.DataModel
 {
     /// <summary>
-    /// Class that defines the tea variety along with some useful SQLite methods for managing the tea variety database.
+    /// Class that defines the tea variety.
     /// </summary>
     [Table("TeaVarieties")]
     public class TeaModel

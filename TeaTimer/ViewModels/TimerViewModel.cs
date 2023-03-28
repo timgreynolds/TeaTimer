@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -78,19 +77,25 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Constructor
-        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService, TeaSqlService sqlService)//, TeaSettingsService settingsService)
-            : base(navigationService, displayService, sqlService)//, settingsService)
+        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService, TeaSqlService sqlService)
+            : base(navigationService, displayService, sqlService)
         {
-            _teas = sqlService.Get();
+            //_teas = sqlService.GetAsync().Result;
             _countdown = dispatcherService.CreateDispatcher().CreateTimer();
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;
             _countdown.Tick += (sender, e) => ExecuteTimer();
             TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
+            RefreshTeas();
         }
         #endregion
 
         #region Private Methods
+        private async Task RefreshTeas()
+        {
+            Teas = await SqlService.GetAsync();
+        }
+
         private void OnSelectedTeaChanged()
         {
             if (SelectedTea != null && _countdown.IsRunning == false)
