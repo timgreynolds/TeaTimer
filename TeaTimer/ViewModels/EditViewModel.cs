@@ -15,6 +15,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private int _brewTemp;
         private bool _isPageDirty;
         private TimeSpan _steepTime;
+        private TeaModel _tea = new TeaModel(string.Empty);
         #endregion Private Fields
 
         #region Public Properties
@@ -42,6 +43,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 SetProperty(ref _brewTemp, value);
             }
         }
+
+        public bool UseCelsius { get; }
 
         public bool IsPageDirty
         {
@@ -84,34 +87,42 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            if (query.Count <= 0)
-            {
-                query.Add("Tea", new TeaModel(string.Empty));
-                IsPageDirty = false;
-            }
             if (query.TryGetValue("Tea", out object param))
             {
                 if (param.GetType().IsAssignableTo(typeof(TeaModel)))
                 {
-                    TeaModel tea = param as TeaModel;
-                    Name = tea.Name;
-                    BrewTemp = tea.BrewTemp;
-                    SteepTime = tea.SteepTime;
-                    IsPageDirty = false;
+                    _tea = param as TeaModel;
+                    //Name = _tea.Name;
+                    //BrewTemp = _tea.BrewTemp;
+                    //SteepTime = _tea.SteepTime;
+                    //IsPageDirty = false;
                 }
                 else
                 {
-                    DisplayService.ShowAlertAsync("Error", "Query parmater could not be interpreted as a Tea.");
+                    _tea = new TeaModel(string.Empty);
+                    //Name = tea.Name;
+                    //BrewTemp = tea.BrewTemp;
+                    //SteepTime = tea.SteepTime;
+                    //IsPageDirty = false;
                 }
             }
             else
             {
-                DisplayService.ShowAlertAsync("Error", "No query parameter matching 'Tea' was passed.");
+                _tea = new TeaModel(string.Empty);
+                //Name = tea.Name;
+                //BrewTemp = tea.BrewTemp;
+                //SteepTime = tea.SteepTime;
+                //IsPageDirty = false;
             }
+            Name = _tea.Name;
+            BrewTemp = _tea.BrewTemp;
+            SteepTime = _tea.SteepTime;
+            IsPageDirty = false;
         }
 
         private void Save()
         {
+            SqlService.Add(_tea);
             DisplayService.ShowAlertAsync("Action", "Save button pressed");
         }
 

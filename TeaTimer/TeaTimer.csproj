@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
-	</PropertyGroup>
-	<PropertyGroup>
 		<TargetFrameworks>net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
 		<!-- Uncomment to also build the Android app.  -->
 		<!-- <TargetFrameWorks>$(TargetFrameworks);net7.0-android</TargetFrameWorks> -->
@@ -23,7 +20,7 @@
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.5</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
@@ -36,6 +33,10 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
+	  <CodesignProvision>iOS Team Provisioning Profile: com.mahonkin.tim.maui.teatimer</CodesignProvision>
+	  <CodesignKey>Apple Development: tim@mahonkin.com (R62H93RXZD)</CodesignKey>
+	  <BuildIpa>true</BuildIpa>
+	  <IpaIncludeArtwork>true</IpaIncludeArtwork>
 	</PropertyGroup>
 	<ItemGroup>
 		<!-- App Icon -->
@@ -80,6 +81,7 @@
 	  <None Remove="CommunityToolkit.Maui.Markup" />
 	  <None Remove="Pages\" />
 	  <None Remove="Services\" />
+	  <None Remove="Behaviors\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Resources\Images\back_icon.svg" />
@@ -88,6 +90,7 @@
 	  <Folder Include="ViewModels\" />
 	  <Folder Include="Pages\" />
 	  <Folder Include="Services\" />
+	  <Folder Include="Behaviors\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Remove="MainPage.xaml.cs" />

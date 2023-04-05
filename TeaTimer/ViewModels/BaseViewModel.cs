@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Microsoft.Maui.Controls;
 using com.mahonkin.tim.maui.TeaTimer.Services;
+using System;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
@@ -17,6 +19,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             NavigationService = navigationService;
             DisplayService = displayService;
             SqlService = sqlService;
+        }
+
+        public virtual void ShellNavigated(object sender, ShellNavigatedEventArgs args)
+        {
+            Console.WriteLine($"ShellNavigated event occurred.");
         }
 
         protected virtual void SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)

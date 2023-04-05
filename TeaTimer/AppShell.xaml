@@ -5,8 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:com.mahonkin.tim.maui.TeaTimer"
     xmlns:pages="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Pages"
+    xmlns:behaviors="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Behaviors"
     x:DataType="local:AppShell"
     FlyoutBehavior="Disabled">
+    <Shell.Behaviors>
+        <behaviors:OnShellNavigating />
+    </Shell.Behaviors>
     <TabBar x:Name="TabBar">
         <Tab x:Name="TimerTab"
              Title="Timer"

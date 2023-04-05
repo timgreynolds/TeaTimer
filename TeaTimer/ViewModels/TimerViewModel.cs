@@ -80,13 +80,19 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService, TeaSqlService sqlService)
             : base(navigationService, displayService, sqlService)
         {
-            //_teas = sqlService.GetAsync().Result;
             _countdown = dispatcherService.CreateDispatcher().CreateTimer();
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;
             _countdown.Tick += (sender, e) => ExecuteTimer();
             TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
-            RefreshTeas();
+        }
+        #endregion
+
+        #region Overrides
+        public override async void ShellNavigated(object sender, ShellNavigatedEventArgs args)
+        {
+            base.ShellNavigated(sender, args);
+            Teas = await SqlService.GetAsync();
         }
         #endregion
 
@@ -114,6 +120,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             else
             {
                 _countdown.Stop();
+                CountdownLabel = TimeSpan.FromSeconds(0.0);
                 IsViewLabelVisible = false;
                 IsButtonEnabled = false;
             }
@@ -121,13 +128,29 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         private void ExecuteTimerButton()
         {
+            IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
             if (_countdown.IsRunning)
             {
                 _countdown.Stop();
+                while (enumerator.MoveNext())
+                {
+                    if (enumerator.Current.IsEnabled == false)
+                    {
+                        enumerator.Current.IsEnabled = true;
+                    }
+                }
                 ButtonText = "Start";
             }
             else
-            {
+            { 
+                while (enumerator.MoveNext())
+                {
+                    if(enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
+                    {
+                        enumerator.Current.IsEnabled = false;
+                    }
+                }
+
                 ButtonText = "Stop";
                 _countdown.Start();
             }
@@ -150,6 +173,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 IsButtonEnabled = false;
                 ButtonText = "Start";
                 CountdownLabel = SelectedTea.SteepTime;
+                IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    if (enumerator.Current.IsEnabled == false)
+                    {
+                        enumerator.Current.IsEnabled = true;
+                    }
+                }
             }
         }
         #endregion

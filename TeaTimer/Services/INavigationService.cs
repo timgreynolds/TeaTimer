@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
-	public interface INavigationService
-	{
-        Task InitializeAsync();
-        Task NavigateToAsync(string route, IDictionary<string, object> routeParameters);
-        Task GoBackAsync(bool animate);
-    }	 
+    public interface INavigationService
+    {
+        public Task InitializeAsync();
+        public Task NavigateToAsync(string route, IDictionary<string, object> routeParameters);
+        public Task GoBackAsync(bool animate);
+    }
+
 }
 

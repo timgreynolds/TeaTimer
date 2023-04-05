@@ -21,7 +21,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public IList Teas
         {
             get => _teas;
-            private set => SetProperty(ref _teas, value);
+            set => SetProperty(ref _teas, value);
         }
 
         public TeaModel SelectedTea
@@ -56,9 +56,16 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         {
             RefreshList = new Command(async () => await  RefreshTeas());
             AddTeaCommand = new Command(() => AddTea());
-            RefreshTeas();
         }
         #endregion Constructors
+
+        #region Ovverrides
+        public override async void ShellNavigated(object sender, ShellNavigatedEventArgs args)
+        {
+            base.ShellNavigated(sender, args);
+            await RefreshTeas();
+        }
+        #endregion Overrides
 
         #region Private Methods
         private async Task RefreshTeas()
