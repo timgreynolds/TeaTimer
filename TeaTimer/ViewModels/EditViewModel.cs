@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -10,19 +11,27 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class EditViewModel : BaseViewModel, IQueryAttributable
     {
         #region Private Fields
-        private string _name;
-        private string _backButtonLabel = "Back";
-        private int _brewTemp;
-        private bool _isPageDirty;
-        private TimeSpan _steepTime;
-        private TeaModel _tea = new TeaModel(string.Empty);
+        private static string _name;
+        private static string _backButtonLabel = "Back";
+        private static int _brewTemp = 212;
+        private static bool _isPageDirty;
+        private static TimeSpan _steepTime = TimeSpan.FromMinutes(2);
+        private static TeaModel _tea = new TeaModel(string.Empty, _steepTime, _brewTemp);
         #endregion Private Fields
 
         #region Public Properties
         public string Name
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
+            get => _tea.Name;
+            set
+            {
+                if (value != _tea.Name)
+                {
+                    IsPageDirty = true;
+                    _tea.Name = value;
+                }
+                SetProperty(ref _name, value);
+            }
         }
 
         public string BackButtonLabel
@@ -33,12 +42,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         public int BrewTemp
         {
-            get => _brewTemp;
+            get => _tea.BrewTemp;
             set
             {
-                if (value != _brewTemp)
+                if (value != _tea.BrewTemp)
                 {
                     IsPageDirty = true;
+                    _tea.BrewTemp = value;
                 }
                 SetProperty(ref _brewTemp, value);
             }
@@ -54,12 +64,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         public TimeSpan SteepTime
         {
-            get => _steepTime;
+            get => _tea.SteepTime;
             set
             {
-                if (value != _steepTime)
+                if (value != _tea.SteepTime)
                 {
                     IsPageDirty = true;
+                    _tea.SteepTime = value;
                 }
                 SetProperty(ref _steepTime, value);
             }
@@ -81,7 +92,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public EditViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
            : base(navigationService, displayService, sqlService)
         {
-            SaveBtnPressed = new Command(() => Save());
+            SaveBtnPressed = new Command(async () => await Save());
             BackButtonCommand = new Command(() => NavigateBack());
         }
 
@@ -92,27 +103,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 if (param.GetType().IsAssignableTo(typeof(TeaModel)))
                 {
                     _tea = param as TeaModel;
-                    //Name = _tea.Name;
-                    //BrewTemp = _tea.BrewTemp;
-                    //SteepTime = _tea.SteepTime;
-                    //IsPageDirty = false;
                 }
                 else
                 {
                     _tea = new TeaModel(string.Empty);
-                    //Name = tea.Name;
-                    //BrewTemp = tea.BrewTemp;
-                    //SteepTime = tea.SteepTime;
-                    //IsPageDirty = false;
                 }
             }
             else
             {
                 _tea = new TeaModel(string.Empty);
-                //Name = tea.Name;
-                //BrewTemp = tea.BrewTemp;
-                //SteepTime = tea.SteepTime;
-                //IsPageDirty = false;
             }
             Name = _tea.Name;
             BrewTemp = _tea.BrewTemp;
@@ -120,10 +119,32 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             IsPageDirty = false;
         }
 
-        private void Save()
+        private async Task Save()
         {
-            SqlService.Add(_tea);
-            DisplayService.ShowAlertAsync("Action", "Save button pressed");
+            if (_tea.Id > 0)
+            {
+                try
+                {
+                    _tea = await SqlService.UpdateAsync(_tea);
+                    await DisplayService.ShowAlertAsync("Tea Updated!", $"{_tea.Name} (Id: {_tea.Id}) successfully updated.", "ÖK");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayService.ShowExceptionAsync(ex);
+                }
+            }
+            else
+            {
+                try
+                {
+                    _tea = await SqlService.AddAsync(_tea);
+                    await DisplayService.ShowAlertAsync("Tea Added!", $"{_tea.Name} ({_tea.Id}) successfully updated.", "ÖK");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayService.ShowExceptionAsync(ex);
+                }
+            }
         }
 
         private void NavigateBack()

@@ -127,8 +127,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         }
         #endregion Constructors
 
-        #region Private Methods
-        private static TeaModel ValidateTea(TeaModel tea)
+        #region Public Methods
+        public static TeaModel ValidateTea(TeaModel tea)
         {
             tea.Name = tea.Name.Trim();
             if (string.IsNullOrEmpty(tea.Name) || string.IsNullOrWhiteSpace(tea.Name))
@@ -145,135 +145,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
             }
 
             return tea;
-        }        
-        #endregion Private Methods
-
-        #region Internal Methods
-        /// <summary>
-        /// Gets the tea from the database by its unique identifier.
-        /// </summary>
-        /// <param name="id">The unique identifier assigned by the database.</param>
-        /// <returns>The tea identified by the supplied unique identifier.</returns>
-        /// <exception cref="SQLiteException"></exception>
-        /// <exception cref="Exception"></exception>
-        //internal static async Task<TeaModel> GetByIdAsync(int id)
-        //{
-        //    TeaModel tea = null;
-
-        //    try
-        //    {
-        //        SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-        //        {
-        //            tea = await connection.GetAsync<TeaModel>(id);
-        //        }
-        //    }
-        //    catch (SQLiteException ex)
-        //    {
-        //        throw SQLiteException.New(ex.Result, ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message, ex);
-        //    }
-        //    return tea;
-        //}
-
-        /// <summary>
-        /// Adds the supplied tea object to the Tea Varieties database.
-        /// </summary>
-        /// <param name="tea">The specific tea to add to the database.</param>
-        /// <returns>The newly added tea with its unique database ID filled in.</returns>
-        /// <exception cref="Exception"></exception>
-        //internal static async Task<TeaModel> AddAsync(TeaModel tea)
-        //{
-        //    tea = ValidateTea(tea);
-        //    SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-        //    try
-        //    {
-        //        if (await connection.InsertAsync(tea) < 1)
-        //        {
-        //            throw new Exception("Could not add the tea to the database.");
-        //        }
-        //    }
-        //    catch (SQLiteException ex)
-        //    {
-        //        throw SQLiteException.New(ex.Result, ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message, ex);
-        //    }
-        //    finally
-        //    {
-        //        await connection.CloseAsync();
-        //    }
-        //    return tea;
-        //}
-
-        /// <summary>
-        /// Updates the database entry with the same unique ID as the provided tea.
-        /// </summary>
-        /// <param name="tea">The tea with updated values.</param>
-        /// <returns>True if the database is updated and false otherwise.</returns>
-        /// <exception cref="Exception"></exception>
-        //internal static async Task<bool> UpdateAsync(TeaModel tea)
-        //{
-        //    bool success = false;
-        //    tea = ValidateTea(tea);
-        //    SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-        //    try
-        //    {
-        //        if (await connection.UpdateAsync(tea) > 0)
-        //        {
-        //            success = true;
-        //        }
-        //    }
-        //    catch (SQLiteException ex)
-        //    {
-        //        throw SQLiteException.New(ex.Result, ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message, ex);
-        //    }
-        //    finally
-        //    {
-        //        await connection.CloseAsync();
-        //    }
-        //    return success;
-        //}
-
-        /// <summary>
-        /// Deletes the database entry with the same unique ID as the provided tea.
-        /// </summary>
-        /// <param name="tea">The tea to be deleted.</param>
-        /// <returns>True if the database is updated and false otherwise.</returns>
-        /// <exception cref="Exception"></exception>
-        //internal static async Task<bool> DeleteAsync(TeaModel tea)
-        //{
-        //    bool success = false;
-        //    SQLiteAsyncConnection connection = new SQLiteAsyncConnection(_dbFileName);
-        //    try
-        //    {
-        //        if (await connection.DeleteAsync(tea) > 0)
-        //        {
-        //            success = true;
-        //        }
-        //    }
-        //    catch (SQLiteException ex)
-        //    {
-        //        throw SQLiteException.New(ex.Result, ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message, ex);
-        //    }
-        //    finally
-        //    {
-        //        await connection.CloseAsync();
-        //    }
-        //    return success;
-        //}
-        #endregion Internal Methods
+        }
+        #endregion Public Methods
     }
 }
