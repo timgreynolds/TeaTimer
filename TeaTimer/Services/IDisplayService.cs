@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Maui;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
@@ -7,9 +6,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
     {
         Task ShowExceptionAsync(System.Exception exception);
 
-        Task ShowAlertAsync(string title, string message, string cancel = "Cancel", FlowDirection flowDirection = FlowDirection.MatchParent);
+        Task ShowAlertAsync(string title, string message, string cancel = "Cancel");
 
-        Task<bool> ShowPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel", FlowDirection flowDirection = FlowDirection.MatchParent);
+        Task<bool> ShowPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel");
+
+        void RefreshView();
+
+        void SetIsBusy(bool busy = true);
     }	
 }
 
