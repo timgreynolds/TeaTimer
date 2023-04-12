@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
-using Microsoft.Maui.Storage;
 using SQLite;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
@@ -13,7 +12,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
     public class TeaSqlService : IDataService<TeaModel>
     {
         #region Private Fields
-        private static readonly string _appConfigFolder = FileSystem.AppDataDirectory;
+        private static readonly string _appConfigFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         private static readonly string _appName = Assembly.GetExecutingAssembly().GetName().Name;
         private static readonly string _dbFileName = Path.Combine(_appConfigFolder, _appName, _appName + ".db3");
         private readonly SQLiteAsyncConnection _asyncConnection;
@@ -147,20 +146,18 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
 
         public List<TeaModel> Get()
         {
-            List<TeaModel> teas = new List<TeaModel>();
             if (_initialized == false)
             {
                 Initialize();
             }
             using (SQLiteConnection connection = new SQLiteConnection(_dbFileName, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
             {
-                teas = connection.Table<TeaModel>().ToList();
+                return connection.Table<TeaModel>().ToList();
             }
-            return teas;
         }
 
         public async Task<List<TeaModel>> GetAsync()
-        {
+        {   
             if (_initialized == false)
             {
                 Initialize();
