@@ -22,10 +22,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Public Properties
         public string Name
         {
-            get => _tea.Name;
+            get => _name;
             set
             {
-                if (value != _tea.Name)
+                if (value != _name)
                 {
                     IsPageDirty = true;
                     _tea.Name = value;
@@ -42,10 +42,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         public int BrewTemp
         {
-            get => _tea.BrewTemp;
+            get => _brewTemp;
             set
             {
-                if (value != _tea.BrewTemp)
+                if (value != _brewTemp)
                 {
                     IsPageDirty = true;
                     _tea.BrewTemp = value;
@@ -64,10 +64,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         public TimeSpan SteepTime
         {
-            get => _tea.SteepTime;
+            get => _steepTime;
             set
             {
-                if (value != _tea.SteepTime)
+                if (value != _steepTime)
                 {
                     IsPageDirty = true;
                     _tea.SteepTime = value;
@@ -93,7 +93,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
            : base(navigationService, displayService, sqlService)
         {
             SaveBtnPressed = new Command(async () => await Save());
-            BackButtonCommand = new Command(() => NavigateBack());
+            BackButtonCommand = new Command(async () => await NavigateBack());
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -126,7 +126,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 try
                 {
                     _tea = await SqlService.UpdateAsync(_tea);
-                    await DisplayService.ShowAlertAsync("Tea Updated!", $"{_tea.Name} (Id: {_tea.Id}) successfully updated.", "ÖK");
+                    await NavigateBack();
                 }
                 catch (Exception ex)
                 {
@@ -138,7 +138,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 try
                 {
                     _tea = await SqlService.AddAsync(_tea);
-                    await DisplayService.ShowAlertAsync("Tea Added!", $"{_tea.Name} ({_tea.Id}) successfully updated.", "ÖK");
+                    await NavigateBack();
                 }
                 catch (Exception ex)
                 {
@@ -147,9 +147,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
-        private void NavigateBack()
+        private async Task  NavigateBack()
         {
-            NavigationService.GoBackAsync();
+            await NavigationService.GoBackAsync();
         }
     }
 }

@@ -1,6 +1,6 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -11,12 +11,19 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class TeaListViewModel : BaseViewModel
     {
         #region Private Fields
+        private bool _isBusy = false;
         private IList _teas;
         private TeaModel _selectedTea;
         #endregion Private Fields
 
         #region Public Properties
         public bool UseCelsius { get; }
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            private set => SetProperty(ref _isBusy, value);
+        }
 
         public IList Teas
         {
@@ -30,7 +37,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             set
             {
                 SetProperty(ref _selectedTea, value);
-                if (value is not null) 
+                if (value is not null)
                 {
                     OnSelectedTeaChanged();
                 }
@@ -54,28 +61,23 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
             : base(navigationService, displayService, sqlService)
         {
-            RefreshList = new Command(async () => await  RefreshTeas());
+            RefreshList = new Command(() => RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(() => AddTea());
+            navigationService.ShellNavigated += (sender, args) => RefreshTeas(sender, args);
         }
         #endregion Constructors
 
-        #region Ovverrides
-        public override async void ShellNavigated(object sender, ShellNavigatedEventArgs args)
-        {
-            base.ShellNavigated(sender, args);
-            await RefreshTeas();
-        }
-        #endregion Overrides
-
         #region Private Methods
-        private async Task RefreshTeas()
+        private void RefreshTeas(object sender, EventArgs args)
         {
-            Teas = await SqlService.GetAsync();
+            DisplayService.SetIsBusy(true);
+            Teas = SqlService.Get();
+            DisplayService.RefreshView();
+            DisplayService.SetIsBusy(false);
         }
 
         private void AddTea()
         {
-            System.Console.WriteLine("Add Tea");
             NavigationService.NavigateToAsync(nameof(Pages.EditPage));
         }
 

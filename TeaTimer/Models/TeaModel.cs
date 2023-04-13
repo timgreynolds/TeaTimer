@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using SQLite;
 
 namespace com.mahonkin.tim.maui.TeaTimer.DataModel
@@ -128,6 +122,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         #endregion Constructors
 
         #region Public Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tea"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static TeaModel ValidateTea(TeaModel tea)
         {
             tea.Name = tea.Name.Trim();

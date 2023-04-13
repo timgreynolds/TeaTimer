@@ -77,22 +77,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion
 
         #region Constructor
-        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaDispatcherService dispatcherService, TeaSqlService sqlService)
+        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaTimerService timerService, TeaSqlService sqlService)
             : base(navigationService, displayService, sqlService)
         {
-            _countdown = dispatcherService.CreateDispatcher().CreateTimer();
+            _countdown = timerService.CreateTimer() as IDispatcherTimer;
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;
             _countdown.Tick += (sender, e) => ExecuteTimer();
             TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
-        }
-        #endregion
-
-        #region Overrides
-        public override async void ShellNavigated(object sender, ShellNavigatedEventArgs args)
-        {
-            base.ShellNavigated(sender, args);
-            Teas = await SqlService.GetAsync();
+            navigationService.ShellNavigated += async (sender, args) => await ShellNavigated(sender, args);
         }
         #endregion
 
@@ -182,6 +175,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                     }
                 }
             }
+        }
+
+        private async Task ShellNavigated(object sender, EventArgs args)
+        {
+            Page currentPage = ((AppShell)sender).CurrentPage ?? (AppShell)sender;
+            currentPage.IsBusy = true;
+            Teas = await SqlService.GetAsync();
+            currentPage.IsBusy = false;
         }
         #endregion
     }

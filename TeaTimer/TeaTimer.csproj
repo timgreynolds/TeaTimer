@@ -81,7 +81,6 @@
 	  <None Remove="CommunityToolkit.Maui.Markup" />
 	  <None Remove="Pages\" />
 	  <None Remove="Services\" />
-	  <None Remove="Behaviors\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Resources\Images\back_icon.svg" />
@@ -90,7 +89,6 @@
 	  <Folder Include="ViewModels\" />
 	  <Folder Include="Pages\" />
 	  <Folder Include="Services\" />
-	  <Folder Include="Behaviors\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Remove="MainPage.xaml.cs" />
@@ -99,5 +97,6 @@
 	  <Compile Remove="Services\ISettingsService.cs" />
 	  <Compile Remove="ViewModels\SettingsViewModel.cs" />
 	  <Compile Remove="Pages\SettingsPage.xaml.cs" />
+	  <Compile Remove="Behaviors\OnShellNavigating.cs" />
 	</ItemGroup>
 </Project>

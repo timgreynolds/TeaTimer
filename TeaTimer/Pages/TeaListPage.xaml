@@ -5,12 +5,14 @@
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage">
     <VerticalStackLayout x:Name="MainLayout">
         <ListView x:Name="TeaListView"
+                  VerticalOptions="FillAndExpand"
                   BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}"
-                  HeightRequest="100"
                   SeparatorColor="White"
                   ItemsSource="{Binding Teas}"
                   IsPullToRefreshEnabled="True"
                   RefreshCommand="{Binding RefreshList}"
+                  IsRefreshing="{Binding IsBusy}"
+                  CachingStrategy="RecycleElement"
                   SelectionMode="Single"
                   SelectedItem="{Binding SelectedTea}">
             <ListView.Resources>
@@ -18,47 +20,45 @@
                 <converters:TimespanConverter x:Key="TimespanConverter" />
             </ListView.Resources>
             <ListView.Header>
-                <VerticalStackLayout>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*" />
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="2*" />
-                        </Grid.ColumnDefinitions>
-                        <Label Text="Tea Name"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Tea Name"
                                TextColor="White"
                                FontFamily="OpenSansRegular"
                                Padding="10"
                                VerticalTextAlignment="Center"
                                HorizontalTextAlignment="Start"
                                Grid.Column="0" />
-                        <Label Text=""
+                    <Label Text=""
                                TextColor="White"
                                FontFamily="OpenSansRegular"
                                VerticalTextAlignment="Center"
                                HorizontalTextAlignment="Start"
                                Grid.Column="1">
-                            <Label.Triggers>
-                                <DataTrigger TargetType="Label"
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label"
                                              Binding="{Binding UseCelsius}"
                                              Value="True">
-                                    <Setter Property="Text" Value="Brew Temp &#x2103;" />
-                                </DataTrigger>
-                                <DataTrigger TargetType="Label"
+                                <Setter Property="Text" Value="Brew Temp &#x2103;" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label"
                                              Binding="{Binding UseCelsius}"
                                              Value="False">
-                                    <Setter Property="Text" Value="Brew Temp &#x2109;" />
-                                </DataTrigger>
-                            </Label.Triggers>
-                        </Label>
-                        <Label Text="Steep Time"
+                                <Setter Property="Text" Value="Brew Temp &#x2109;" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Label Text="Steep Time"
                                TextColor="White"
                                FontFamily="OpenSansRegular"
                                VerticalTextAlignment="Center"
                                HorizontalTextAlignment="Start"
                                Grid.Column="2" />
-                    </Grid>
-                </VerticalStackLayout>
+                </Grid>
             </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate>

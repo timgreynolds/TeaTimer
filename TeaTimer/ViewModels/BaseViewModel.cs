@@ -21,12 +21,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             SqlService = sqlService;
         }
 
-        public virtual void ShellNavigated(object sender, ShellNavigatedEventArgs args)
-        {
-            Console.WriteLine($"ShellNavigated event occurred.");
-        }
-
-        protected virtual void SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        public virtual void SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(storage, value) == false)
             {
