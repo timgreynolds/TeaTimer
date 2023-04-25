@@ -4,7 +4,8 @@
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.EditPage"
              Routing.Route="EditPage"
-             Title="Edit Tea">
+             Title="Edit Tea"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding BackButtonCommand}"
                             TextOverride="{Binding BackButtonLabel}" />

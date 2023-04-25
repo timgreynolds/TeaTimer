@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Microsoft.Maui.Controls;
 using com.mahonkin.tim.maui.TeaTimer.Services;
-using System;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {

@@ -1,10 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
 /// <inheritdoc cref="MauiApp" />
+[XamlCompilation (XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
     /// <inheritdoc cref="MauiApp.CreateBuilder(bool)" />

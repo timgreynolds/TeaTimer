@@ -27,16 +27,16 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
 
         public event EventHandler<EventArgs> NavigatingFrom;
 
-        public event EventHandler<EventArgs> ShellNavigating
+        public event EventHandler<EventArgs> ShellNavigated
         {
             add => AppShell.Current.Navigated += (sender, args) => value(AppShell.Current, args);
             remove => AppShell.Current.Navigated -= (sender, args) => value(AppShell.Current, args);
         }
 
-        public event EventHandler<EventArgs> ShellNavigated
+        public event EventHandler<EventArgs> ShellNavigating
         {
-            add => AppShell.Current.Navigated += (sender, args) => value(AppShell.Current, args);
-            remove => AppShell.Current.Navigated -= (sender, args) => value(AppShell.Current, args);
+            add => AppShell.Current.Navigating += (sender, args) => value(AppShell.Current, args);
+            remove => AppShell.Current.Navigating -= (sender, args) => value(AppShell.Current, args);
         }
     }
 }

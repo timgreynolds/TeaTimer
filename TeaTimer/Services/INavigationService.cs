@@ -12,8 +12,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         public event EventHandler<EventArgs> NavigatedTo;
         public event EventHandler<EventArgs> NavigatedFrom;
         public event EventHandler<EventArgs> NavigatingFrom;
-        public event EventHandler<EventArgs> ShellNavigating;
         public event EventHandler<EventArgs> ShellNavigated;
+        public event EventHandler<EventArgs> ShellNavigating;
     }
 
 }
