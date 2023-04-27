@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
@@ -156,13 +157,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         private void ExecuteTimer()
         {
-            if (CountdownLabel.TotalSeconds > 0)
+            if (CountdownLabel.TotalSeconds > 0.0)
             {
                 CountdownLabel = CountdownLabel.Subtract(TimeSpan.FromSeconds(1));
             }
             else
             {
                 _countdown.Stop();
+                TimerExpired();
                 IsButtonEnabled = false;
                 ButtonText = "Start";
                 CountdownLabel = SelectedTea.SteepTime;
@@ -187,7 +189,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Private Methods
 
         #region Partial Properties and Methods
-
+        partial void TimerExpired();
         #endregion Partial Properties and Methods
     }
 }
