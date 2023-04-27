@@ -14,4 +14,3 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 		}
 	}
 }
-
