@@ -1,24 +1,37 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
-/// <summary>
-/// MauiProgram application entry point
-/// </summary>
+
+/// <inheritdoc cref="MauiApp" />
+[XamlCompilation (XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
-    /// <summary>
-    /// Create the App
-    /// </summary>
-    /// <returns>The generated MauiApp</returns>
+    /// <inheritdoc cref="MauiApp.CreateBuilder(bool)" />
     public static MauiApp CreateMauiApp()
     {
-        var builder = MauiApp.CreateBuilder()
+        MauiAppBuilder builder = MauiApp.CreateBuilder()
         .UseMauiApp<App>()
         .ConfigureFonts(fonts =>
         {
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
         });
+
+        builder.Services.AddSingleton<Pages.TimerPage>();
+        builder.Services.AddTransient<Pages.TeaListPage>();
+        builder.Services.AddTransient<Pages.EditPage>();
+
+        builder.Services.AddSingleton<ViewModels.TimerViewModel>();
+        builder.Services.AddTransient<ViewModels.TeaListViewModel>();
+        builder.Services.AddTransient<ViewModels.EditViewModel>();
+
+        builder.Services.AddSingleton<Services.TeaNavigationService, Services.TeaNavigationService>();
+        builder.Services.AddSingleton<Services.TeaDisplayService, Services.TeaDisplayService>();
+        builder.Services.AddSingleton<Services.TeaTimerService, Services.TeaTimerService>();
+        builder.Services.AddSingleton<Services.TeaSqlService, Services.TeaSqlService>();
+
         return builder.Build();
     }
 }

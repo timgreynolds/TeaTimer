@@ -3,9 +3,6 @@ using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
-/// <summary>
-/// 
-/// </summary>
 public class Program
 {
     /// <summary>This is the main entry point of the application.</summary>
