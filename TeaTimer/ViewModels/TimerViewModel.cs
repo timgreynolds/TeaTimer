@@ -9,7 +9,7 @@ using Microsoft.Maui.Dispatching;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
-    public class TimerViewModel : BaseViewModel
+    public partial class TimerViewModel : BaseViewModel
     {
         #region Private Fields
         private string _buttonText = "Start";
@@ -20,7 +20,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private List<TeaModel> _teas = new List<TeaModel>();
         private IDispatcherTimer _countdown;
         private TeaModel _selectedTea;
-        #endregion
+        #endregion Private Fields
 
         #region Public Properties
         public string ButtonText
@@ -74,7 +74,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             get;
             private set;
         }
-        #endregion
+        #endregion Public Properties
 
         #region Constructor
         public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaTimerService timerService, TeaSqlService sqlService)
@@ -87,7 +87,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
             navigationService.ShellNavigated += async (sender, args) => await ShellNavigated(sender, args);
         }
-        #endregion
+        #endregion Constructor
 
         #region Private Methods
         private async Task RefreshTeas()
@@ -135,10 +135,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 ButtonText = "Start";
             }
             else
-            { 
+            {
                 while (enumerator.MoveNext())
                 {
-                    if(enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
+                    if (enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
                     {
                         enumerator.Current.IsEnabled = false;
                     }
@@ -184,6 +184,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             Teas = await SqlService.GetAsync();
             currentPage.IsBusy = false;
         }
-        #endregion
+        #endregion Private Methods
+
+        #region Partial Properties and Methods
+
+        #endregion Partial Properties and Methods
     }
 }

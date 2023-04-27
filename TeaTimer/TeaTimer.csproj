@@ -75,8 +75,6 @@
 		<None Remove="ViewModels\" />
 		<None Remove="Pages\" />
 		<None Remove="Services\" />
-		<None Remove="Controls\" />
-		<None Remove="Handlers\" />
 	</ItemGroup>
 	<ItemGroup>
 		<BundleResource Include="Resources\Images\back_icon.svg" />
@@ -85,8 +83,6 @@
 		<Folder Include="ViewModels\" />
 		<Folder Include="Pages\" />
 		<Folder Include="Services\" />
-		<Folder Include="Controls\" />
-		<Folder Include="Handlers\" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="MainPage.xaml.cs" />
