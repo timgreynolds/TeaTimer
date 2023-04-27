@@ -7,6 +7,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
     /// <inheritdoc cref="IValueConverter"/>
 	internal class TimespanConverter : IValueConverter
 	{
+        #region Constructors
+        ///<Summary>Constructor</Summary>
+        public TimespanConverter()
+        {
+        }
+        #endregion Constructors
+
+        #region Interface Methods
         /// <inheritdoc cref="IValueConverter.Convert(object, Type, object, CultureInfo)" />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -18,10 +26,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         {
             TimeSpan steepTime = new TimeSpan();
 
-            TimeSpan.TryParseExact((string)value, @"mm\:ss", null, out steepTime);
+            TimeSpan.TryParseExact((string)value, @"m\:ss", null, out steepTime);
                         
             return steepTime;
         }
+        #endregion Interface Methods
     }
 }
 

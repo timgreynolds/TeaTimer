@@ -8,8 +8,7 @@
              x:DataType="datamodel:TeaModel"
              Title="Tea List">
     <ListView x:Name="TeaListView"
-              HasUnevenRows="True"
-              ItemTapped="TeaListView_ItemTapped">
+              HasUnevenRows="True">
         <ListView.Resources>
             <converters:TimespanConverter x:Key="TimespanConverter" />
             <converters:TemperatureConverter x:Key="TemperatureConverter" />
@@ -75,8 +74,7 @@
                 <Button x:Name="AddTeaBtn"
                         Text="Add Tea"
                         FontFamily="OpenSansRegular"
-                        HorizontalOptions="Center"
-                        Clicked="TeaListView_ItemTapped" />
+                        HorizontalOptions="Center" />
             </VerticalStackLayout>
         </ListView.Footer>
     </ListView>

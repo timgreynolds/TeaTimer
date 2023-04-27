@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
+             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.EditPage"
+             Routing.Route="EditPage"
+             Title="Edit Tea"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackButtonCommand}"
+                            TextOverride="{Binding BackButtonLabel}" />
+    </Shell.BackButtonBehavior>
+    <VerticalStackLayout 
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+        <VerticalStackLayout.Resources>
+            <converters:TemperatureConverter x:Key="TemperatureConverter"/>
+            <converters:TimespanConverter x:Key="TimespanConverter"/>
+        </VerticalStackLayout.Resources>
+        <Grid RowSpacing="25" ColumnSpacing="25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Label x:Name="TeaNameLabel"
+                   Text="Tea Name"
+                   FontFamily="OpenSansRegular"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="End" />
+            <Label x:Name="BrewTempLabel"
+                   FontFamily="OpenSansRegular"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="End"
+                   Grid.Row="1">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding UseCelsius}"
+                                 Value="True">
+                        <Setter Property="Text" Value="Brew Temp &#x2103;" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label"
+                                 Binding="{Binding UseCelsius}"
+                                 Value="False">
+                        <Setter Property="Text" Value="Brew Temp &#x2109;" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+            <Label x:Name="SteepTimeLabel"
+                   Text="Steep Time"
+                   FontFamily="OpenSansRegular"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="End"
+                   Grid.Row="2"/>
+            <Entry x:Name="TeaNameEntry"
+                   Placeholder="Tea Name"
+                   Text="{Binding Name}"
+                   FontFamily="OpenSansRegular"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Fill"
+                   Grid.Column="1"/>
+            <Entry x:Name="BrewTempEntry"
+                   Placeholder="Brew Temperature"
+                   Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{0:D}'}"
+                   FontFamily="OpenSansRegular"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Fill"
+                   Grid.Column="1"
+                   Grid.Row="1" />
+            <Entry x:Name="SteepTimeEntry"
+                   Placeholder="Steep Time"
+                   Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
+                   FontFamily="OpenSansRegular"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Fill"
+                   Grid.Column="1" 
+                   Grid.Row="2" />
+        </Grid>
+        <Button x:Name="SaveBtn"
+                Text="Save"
+                FontFamily="OpenSansRegular"
+                SemanticProperties.Hint="Saves the current tea information to the database."
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                IsEnabled="{Binding IsPageDirty}"
+                Command="{Binding SaveBtnPressed}" />
+    </VerticalStackLayout>
+</ContentPage>
