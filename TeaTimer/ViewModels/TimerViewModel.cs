@@ -189,7 +189,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Private Methods
 
         #region Partial Properties and Methods
-        partial void TimerExpired();
+        private partial void TimerExpired();
         #endregion Partial Properties and Methods
     }
 }
