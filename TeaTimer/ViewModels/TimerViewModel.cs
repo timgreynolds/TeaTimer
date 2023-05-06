@@ -1,6 +1,9 @@
+/**
+ * 
+ * **/
+
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
@@ -81,6 +84,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaTimerService timerService, TeaSqlService sqlService)
             : base(navigationService, displayService, sqlService)
         {
+            RequestAuthorizationAsync();
             _countdown = timerService.CreateTimer() as IDispatcherTimer;
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;
@@ -189,7 +193,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Private Methods
 
         #region Partial Properties and Methods
-        private partial void TimerExpired();
+        private partial Task RequestAuthorizationAsync();
+        private partial Task TimerExpired();
         #endregion Partial Properties and Methods
     }
 }
