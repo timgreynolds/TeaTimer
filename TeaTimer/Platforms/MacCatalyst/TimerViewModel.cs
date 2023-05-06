@@ -8,11 +8,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
     public partial class TimerViewModel
     {
-        async private partial Task RequestAuthorizationAsync()
-        {
-            (bool success, NSError error) = await UNUserNotificationCenter.Current.RequestAuthorizationAsync(UNAuthorizationOptions.Sound | UNAuthorizationOptions.Alert);
-        }
-
         async private partial Task TimerExpired()
         {
             UNNotificationSettings settings = await UNUserNotificationCenter.Current.GetNotificationSettingsAsync();
