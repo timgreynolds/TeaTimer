@@ -10,7 +10,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         public event EventHandler Tick;
         public void Start();
         public void Stop();
-        public object CreateTimer();
+        public void CreateTimer();
     }
 }
 

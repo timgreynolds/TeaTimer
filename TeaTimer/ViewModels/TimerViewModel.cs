@@ -5,7 +5,6 @@ using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Dispatching;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
@@ -18,7 +17,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private bool _isViewLabelVisible;
         private TimeSpan _countdownLabel = new TimeSpan(0);
         private List<TeaModel> _teas = new List<TeaModel>();
-        private IDispatcherTimer _countdown;
+        private TeaTimerService _countdown;
         private TeaModel _selectedTea;
         #endregion Private Fields
 
@@ -80,7 +79,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaTimerService timerService, TeaSqlService sqlService)
             : base(navigationService, displayService, sqlService)
         {
-            _countdown = timerService.CreateTimer() as IDispatcherTimer;
+            _countdown = timerService;
+            _countdown.CreateTimer();
             _countdown.Interval = TimeSpan.FromSeconds(1);
             _countdown.IsRepeating = true;
             _countdown.Tick += (sender, e) => ExecuteTimer();
