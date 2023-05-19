@@ -77,7 +77,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         public void Stop()
         {
             _countdown.Stop();
-            _currentCtr.RemovePendingNotificationRequests(new[] { "TeaTimerRequest" });
+            _currentCtr.RemovePendingNotificationRequests(new[] { Constants.TIMER_REQUEST });
         }
 
         private void CreateNotification(TimeSpan countdown)
@@ -93,7 +93,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                     Sound = UNNotificationSound.DefaultCriticalSound
                 };
                 UNTimeIntervalNotificationTrigger trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(countdown.TotalSeconds, false);
-                UNNotificationRequest request = UNNotificationRequest.FromIdentifier("TeaTimerRequest", content, trigger);
+                UNNotificationRequest request = UNNotificationRequest.FromIdentifier(Constants.TIMER_REQUEST, content, trigger);
                 _currentCtr.AddNotificationRequest(request, ErrorHandler);
             }
             catch (Exception ex)
