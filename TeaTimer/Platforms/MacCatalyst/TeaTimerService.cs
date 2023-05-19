@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Maui.Dispatching;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
@@ -37,7 +38,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             {
                 _countdown = AppShell.Current.Dispatcher.CreateTimer();
             }
-            //return _countdown;
         }
 
         public void Start()
@@ -45,6 +45,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             _countdown.Start();
         }
 
+        public void Start(TimeSpan duration)
+        {
+            throw new NotImplementedException();
+        }
         public void Stop()
         {
             _countdown.Stop();

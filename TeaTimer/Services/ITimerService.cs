@@ -9,8 +9,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         public bool IsRunning { get; }
         public event EventHandler Tick;
         public void Start();
+        public void Start(TimeSpan duration);
         public void Stop();
         public void CreateTimer();
     }
 }
-
