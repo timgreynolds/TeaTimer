@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Maui.Dispatching;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
@@ -31,18 +32,22 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             remove => _countdown.Tick -= value;
         }
 
-        public object CreateTimer()
+        public void CreateTimer()
         {
             if(_countdown is null)
             {
                 _countdown = AppShell.Current.Dispatcher.CreateTimer();
             }
-            return _countdown;
         }
 
         public void Start()
         {
             _countdown.Start();
+        }
+
+        public void Start(TimeSpan duration)
+        {
+            throw new NotImplementedException();
         }
 
         public void Stop()

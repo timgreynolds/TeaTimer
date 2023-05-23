@@ -1,8 +1,6 @@
-using System.Reflection;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Storage;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
