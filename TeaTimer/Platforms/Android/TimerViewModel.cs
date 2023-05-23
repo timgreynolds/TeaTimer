@@ -1,16 +1,15 @@
-﻿using Android.Content;
+﻿using System.Threading.Tasks;
 using Android.Media;
-using Uri = Android.Net.Uri;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
-	public partial class TimerViewModel
+    public partial class TimerViewModel
 	{
-        partial void TimerExpired()
+        async private partial Task TimerExpired()
 		{
-			Uri alarmSoundUri = RingtoneManager.GetActualDefaultRingtoneUri(null, RingtoneType.Alarm);
+			Android.Net.Uri alarmSoundUri = RingtoneManager.GetActualDefaultRingtoneUri(null, RingtoneType.Alarm);
 			Ringtone alarmSound = RingtoneManager.GetRingtone(null, alarmSoundUri);
-			alarmSound.Play();
+			await Task.Run(() => alarmSound.Play());
 		}
 	}
 }

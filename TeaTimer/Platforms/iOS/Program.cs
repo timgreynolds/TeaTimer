@@ -1,5 +1,4 @@
-﻿using ObjCRuntime;
-using UIKit;
+﻿using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -10,7 +9,16 @@ public class Program
 	{
 		// if you want to use a different Application Delegate class from "AppDelegate"
 		// you can specify it here.
-		UIApplication.Main(args, null, typeof(AppDelegate));
+		try
+		{
+			UIApplication.Main(args, null, typeof(AppDelegate));
+		}
+		catch(System.Exception ex)
+		{
+			System.Console.WriteLine($"Application level exception handler. Something went wrong.");
+			System.Console.WriteLine(ex.Message);
+			System.Console.WriteLine(ex.StackTrace);
+		}
 	}
 }
 
