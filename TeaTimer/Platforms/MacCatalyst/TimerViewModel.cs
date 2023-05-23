@@ -1,18 +1,22 @@
-﻿
-using System;
+﻿using System;
+using System.Threading.Tasks;
 using AudioToolbox;
+using UserNotifications;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
     public partial class TimerViewModel
     {
-        partial void TimerExpired()
+        async private partial Task TimerExpired()
         {
-            string soundFileName = @"/System/Library/PrivateFrameworks/ToneLibrary.framework/Versions/A/Resources/AlertTones/alarm.caf";
-            if (Uri.TryCreate(soundFileName, UriKind.Absolute, out Uri uri))
+            UNNotificationSettings settings = await UNUserNotificationCenter.Current.GetNotificationSettingsAsync();
+            if (settings.AuthorizationStatus != UNAuthorizationStatus.Authorized)
             {
-                //SystemSound alarmSound = new SystemSound(uri).PlaySystemSound();
-                new SystemSound(uri).PlaySystemSound();
+                string soundFileName = @"/System/Library/PrivateFrameworks/ToneLibrary.framework/Versions/A/Resources/AlertTones/alarm.caf";
+                if (Uri.TryCreate(soundFileName, UriKind.Absolute, out Uri uri))
+                {
+                    await new SystemSound(uri).PlaySystemSoundAsync();
+                }
             }
         }
     }

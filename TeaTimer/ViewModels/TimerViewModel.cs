@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.DataModel;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Dispatching;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
@@ -19,7 +17,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private bool _isViewLabelVisible;
         private TimeSpan _countdownLabel = new TimeSpan(0);
         private List<TeaModel> _teas = new List<TeaModel>();
-        private IDispatcherTimer _countdown;
+        private TeaTimerService _timerService;
         private TeaModel _selectedTea;
         #endregion Private Fields
 
@@ -81,11 +79,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaTimerService timerService, TeaSqlService sqlService)
             : base(navigationService, displayService, sqlService)
         {
-            _countdown = timerService.CreateTimer() as IDispatcherTimer;
-            _countdown.Interval = TimeSpan.FromSeconds(1);
-            _countdown.IsRepeating = true;
-            _countdown.Tick += (sender, e) => ExecuteTimer();
-            TimerButtonPressed = new Command(() => ExecuteTimerButton(), () => TimerCanExecute());
+            _timerService = timerService;
+            _timerService.CreateTimer();
+            _timerService.Interval = TimeSpan.FromSeconds(1);
+            _timerService.IsRepeating = true;
+            _timerService.Tick += (sender, e) => ExecuteTimer();
+            TimerButtonPressed = new Command(ExecuteTimerButton, TimerCanExecute);
             navigationService.ShellNavigated += async (sender, args) => await ShellNavigated(sender, args);
         }
         #endregion Constructor
@@ -98,34 +97,34 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         private void OnSelectedTeaChanged()
         {
-            if (SelectedTea != null && _countdown.IsRunning == false)
+            if (SelectedTea != null && _timerService.IsRunning == false)
             {
                 CountdownLabel = SelectedTea.SteepTime;
                 IsViewLabelVisible = true;
                 IsButtonEnabled = true;
             }
-            else if (SelectedTea != null && _countdown.IsRunning)
+            else if (SelectedTea != null && _timerService.IsRunning)
             {
-                _countdown.Stop();
+                _timerService.Stop();
                 CountdownLabel = SelectedTea.SteepTime;
                 IsViewLabelVisible = true;
                 IsButtonEnabled = true;
             }
             else
             {
-                _countdown.Stop();
+                _timerService.Stop();
                 CountdownLabel = TimeSpan.FromSeconds(0.0);
                 IsViewLabelVisible = false;
-                IsButtonEnabled = false;
+                IsButtonEnabled = true;
             }
         }
 
         private void ExecuteTimerButton()
         {
             IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
-            if (_countdown.IsRunning)
+            if (_timerService.IsRunning)
             {
-                _countdown.Stop();
+                _timerService.Stop();
                 while (enumerator.MoveNext())
                 {
                     if (enumerator.Current.IsEnabled == false)
@@ -146,7 +145,23 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
 
                 ButtonText = "Stop";
-                _countdown.Start();
+
+                try
+                {
+                    _timerService.Start(_countdownLabel);
+                }
+                catch (ApplicationException appEx)
+                {
+                    DisplayService.ShowAlertAsync(appEx.Message, "An unknown application error occurred.");
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    DisplayService.ShowAlertAsync("Not Authorized!", "The user has not authorized notifications for this app.");
+                }
+                catch(Exception ex)
+                {
+                    DisplayService.ShowExceptionAsync(ex);
+                }
             }
         }
 
@@ -163,11 +178,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
             else
             {
-                _countdown.Stop();
+                _timerService.Stop();
                 TimerExpired();
-                IsButtonEnabled = false;
+                SelectedTea = null;
                 ButtonText = "Start";
-                CountdownLabel = SelectedTea.SteepTime;
+                IsButtonEnabled = false;
                 IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
@@ -189,7 +204,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Private Methods
 
         #region Partial Properties and Methods
-        partial void TimerExpired();
+        private partial Task TimerExpired();
         #endregion Partial Properties and Methods
     }
 }
