@@ -17,13 +17,12 @@ test-results/
 
 # content below from: https://github.com/github/gitignore/blob/main/Global/macOS.gitignore
 # General
-.DS_Store
+.[Dd][Ss]_[Ss]tore/
 .AppleDouble
 .LSOverride
 
 # Icon must end with two \r
 Icon
-
 
 # Thumbnails
 ._*
