@@ -23,66 +23,61 @@ public class AppDelegate : MauiUIApplicationDelegate
     public override void DidEnterBackground(UIApplication application)
     {
         _logger.Log(CoreFoundation.OSLogLevel.Info, $"====Entering background====");
-        Console.WriteLine($"====Countdown left: {_timeLeft.ToString(@"mm\:ss")}");
-        Console.WriteLine($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+        _logger.Log(CoreFoundation.OSLogLevel.Info, $"====Countdown left: {_timeLeft.ToString(@"mm\:ss")}");
+        _logger.Log(CoreFoundation.OSLogLevel.Info, $"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
         _currentBindingContext = AppShell.Current.CurrentPage.BindingContext;
-        Console.WriteLine($"====Page viewmodel type: {_currentBindingContext.GetType().Name}");
+        _logger.Log($"====Page viewmodel type: {_currentBindingContext.GetType().Name}");
         if (_currentBindingContext.GetType().IsAssignableTo(typeof(TimerViewModel)))
         {
-            Console.WriteLine($"====Saving state====");
+            _logger.Log($"====Saving state====");
             _timeLeft = ((TimerViewModel)_currentBindingContext).CountdownLabel;
             _backgroundedTime = DateTime.UtcNow;
-            Console.WriteLine($"====Countdown left: {_timeLeft.ToString(@"mm\:ss")}");
-            Console.WriteLine($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+            _logger.Log($"====Countdown left: {_timeLeft.ToString(@"mm\:ss")}");
+            _logger.Log($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
         }
         base.DidEnterBackground(application);
-        Console.WriteLine($"====Entered background=====");
+        _logger.Log($"====Entered background=====");
     }
 
     public override void WillEnterForeground(UIApplication application)
     {
-        Console.WriteLine($"====Entering foreground====");
-        Console.WriteLine($"====Countdown left when backgrounded: {_timeLeft.ToString(@"mm\:ss")}");
-        Console.WriteLine($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
-        Console.WriteLine($"====Awoken at: {DateTime.UtcNow.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+        _logger.Log($"====Entering foreground====");
+        _logger.Log($"====Countdown left when backgrounded: {_timeLeft.ToString(@"mm\:ss")}");
+        _logger.Log($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+        _logger.Log($"====Awoken at: {DateTime.UtcNow.ToLocalTime().ToString(@"hh\:mm\:ss")}");
         TimeSpan elapsedTime = DateTime.UtcNow.Subtract(_backgroundedTime);
-        Console.WriteLine($"====Time spent in background: {elapsedTime.ToString(@"mm\:ss")}");
+        _logger.Log($"====Time spent in background: {elapsedTime.ToString(@"mm\:ss")}");
         TimeSpan remainingTime = _timeLeft.Subtract(elapsedTime);
-        Console.WriteLine($"====Page viewmodel type: {_currentBindingContext.GetType().Name}");
+        _logger.Log($"====Page viewmodel type: {_currentBindingContext.GetType().Name}");
         if (_currentBindingContext.GetType().IsAssignableTo(typeof(TimerViewModel)))
         {
-            Console.WriteLine($"====Resetting state====");
+            _logger.Log($"====Resetting state====");
             if (remainingTime > TimeSpan.Zero)
             {
-                Console.WriteLine($"====Current time remaining: {remainingTime.ToString(@"mm\:ss")}");
+                _logger.Log($"====Current time remaining: {remainingTime.ToString(@"mm\:ss")}");
                 ((TimerViewModel)_currentBindingContext).CountdownLabel = remainingTime;
-                Console.WriteLine($"====Page Countdown set to: {remainingTime.ToString(@"mm\:ss")}");
+                _logger.Log($"====Page Countdown set to: {remainingTime.ToString(@"mm\:ss")}");
             }
             else
             {
-                Console.WriteLine($"====Timer already expired====");
+                _logger.Log($"====Timer already expired====");
                 ((TimerViewModel)_currentBindingContext).CountdownLabel = TimeSpan.Zero;
             }
-            Console.WriteLine($"====State reset====");
+            _logger.Log($"====State reset====");
         }
         base.WillEnterForeground(application);
-        Console.WriteLine($"====Entered foreground====");
+        _logger.Log($"====Entered foreground====");
     }
 
     public override bool WillFinishLaunching(UIApplication application, NSDictionary launchOptions)
     {
         try
         {
-            //UNNotificationAction timerExpiredOkAction = UNNotificationAction.FromIdentifier(Constants.TIMER_EXPIRED_OK_ACTION, "OK", UNNotificationActionOptions.None, UNNotificationActionIcon.CreateFromSystem("timer"));
-            //UNNotificationAction timerExpiredCancelAction = UNNotificationAction.FromIdentifier(Constants.TIMER_EXPIRED_CANCEL_ACTION, "Cancel", UNNotificationActionOptions.None, UNNotificationActionIcon.CreateFromSystem("wrongwaysign"));
-            //UNNotificationCategory timerExpiredCategory = UNNotificationCategory.FromIdentifier(Constants.TIMER_EXPIRED_CATEGORY, new[] { timerExpiredOkAction, timerExpiredCancelAction }, new[] { string.Empty }, UNNotificationCategoryOptions.None);
-            //NSSet<UNNotificationCategory> categories = new NSSet<UNNotificationCategory>(new[] { timerExpiredCategory });
-            //UNUserNotificationCenter.Current.SetNotificationCategories(categories);
             UNUserNotificationCenter.Current.Delegate = new NotificationCenterDelegate();
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
-            System.Console.WriteLine(ex.Message);
+            _logger.Log(ex.Message);
         }
         return base.WillFinishLaunching(application, launchOptions);
     }
