@@ -17,6 +17,7 @@ public class AppDelegate : MauiUIApplicationDelegate
     private DateTime _backgroundedTime = DateTime.UtcNow;
     private object _currentBindingContext;
     private CoreFoundation.OSLog _logger = new CoreFoundation.OSLog(Assembly.GetExecutingAssembly().GetName().Name, nameof(AppDelegate));
+
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
     public override void DidEnterBackground(UIApplication application)
@@ -72,11 +73,11 @@ public class AppDelegate : MauiUIApplicationDelegate
     {
         try
         {
-            UNNotificationAction timerExpiredOkAction = UNNotificationAction.FromIdentifier(Constants.TIMER_EXPIRED_OK_ACTION, "OK", UNNotificationActionOptions.None, UNNotificationActionIcon.CreateFromSystem("timer"));
-            UNNotificationAction timerExpiredCancelAction = UNNotificationAction.FromIdentifier(Constants.TIMER_EXPIRED_CANCEL_ACTION, "Cancel", UNNotificationActionOptions.None, UNNotificationActionIcon.CreateFromSystem("wrongwaysign"));
-            UNNotificationCategory timerExpiredCategory = UNNotificationCategory.FromIdentifier(Constants.TIMER_EXPIRED_CATEGORY, new[] { timerExpiredOkAction, timerExpiredCancelAction }, new[] { string.Empty }, UNNotificationCategoryOptions.None);
-            NSSet<UNNotificationCategory> categories = new NSSet<UNNotificationCategory>(new[] { timerExpiredCategory });
-            UNUserNotificationCenter.Current.SetNotificationCategories(categories);
+            //UNNotificationAction timerExpiredOkAction = UNNotificationAction.FromIdentifier(Constants.TIMER_EXPIRED_OK_ACTION, "OK", UNNotificationActionOptions.None, UNNotificationActionIcon.CreateFromSystem("timer"));
+            //UNNotificationAction timerExpiredCancelAction = UNNotificationAction.FromIdentifier(Constants.TIMER_EXPIRED_CANCEL_ACTION, "Cancel", UNNotificationActionOptions.None, UNNotificationActionIcon.CreateFromSystem("wrongwaysign"));
+            //UNNotificationCategory timerExpiredCategory = UNNotificationCategory.FromIdentifier(Constants.TIMER_EXPIRED_CATEGORY, new[] { timerExpiredOkAction, timerExpiredCancelAction }, new[] { string.Empty }, UNNotificationCategoryOptions.None);
+            //NSSet<UNNotificationCategory> categories = new NSSet<UNNotificationCategory>(new[] { timerExpiredCategory });
+            //UNUserNotificationCenter.Current.SetNotificationCategories(categories);
             UNUserNotificationCenter.Current.Delegate = new NotificationCenterDelegate();
         }
         catch (System.Exception ex)

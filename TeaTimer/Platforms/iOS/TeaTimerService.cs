@@ -13,7 +13,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
     public class TeaTimerService : ITimerService
     {
         ApplicationException _applicationException = null;
-        private UNAuthorizationStatus _isNotificationAuthorized = UNAuthorizationStatus.NotDetermined;
+        private UNAuthorizationStatus _authorizationStatus = UNAuthorizationStatus.NotDetermined;
         private IDispatcherTimer _countdown = null;
         private static readonly UNUserNotificationCenter _currentCtr = UNUserNotificationCenter.Current;
 
@@ -50,7 +50,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         public void Start(TimeSpan duration)
         {
             _currentCtr.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound, ProcessAuthRequest);
-            _currentCtr.GetNotificationSettings((settings) => _isNotificationAuthorized = settings.AuthorizationStatus);
+            _currentCtr.GetNotificationSettings((settings) => _authorizationStatus = settings.AuthorizationStatus);
 
             if(_applicationException is not null)
             {
@@ -59,7 +59,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
 
             try
             {
-                if (_isNotificationAuthorized != UNAuthorizationStatus.Denied)
+                if (_authorizationStatus != UNAuthorizationStatus.Denied)
                 {
                     CreateNotification(duration);
                 }
@@ -89,7 +89,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                     CategoryIdentifier = Constants.TIMER_EXPIRED_CATEGORY,
                     Title = Constants.TITLE,
                     Subtitle = Constants.SUBTITLE,
-                    Body = Constants.SUBTITLE,
+                    Body = Constants.REQUEST_BODY,
                     Sound = UNNotificationSound.DefaultCriticalSound
                 };
                 UNTimeIntervalNotificationTrigger trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(countdown.TotalSeconds, false);
@@ -126,11 +126,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
             if (auth)
             {
-                _isNotificationAuthorized = UNAuthorizationStatus.Authorized;
+                _authorizationStatus = UNAuthorizationStatus.Authorized;
             }
             else
             {
-                _isNotificationAuthorized = UNAuthorizationStatus.NotDetermined;
+                _authorizationStatus = UNAuthorizationStatus.NotDetermined;
             }
         }
     }

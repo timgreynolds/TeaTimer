@@ -10,6 +10,13 @@ public partial class AppShell : Shell
     {
         Routing.RegisterRoute(nameof(EditPage), typeof(EditPage));
 
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch(System.Exception ex) // Maybe last top-level opportunity to display an exception alert
+        {
+            this.CurrentPage.DisplayAlert("Error!", ex.Message, "OK");
+        }
     }
 }
