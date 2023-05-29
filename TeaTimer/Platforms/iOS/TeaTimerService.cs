@@ -12,7 +12,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
     public class TeaTimerService : ITimerService
     {
-        ApplicationException _applicationException = null;
+        private ApplicationException _applicationException = null;
         private UNAuthorizationStatus _authorizationStatus = UNAuthorizationStatus.NotDetermined;
         private IDispatcherTimer _countdown = null;
         private static readonly UNUserNotificationCenter _currentCtr = UNUserNotificationCenter.Current;
@@ -37,15 +37,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             remove => _countdown.Tick -= value;
         }
 
-        public void CreateTimer()
-        {
-            _countdown = AppShell.Current.Dispatcher.CreateTimer();
-        }
-
-        public void Start()
-        {
-            _countdown.Start();
-        }
+        public void CreateTimer() => _countdown = AppShell.Current.Dispatcher.CreateTimer();
+        
+        public void Start() => _countdown.Start();
 
         public void Start(TimeSpan duration)
         {
@@ -86,10 +80,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             {
                 UNMutableNotificationContent content = new UNMutableNotificationContent()
                 {
-                    CategoryIdentifier = Constants.TIMER_EXPIRED_CATEGORY,
                     Title = Constants.TITLE,
-                    Subtitle = Constants.SUBTITLE,
-                    Body = Constants.REQUEST_BODY,
                     Sound = UNNotificationSound.DefaultCriticalSound
                 };
                 UNTimeIntervalNotificationTrigger trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(countdown.TotalSeconds, false);
