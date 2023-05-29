@@ -16,7 +16,7 @@ public partial class AppShell : Shell
         }
         catch(System.Exception ex) // Maybe last top-level opportunity to display an exception alert
         {
-            this.CurrentPage.DisplayAlert("Error!", ex.Message, "OK");
+            CurrentPage.DisplayAlert("Error!", ex.Message, "OK");
         }
     }
 }

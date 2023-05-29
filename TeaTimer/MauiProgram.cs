@@ -20,12 +20,12 @@ public static class MauiProgram
         });
 
         builder.Services.AddSingleton<Pages.TimerPage>();
-        builder.Services.AddTransient<Pages.TeaListPage>();
-        builder.Services.AddTransient<Pages.EditPage>();
+        builder.Services.AddSingleton<Pages.TeaListPage>();
+        builder.Services.AddSingleton<Pages.EditPage>();
 
         builder.Services.AddSingleton<ViewModels.TimerViewModel>();
-        builder.Services.AddTransient<ViewModels.TeaListViewModel>();
-        builder.Services.AddTransient<ViewModels.EditViewModel>();
+        builder.Services.AddSingleton<ViewModels.TeaListViewModel>();
+        builder.Services.AddSingleton<ViewModels.EditViewModel>();
 
         builder.Services.AddSingleton<Services.TeaNavigationService, Services.TeaNavigationService>();
         builder.Services.AddSingleton<Services.TeaDisplayService, Services.TeaDisplayService>();

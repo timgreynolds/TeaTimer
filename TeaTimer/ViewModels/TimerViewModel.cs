@@ -76,7 +76,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Public Properties
 
         #region Constructor
-        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaTimerService timerService, TeaSqlService sqlService)
+        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService, TeaTimerService timerService)
             : base(navigationService, displayService, sqlService)
         {
             _timerService = timerService;
