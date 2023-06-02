@@ -1,7 +1,4 @@
-﻿/**
-* iOS platform-specific TeaTimerService implementation.
-**/
-using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
+﻿using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
 using System;
 using Foundation;
 using Microsoft.Maui.Dispatching;
@@ -10,43 +7,58 @@ using System.Collections;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
+    /// <inheritdoc cref="Services.ITimerService" />
     public class TeaTimerService : ITimerService
     {
+        #region Private Fields
         private ApplicationException _applicationException = null;
         private UNAuthorizationStatus _authorizationStatus = UNAuthorizationStatus.NotDetermined;
         private IDispatcherTimer _countdown = null;
         private static readonly UNUserNotificationCenter _currentCtr = UNUserNotificationCenter.Current;
+        #endregion Private Fields
 
+        #region Public Properties
+        /// <inheritdoc cref="ITimerService.Interval" />
         public TimeSpan Interval
         {
             get => _countdown.Interval;
             set => _countdown.Interval = value;
         }
 
+        /// <inheritdoc cref="ITimerService.IsRepeating" />
         public bool IsRepeating
         {
             get => _countdown.IsRepeating;
             set => _countdown.IsRepeating = value;
         }
 
+        /// <inheritdoc cref="ITimerService.IsRunning" />
         public bool IsRunning => _countdown.IsRunning;
+        #endregion Public Properties
 
+        #region Event Handlers
+        /// <inheritdoc cref="ITimerService.Tick" />
         public event EventHandler Tick
         {
             add => _countdown.Tick += value;
             remove => _countdown.Tick -= value;
         }
+        #endregion Event Handlers
 
-        public void CreateTimer() => _countdown = AppShell.Current.Dispatcher.CreateTimer();
-        
+        #region Public Methods
+        /// <inheritdoc cref="ITimerService.CreateTimer()" />
+        public void CreateTimer() => _countdown ??= AppShell.Current.Dispatcher.CreateTimer();
+
+        /// <inheritdoc cref="ITimerService.Start()" />
         public void Start() => _countdown.Start();
 
+        /// <inheritdoc cref="ITimerService.Start(TimeSpan)" />
         public void Start(TimeSpan duration)
         {
             _currentCtr.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound, ProcessAuthRequest);
             _currentCtr.GetNotificationSettings((settings) => _authorizationStatus = settings.AuthorizationStatus);
 
-            if(_applicationException is not null)
+            if (_applicationException is not null)
             {
                 throw _applicationException;
             }
@@ -68,12 +80,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
         }
 
+        /// <inheritdoc cref="ITimerService.Stop()" />
         public void Stop()
         {
             _countdown.Stop();
             _currentCtr.RemovePendingNotificationRequests(new[] { Constants.TIMER_REQUEST });
         }
+        #endregion Public Methods
 
+        #region Private Methods
         private void CreateNotification(TimeSpan countdown)
         {
             try
@@ -95,7 +110,21 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                 {
                     applicationException.Data.Add(entry.Key, entry.Value);
                 }
-                throw applicationException;
+                if (_applicationException is null)
+                {
+                    _applicationException = applicationException;
+                }
+                else
+                {
+                    throw new AggregateException("Multiple errors occurred.", new[] { _applicationException, applicationException });
+                }
+            }
+            finally
+            {
+                if (_applicationException is not null)
+                {
+                    throw _applicationException;
+                }
             }
         }
 
@@ -124,5 +153,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                 _authorizationStatus = UNAuthorizationStatus.NotDetermined;
             }
         }
+        #endregion Private Methods
     }
 }

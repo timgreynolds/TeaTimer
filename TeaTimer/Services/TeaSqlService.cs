@@ -9,24 +9,19 @@ using SQLite;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
+    ///<inheritdoc cref="IDataService{T}"/>
     public class TeaSqlService : IDataService<TeaModel>
     {
         #region Private Fields
         private static readonly string _appConfigFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         private static readonly string _appName = Assembly.GetExecutingAssembly().GetName().Name;
         private static readonly string _dbFileName = Path.Combine(_appConfigFolder, _appName, _appName + ".db3");
-        private readonly SQLiteAsyncConnection _asyncConnection;
+        private SQLiteAsyncConnection _asyncConnection;
         private bool _initialized;
         #endregion Private Fields
 
-        #region Constructors
-        public TeaSqlService()
-        {
-            _asyncConnection = new SQLiteAsyncConnection(_dbFileName, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
-        }
-        #endregion Constructors
-
         #region Public Methods
+        /// <inheritdoc cref="IDataService{T}.Initialize()"/>
         public void Initialize()
         {
             // The DbFile must be created, and populated with at least one initial tea variety.
@@ -48,6 +43,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                     }
                     _initialized = true;
                 }
+                _asyncConnection = new SQLiteAsyncConnection(_dbFileName, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
             }
             catch (SQLiteException ex)
             {
@@ -59,11 +55,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
         }
 
+        /// <inheritdoc cref="IDataService{T}.Add(object)"/>
         public TeaModel Add(object obj)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc cref="IDataService{T}.AddAsync(object)" />
         public async Task<TeaModel> AddAsync(object obj)
         {
             TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
@@ -86,11 +84,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             return tea;
         }
 
+        /// <inheritdoc cref="IDataService{T}.Update(object)" />
         public TeaModel Update(object obj)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc cref="IDataService{T}.UpdateAsync(object)" />
         public async Task<TeaModel> UpdateAsync(object obj)
         {
             TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
@@ -113,11 +113,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             return tea;
         }
 
+        /// <inheritdoc cref="IDataService{T}.Delete(object)" />
         public bool Delete(object obj)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc cref="IDataService{T}.DeleteAsync(object)" />
         public async Task<bool> DeleteAsync(object obj)
         {
             TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
@@ -144,6 +146,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             return deleted;
         }
 
+        /// <inheritdoc cref="IDataService{T}.Get()" />
         public List<TeaModel> Get()
         {
             if (_initialized == false)
@@ -156,6 +159,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
         }
 
+        /// <inheritdoc cref="IDataService{T}.GetAsync()" />
         public async Task<List<TeaModel>> GetAsync()
         {   
             if (_initialized == false)
@@ -176,11 +180,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
         }
 
+        /// <inheritdoc cref="IDataService{T}.FindById(object)" />
         public TeaModel FindById(object id)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc cref="IDataService{T}.FindByIdAsync(object)" />
         public async Task<TeaModel> FindByIdAsync(object obj)
         {
             if (_initialized == false)

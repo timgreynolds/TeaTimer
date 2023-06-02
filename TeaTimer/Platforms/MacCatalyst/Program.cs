@@ -1,8 +1,8 @@
-﻿using ObjCRuntime;
-using UIKit;
+﻿using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
+/// <summary>This is the main entry point of the application.</summary>
 public class Program
 {
     /// <summary>This is the main entry point of the application.</summary>
