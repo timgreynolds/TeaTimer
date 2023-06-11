@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.Maui.Dispatching;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
@@ -7,10 +6,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
     public class TeaTimerService : ITimerService
     {
         private IDispatcherTimer _countdown = null;
-
-        public TeaTimerService()
-        {
-        }
 
         public TimeSpan Interval
         {
@@ -47,7 +42,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
 
         public void Start(TimeSpan duration)
         {
-            throw new NotImplementedException();
+            Start();
         }
 
         public void Stop()
