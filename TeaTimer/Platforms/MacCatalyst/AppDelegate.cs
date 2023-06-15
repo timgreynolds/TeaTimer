@@ -13,7 +13,9 @@ using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
-/// <inheritdoc cref="MauiUIApplicationDelegate" />
+/// <summary>
+/// A set of methods to manage shared behaviors for your app.   
+/// </summary>
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {

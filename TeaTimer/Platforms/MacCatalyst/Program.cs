@@ -2,7 +2,9 @@
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
-/// <summary>This is the main entry point of the application.</summary>
+/// <summary>
+/// This is the main entry point of the application.
+/// </summary>
 public class Program
 {
     /// <summary>This is the main entry point of the application.</summary>

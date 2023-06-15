@@ -3,11 +3,17 @@ using Microsoft.Maui.Dispatching;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
-    /// <inheritdoc cref="ITimerService"/>
+    /// <summary>
+    /// Implementation of <see cref="ITimerService"/> that depends on Maui dispatchers.
+    /// </summary>
     public class TeaTimerService : ITimerService
     {
+        #region Private Fields
         private IDispatcherTimer _countdown = null;
+        #endregion Private Fields
 
+
+        #region Public Properties
         /// <inheritdoc cref="ITimerService.Interval" />
         public TimeSpan Interval
         {
@@ -31,23 +37,39 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             add => _countdown.Tick += value;
             remove => _countdown.Tick -= value;
         }
+        #endregion Public Properties
 
-        /// <inheritdoc cref="ITimerService.CreateTimer()" />
+        #region Public Methods
+        /// <summary>
+        /// Creates an instance of an IDispatcherTimer associated with the
+        /// current shell's Dispatcher.
+        /// </summary>
+        /// <remarks>
+        /// This works for MacCatalyst, I assume, because the shell's Dispatcher
+        /// continues to run on the main/UI thread when the app is backgrounded,
+        /// minimized, or hidden.
+        /// </remarks>
         public void CreateTimer()
         {
-            if(_countdown is null)
-            {
-                _countdown = AppShell.Current.Dispatcher.CreateTimer();
-            }
+            _countdown ??= AppShell.Current.Dispatcher.CreateTimer();
         }
 
-        /// <inheritdoc cref="ITimerService.Start()" />
+        /// <summary>
+        /// Starts the timer.
+        /// </summary>
         public void Start()
         {
             _countdown.Start();
         }
 
-        /// <inheritdoc cref="ITimerService.Start(TimeSpan)" />
+        /// <summary>
+        /// Starts the timer.
+        /// </summary>
+        /// <remarks>
+        /// This method is provided for compatibility only. The <paramref
+        /// name="duration">duration</paramref> is ignored and <see
+        /// cref="Start()"/> is called.
+        /// </remarks>
         public void Start(TimeSpan duration)
         {
             Start();
@@ -58,6 +80,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         {
             _countdown.Stop();
         }
+        #endregion Public Methods
     }
 }
-

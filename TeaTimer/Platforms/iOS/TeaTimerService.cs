@@ -7,7 +7,10 @@ using System.Collections;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
-    /// <inheritdoc cref="Services.ITimerService" />
+    /// <summary>
+    /// Implementation of <see cref="ITimerService"/> that takes advantage of the
+    /// iOS Notification Center for timer expiry if the app is backgrounded.
+    /// </summary>
     public class TeaTimerService : ITimerService
     {
         #region Private Fields
@@ -46,13 +49,37 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         #endregion Event Handlers
 
         #region Public Methods
-        /// <inheritdoc cref="ITimerService.CreateTimer()" />
+        /// <summary>
+        /// Creates an instance of an IDispatcherTimer associated with the
+        /// current shell's Dispatcher.
+        /// </summary>
+        /// <remarks>
+        /// This works for iOS as long as the app remains in the foreground for
+        /// the entire countdown. If the phone goes to sleep or the app is put
+        /// into the background while the countdown is running it will stop. In
+        /// that case a local notification request can also be created using
+        /// <see cref="Start(TimeSpan)"/>.
+        /// </remarks>
+        /// <seealso cref="DidEnterBackground(UIKit.UIApplication)"/>
         public void CreateTimer() => _countdown ??= AppShell.Current.Dispatcher.CreateTimer();
 
-        /// <inheritdoc cref="ITimerService.Start()" />
+        /// <summary>
+        /// Starts the timer without creating an associated local notification
+        /// request.
+        /// </summary>
         public void Start() => _countdown.Start();
 
-        /// <inheritdoc cref="ITimerService.Start(TimeSpan)" />
+        /// <summary>
+        /// Starts the timer and creates a local notification request set to
+        /// alert after <paramref name="duration">duration</paramref>.
+        /// </summary>
+        /// <remarks>
+        /// The notification alert will only occur when the app is in the
+        /// background and requires that the user has allowed notifications
+        /// in the Settings app. If the user has not allowed notifications, no
+        /// alert will be given when the app is in the background or the phone is
+        /// asleep at timer expiry.
+        /// </remarks>
         public void Start(TimeSpan duration)
         {
             _currentCtr.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound, ProcessAuthRequest);
@@ -80,7 +107,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
         }
 
-        /// <inheritdoc cref="ITimerService.Stop()" />
+        /// <summary>
+        /// Stops the countdown and cancels any pending notification requests.
+        /// </summary>
         public void Stop()
         {
             _countdown.Stop();

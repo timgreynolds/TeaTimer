@@ -5,7 +5,9 @@ using Microsoft.Maui.Hosting;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
-/// <inheritdoc cref="MauiApp" />
+/// <summary>
+/// Maui entry point and application builder.
+/// </summary>
 [XamlCompilation (XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {

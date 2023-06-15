@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
 using com.mahonkin.tim.maui.TeaTimer.ViewModels;
 using Foundation;
@@ -10,65 +9,80 @@ using UserNotifications;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
+/// <summary>
+/// A set of methods to manage shared behaviors for your app.   
+/// </summary>
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {
+    #region Private Fields
     private TimeSpan _timeLeft = TimeSpan.Zero;
-    private DateTime _backgroundedTime = DateTime.UtcNow;
+    private DateTime _backgroundedTime = DateTime.MinValue;
     private object _currentBindingContext;
-    private CoreFoundation.OSLog _logger = new CoreFoundation.OSLog(Assembly.GetExecutingAssembly().GetName().Name, nameof(AppDelegate));
+    #endregion Private Fields
 
+    /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
+    /// <summary>
+    /// Method that is run when the app enters the background. 
+    /// </summary>
+    /// <remarks>
+    /// Saves some app state.<br/>If the currently displayed page is the Timer Page
+    /// and the countdown is running the time left in the countdown as well as
+    /// the time the app went into the background are stored. This information
+    /// can be used later by <see cref="WillEnterForeground(UIApplication)"/> to
+    /// restore/reset appropriate app state.
+    /// </remarks>
     public override void DidEnterBackground(UIApplication application)
     {
-        _logger.Log(CoreFoundation.OSLogLevel.Info, $"====Entering background====");
-        _logger.Log(CoreFoundation.OSLogLevel.Info, $"====Countdown left: {_timeLeft.ToString(@"mm\:ss")}");
-        _logger.Log(CoreFoundation.OSLogLevel.Info, $"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+        _backgroundedTime = DateTime.UtcNow;
         _currentBindingContext = AppShell.Current.CurrentPage.BindingContext;
-        _logger.Log($"====Page viewmodel type: {_currentBindingContext.GetType().Name}");
+
         if (_currentBindingContext.GetType().IsAssignableTo(typeof(TimerViewModel)))
         {
-            _logger.Log($"====Saving state====");
-            _timeLeft = ((TimerViewModel)_currentBindingContext).CountdownLabel;
-            _backgroundedTime = DateTime.UtcNow;
-            _logger.Log($"====Countdown left: {_timeLeft.ToString(@"mm\:ss")}");
-            _logger.Log($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+            if (((TimerViewModel)_currentBindingContext).IsTimerRunning)
+            {
+                _timeLeft = ((TimerViewModel)_currentBindingContext).CountdownLabel;
+            }
         }
+
         base.DidEnterBackground(application);
-        _logger.Log($"====Entered background=====");
     }
 
+    /// <summary>
+    /// Method that is run when the app is about to enter the foreground.
+    /// </summary>
+    /// <remarks>
+    /// Restores previously saved app state.</br>If the countdown was running
+    /// when the app entered the background and has not expired while the app
+    /// was in the background uses the saved data to calculate the current time
+    /// remaining in the countdown and updates the timer appropriately.
+    /// </remarks>
     public override void WillEnterForeground(UIApplication application)
     {
-        _logger.Log($"====Entering foreground====");
-        _logger.Log($"====Countdown left when backgrounded: {_timeLeft.ToString(@"mm\:ss")}");
-        _logger.Log($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
-        _logger.Log($"====Awoken at: {DateTime.UtcNow.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+        DateTime awakeTime = DateTime.UtcNow;
         TimeSpan elapsedTime = DateTime.UtcNow.Subtract(_backgroundedTime);
-        _logger.Log($"====Time spent in background: {elapsedTime.ToString(@"mm\:ss")}");
-        TimeSpan remainingTime = _timeLeft.Subtract(elapsedTime);
-        _logger.Log($"====Page viewmodel type: {_currentBindingContext.GetType().Name}");
+
         if (_currentBindingContext.GetType().IsAssignableTo(typeof(TimerViewModel)))
         {
-            _logger.Log($"====Resetting state====");
-            if (remainingTime > TimeSpan.Zero)
+            if (((TimerViewModel)_currentBindingContext).IsTimerRunning)
             {
-                _logger.Log($"====Current time remaining: {remainingTime.ToString(@"mm\:ss")}");
-                ((TimerViewModel)_currentBindingContext).CountdownLabel = remainingTime;
-                _logger.Log($"====Page Countdown set to: {remainingTime.ToString(@"mm\:ss")}");
+                if (elapsedTime < _timeLeft)
+                {
+                    ((TimerViewModel)_currentBindingContext).CountdownLabel = _timeLeft.Subtract(elapsedTime);
+                }
+                else
+                {
+                    ((TimerViewModel)_currentBindingContext).SelectedTea = null;
+                    ((TimerViewModel)_currentBindingContext).IsButtonEnabled = false;
+                }
             }
-            else
-            {
-                _logger.Log($"====Timer already expired====");
-                ((TimerViewModel)_currentBindingContext).CountdownLabel = TimeSpan.Zero;
-            }
-            _logger.Log($"====State reset====");
         }
         base.WillEnterForeground(application);
-        _logger.Log($"====Entered foreground====");
     }
 
+    /// <inheritdoc cref="MauiUIApplicationDelegate.WillFinishLaunching(UIApplication, NSDictionary)"/>
     public override bool WillFinishLaunching(UIApplication application, NSDictionary launchOptions)
     {
         try
@@ -77,7 +91,7 @@ public class AppDelegate : MauiUIApplicationDelegate
         }
         catch (Exception ex)
         {
-            _logger.Log(ex.Message);
+            Console.WriteLine(ex.Message);
         }
         return base.WillFinishLaunching(application, launchOptions);
     }

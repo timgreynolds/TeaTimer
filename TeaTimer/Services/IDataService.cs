@@ -8,6 +8,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
     /// access to an underlying data provider. Type T is the type of the data
     /// object or model.
     /// </summary>
+    /// <typeparamref name="T" />
     public interface IDataService<T>
     {
         /// <summary>
@@ -66,7 +67,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// A type T object to be added to the database.
         /// </param>
         /// <returns>
-        /// True if the object was added false if not.
+        /// The tye T object that was added to the data provider, including its
+        /// assigned unique identifier.
         /// </returns>
         public T Add(object obj);
 

@@ -9,11 +9,14 @@ using SQLite;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
-    ///<inheritdoc cref="IDataService{T}"/>
+    /// <summary>
+    /// Implementation of <see cref="IDataService{T}">IDataService"</see> using
+    /// SQLLite and a database of teas.
+    /// </summary>
     public class TeaSqlService : IDataService<TeaModel>
     {
         #region Private Fields
-        private static readonly string _appConfigFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        private static readonly string _appConfigFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         private static readonly string _appName = Assembly.GetExecutingAssembly().GetName().Name;
         private static readonly string _dbFileName = Path.Combine(_appConfigFolder, _appName, _appName + ".db3");
         private SQLiteAsyncConnection _asyncConnection;
@@ -21,7 +24,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         #endregion Private Fields
 
         #region Public Methods
-        /// <inheritdoc cref="IDataService{T}.Initialize()"/>
+        /// <summary>
+        /// Ensures that the database exists and contains at least one tea
+        /// variety.
+        /// </summary>
+        /// <remarks>
+        /// Creates the DB file in the platform-specific <see
+        /// cref="Environment.SpecialFolder.LocalApplicationData">Local
+        /// Application Data</see> directory and populates it with 'Earl Grey'
+        /// tea. If the DB file already exists and contains at least one entry
+        /// this should be a no-op.
+        /// </remarks>
         public void Initialize()
         {
             // The DbFile must be created, and populated with at least one initial tea variety.
@@ -55,13 +68,32 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
         }
 
-        /// <inheritdoc cref="IDataService{T}.Add(object)"/>
+        /// <summary>
+        /// Use the async method if possible.
+        /// </summary>
+        /// <remarks>
+        /// This wraps the async method in a continuation using ContinueWith.
+        /// </remarks>
         public TeaModel Add(object obj)
         {
-            throw new NotImplementedException();
+            TeaModel tea = null;
+            AddAsync(obj).ContinueWith((t) => { tea = t.Result; })
+                .ConfigureAwait(false);
+            return tea;
         }
 
-        /// <inheritdoc cref="IDataService{T}.AddAsync(object)" />
+        /// <summary>
+        /// Adds the given tea to the database in an asynchronous manner.
+        /// </summary>
+        /// <param name="obj">
+        /// A <see cref="TeaModel">Tea</see> to add to the database.
+        /// </param>
+        /// <returns>
+        /// A Task representing the add operation. The task result contains the
+        /// tea as added to the database including its auto-assigned unique key.
+        /// </returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<TeaModel> AddAsync(object obj)
         {
             TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
@@ -84,13 +116,34 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             return tea;
         }
 
-        /// <inheritdoc cref="IDataService{T}.Update(object)" />
+        /// <summary>
+        /// Use the async method if possible.
+        /// </summary>
+        /// <remarks>
+        /// This wraps the async method in a continuation using ContinueWith.
+        /// </remarks>
         public TeaModel Update(object obj)
         {
-            throw new NotImplementedException();
+            TeaModel tea = null;
+            UpdateAsync(obj).ContinueWith((t) => tea = t.Result)
+                .ConfigureAwait(false);
+            return tea;
         }
 
-        /// <inheritdoc cref="IDataService{T}.UpdateAsync(object)" />
+        /// <summary>
+        /// Updates all of the columns of a table using the given tea except
+        /// for its primary key in an asynchronous manner. The object is 
+        /// required to have a primary key.
+        /// </summary>
+        /// <param name="obj">
+        /// The <see cref="TeaModel">Tea</see> to be updated.
+        /// </param>
+        /// <returns>
+        /// A Task representing the update operation. The task result contains
+        /// the tea as it was updated.
+        /// </returns>
+        /// <exception cref="SQLiteException" />
+        /// <exception cref="Exception" />
         public async Task<TeaModel> UpdateAsync(object obj)
         {
             TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
@@ -113,13 +166,33 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             return tea;
         }
 
-        /// <inheritdoc cref="IDataService{T}.Delete(object)" />
+        /// <summary>
+        /// Use the async method if possible.
+        /// </summary>
+        /// <remarks>
+        /// This wraps the async method in a continuation using ContinueWith.
+        /// </remarks>
         public bool Delete(object obj)
         {
-            throw new NotImplementedException();
+            bool deleted = false;
+            DeleteAsync(obj).ContinueWith((t) => deleted = t.Result)
+                .ConfigureAwait(false);
+            return deleted;
         }
 
-        /// <inheritdoc cref="IDataService{T}.DeleteAsync(object)" />
+        /// <summary>
+        /// Deletes the given tea from the database using its primary key in an
+        /// asynchronous manner. The object is required to have a primary key.
+        /// </summary>
+        /// <param name="obj">
+        /// The <see cref="TeaModel">Tea</see> to be deleted.
+        /// </param>
+        /// <returns>
+        /// A Task representing the delete operation. The task result contains
+        /// true if the tea was deleted and false otherwise.
+        /// </returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<bool> DeleteAsync(object obj)
         {
             TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
@@ -146,22 +219,31 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             return deleted;
         }
 
-        /// <inheritdoc cref="IDataService{T}.Get()" />
+        /// <summary>
+        /// Use the async method if possible.
+        /// </summary>
+        /// <remarks>
+        /// This wraps the async method in a continuation using ContinueWith.
+        /// </remarks>
         public List<TeaModel> Get()
         {
-            if (_initialized == false)
-            {
-                Initialize();
-            }
-            using (SQLiteConnection connection = new SQLiteConnection(_dbFileName, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
-            {
-                return connection.Table<TeaModel>().ToList();
-            }
+            List<TeaModel> teas = new List<TeaModel>();
+            GetAsync().ContinueWith((t) => teas = t.Result)
+                .ConfigureAwait(false);
+            return teas;
         }
 
-        /// <inheritdoc cref="IDataService{T}.GetAsync()" />
+        /// <summary>
+        /// Gets all the teas from the database in an asynchronous manner.
+        /// </summary>
+        /// <returns>
+        /// A Task representing the get operation. The task result contains a
+        /// List of all the teas in the database.
+        /// </returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<List<TeaModel>> GetAsync()
-        {   
+        {
             if (_initialized == false)
             {
                 Initialize();
@@ -180,13 +262,32 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
         }
 
-        /// <inheritdoc cref="IDataService{T}.FindById(object)" />
+        /// <summary>
+        /// Use the async method if possible.
+        /// </summary>
+        /// <remarks>
+        /// This wraps the async method in a continuation using ContinueWith.
+        /// </remarks>
         public TeaModel FindById(object id)
         {
-            throw new NotImplementedException();
+            TeaModel tea = null;
+            FindByIdAsync(id).ContinueWith((t) => tea = t.Result)
+                .ConfigureAwait(false);
+            return tea;
         }
 
-        /// <inheritdoc cref="IDataService{T}.FindByIdAsync(object)" />
+        /// <summary>
+        /// Attempts to retrieve the tea with the given primary key from the
+        /// database in an asynchronous manner. Use of this method requires that
+        /// the given tea have a primary key.
+        /// </summary>
+        /// <param name="obj">The primary key of the tea to retrieve.</param>
+        /// <returns>
+        /// A Task representing the retrieve operation. The task result contains
+        /// the tea retrieved or null if not found.
+        /// </returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task<TeaModel> FindByIdAsync(object obj)
         {
             if (_initialized == false)

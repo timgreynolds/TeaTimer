@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
     /// <summary>
-    /// Provides an interface that supports some simple navigation options.
+    /// Represents an interface that can be used to provide some simple
+    /// navigation options.
     /// </summary>
     public interface INavigationService
     {
@@ -19,6 +20,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// </paramref> and pass a list of parameters to the new page using
         /// <paramref name="routeParameters">routeParameters</paramref>
         /// </summary>
+        /// <param name="route"/>
+        /// <param name="routeParameters"/>
         public Task NavigateToAsync(string route, IDictionary<string, object> routeParameters);
 
         /// <summary>
@@ -26,19 +29,30 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// </summary>
         public Task GoBackAsync(bool animate);
 
-        /// <inheritdoc cref="Microsoft.Maui.Controls.Page.NavigatedTo" />
+        /// <summary>
+        /// Event that is fired when navigation to the page is complete. 
+        /// </summary>
         public event EventHandler<EventArgs> NavigatedTo;
 
-        /// <inheritdoc cref="Microsoft.Maui.Controls.Page.NavigatedTo" />
+        /// <summary>
+        /// Event that is fired when navigation away from the page is complete.
+        /// </summary> 
         public event EventHandler<EventArgs> NavigatedFrom;
 
-        /// <inheritdoc cref="Microsoft.Maui.Controls.Page.NavigatingFrom" />
+        /// <summary>
+        /// Event that is fired when navigation away from the page is about to
+        /// be performed.
+        /// </summary>
         public event EventHandler<EventArgs> NavigatingFrom;
 
-        /// <inheritdoc cref="Microsoft.Maui.Controls.Shell.Navigated" />
+        /// <summary>
+        /// Event that is fired when shell navigation has completed.
+        /// </summary>
         public event EventHandler<EventArgs> ShellNavigated;
 
-        /// <inheritdoc cref="Microsoft.Maui.Controls.Shell.Navigating" />
+        /// <summary>
+        /// Event that is fired when shell navigation is about to be performed.
+        /// </summary>
         public event EventHandler<EventArgs> ShellNavigating;
     }
 

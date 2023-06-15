@@ -88,7 +88,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <param name="steepTime">The amount of time, expressed as a string in standard 'mm:ss' format, the tea should steep. If set to a time greater than 30 minutes an ArgumentException is thrown.</param>
         /// <param name="brewTemp">The temperature in degrees farenheit at which the tea should steep. If attempting to set to a value greater than 212 (boiling) it will be set to 212.</param>
         /// <exception cref="ArgumentException">ArgumentException</exception>
-        internal TeaModel(string name, string steepTime = "02:00", int brewTemp = 212)
+        public TeaModel(string name, string steepTime = "02:00", int brewTemp = 212)
         {
             TimeSpan time = TimeSpan.MaxValue;
             if (TimeSpan.TryParseExact(steepTime, @"mm\:ss", null, out time) == false)
@@ -113,7 +113,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <param name="steepTime">The amount of time, expressed as a TimeSpan object, the tea should steep. If set to a time greater than 30 minutes an ArgumentException is thrown.</param>
         /// <param name="brewTemp">The temperature in degrees farenheit at which the tea should steep. If attempting to set to a value greater than 212 (boiling) it will be set to 212.</param>
         /// <exception cref="ArgumentException">ArgumentException</exception>
-        internal TeaModel(string name, TimeSpan steepTime, int brewTemp = 212)
+        public TeaModel(string name, TimeSpan steepTime, int brewTemp = 212)
         {
             Name = name;
             SteepTime = steepTime <= new TimeSpan(0, 30, 0) ? steepTime : throw new ArgumentException($"Steep times greater than 30 minutes ({steepTime}) don't really make sense.", nameof(steepTime));
@@ -123,10 +123,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
 
         #region Public Methods
         /// <summary>
-        /// 
+        /// Validates the tea's data.
         /// </summary>
         /// <param name="tea"></param>
-        /// <returns></returns>
+        /// <returns>The tea with valid properties if it could be validated.
+        /// An exception otherwise.</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static TeaModel ValidateTea(TeaModel tea)
