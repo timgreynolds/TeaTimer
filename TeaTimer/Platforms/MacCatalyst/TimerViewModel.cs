@@ -5,6 +5,7 @@ using UserNotifications;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
+    /// <inheritdoc cref="BaseViewModel"/>
     public partial class TimerViewModel
     {
         async private partial Task TimerExpired()

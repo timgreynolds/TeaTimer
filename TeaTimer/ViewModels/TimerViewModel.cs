@@ -8,6 +8,10 @@ using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
+    /// <summary>
+    /// View model that backs up the <see cref="Pages.TimerPage">
+    /// Timer/Countdown</see> page.
+    /// </summary>
     public partial class TimerViewModel : BaseViewModel
     {
         #region Private Fields
@@ -76,7 +80,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Public Properties
 
         #region Constructor
-        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaTimerService timerService, TeaSqlService sqlService)
+        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService, TeaTimerService timerService)
             : base(navigationService, displayService, sqlService)
         {
             _timerService = timerService;

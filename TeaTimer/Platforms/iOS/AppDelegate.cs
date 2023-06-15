@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
 using com.mahonkin.tim.maui.TeaTimer.ViewModels;
 using Foundation;
@@ -10,78 +9,89 @@ using UserNotifications;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
+/// <summary>
+/// A set of methods to manage shared behaviors for your app.   
+/// </summary>
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {
+    #region Private Fields
     private TimeSpan _timeLeft = TimeSpan.Zero;
-    private DateTime _backgroundedTime = DateTime.UtcNow;
+    private DateTime _backgroundedTime = DateTime.MinValue;
     private object _currentBindingContext;
-    private CoreFoundation.OSLog _logger = new CoreFoundation.OSLog(Assembly.GetExecutingAssembly().GetName().Name, nameof(AppDelegate));
+    #endregion Private Fields
+
+    /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
+    /// <summary>
+    /// Method that is run when the app enters the background. 
+    /// </summary>
+    /// <remarks>
+    /// Saves some app state.<br/>If the currently displayed page is the Timer Page
+    /// and the countdown is running the time left in the countdown as well as
+    /// the time the app went into the background are stored. This information
+    /// can be used later by <see cref="WillEnterForeground(UIApplication)"/> to
+    /// restore/reset appropriate app state.
+    /// </remarks>
     public override void DidEnterBackground(UIApplication application)
     {
-        _logger.Log(CoreFoundation.OSLogLevel.Info, $"====Entering background====");
-        Console.WriteLine($"====Countdown left: {_timeLeft.ToString(@"mm\:ss")}");
-        Console.WriteLine($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+        _backgroundedTime = DateTime.UtcNow;
         _currentBindingContext = AppShell.Current.CurrentPage.BindingContext;
-        Console.WriteLine($"====Page viewmodel type: {_currentBindingContext.GetType().Name}");
+
         if (_currentBindingContext.GetType().IsAssignableTo(typeof(TimerViewModel)))
         {
-            Console.WriteLine($"====Saving state====");
-            _timeLeft = ((TimerViewModel)_currentBindingContext).CountdownLabel;
-            _backgroundedTime = DateTime.UtcNow;
-            Console.WriteLine($"====Countdown left: {_timeLeft.ToString(@"mm\:ss")}");
-            Console.WriteLine($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+            if (((TimerViewModel)_currentBindingContext).IsTimerRunning)
+            {
+                _timeLeft = ((TimerViewModel)_currentBindingContext).CountdownLabel;
+            }
         }
+
         base.DidEnterBackground(application);
-        Console.WriteLine($"====Entered background=====");
     }
 
+    /// <summary>
+    /// Method that is run when the app is about to enter the foreground.
+    /// </summary>
+    /// <remarks>
+    /// Restores previously saved app state.</br>If the countdown was running
+    /// when the app entered the background and has not expired while the app
+    /// was in the background uses the saved data to calculate the current time
+    /// remaining in the countdown and updates the timer appropriately.
+    /// </remarks>
     public override void WillEnterForeground(UIApplication application)
     {
-        Console.WriteLine($"====Entering foreground====");
-        Console.WriteLine($"====Countdown left when backgrounded: {_timeLeft.ToString(@"mm\:ss")}");
-        Console.WriteLine($"====Backgrounded at: {_backgroundedTime.ToLocalTime().ToString(@"hh\:mm\:ss")}");
-        Console.WriteLine($"====Awoken at: {DateTime.UtcNow.ToLocalTime().ToString(@"hh\:mm\:ss")}");
+        DateTime awakeTime = DateTime.UtcNow;
         TimeSpan elapsedTime = DateTime.UtcNow.Subtract(_backgroundedTime);
-        Console.WriteLine($"====Time spent in background: {elapsedTime.ToString(@"mm\:ss")}");
-        TimeSpan remainingTime = _timeLeft.Subtract(elapsedTime);
-        Console.WriteLine($"====Page viewmodel type: {_currentBindingContext.GetType().Name}");
+
         if (_currentBindingContext.GetType().IsAssignableTo(typeof(TimerViewModel)))
         {
-            Console.WriteLine($"====Resetting state====");
-            if (remainingTime > TimeSpan.Zero)
+            if (((TimerViewModel)_currentBindingContext).IsTimerRunning)
             {
-                Console.WriteLine($"====Current time remaining: {remainingTime.ToString(@"mm\:ss")}");
-                ((TimerViewModel)_currentBindingContext).CountdownLabel = remainingTime;
-                Console.WriteLine($"====Page Countdown set to: {remainingTime.ToString(@"mm\:ss")}");
+                if (elapsedTime < _timeLeft)
+                {
+                    ((TimerViewModel)_currentBindingContext).CountdownLabel = _timeLeft.Subtract(elapsedTime);
+                }
+                else
+                {
+                    ((TimerViewModel)_currentBindingContext).SelectedTea = null;
+                    ((TimerViewModel)_currentBindingContext).IsButtonEnabled = false;
+                }
             }
-            else
-            {
-                Console.WriteLine($"====Timer already expired====");
-                ((TimerViewModel)_currentBindingContext).CountdownLabel = TimeSpan.Zero;
-            }
-            Console.WriteLine($"====State reset====");
         }
         base.WillEnterForeground(application);
-        Console.WriteLine($"====Entered foreground====");
     }
 
+    /// <inheritdoc cref="MauiUIApplicationDelegate.WillFinishLaunching(UIApplication, NSDictionary)"/>
     public override bool WillFinishLaunching(UIApplication application, NSDictionary launchOptions)
     {
         try
         {
-            UNNotificationAction timerExpiredOkAction = UNNotificationAction.FromIdentifier(Constants.TIMER_EXPIRED_OK_ACTION, "OK", UNNotificationActionOptions.None, UNNotificationActionIcon.CreateFromSystem("timer"));
-            UNNotificationAction timerExpiredCancelAction = UNNotificationAction.FromIdentifier(Constants.TIMER_EXPIRED_CANCEL_ACTION, "Cancel", UNNotificationActionOptions.None, UNNotificationActionIcon.CreateFromSystem("wrongwaysign"));
-            UNNotificationCategory timerExpiredCategory = UNNotificationCategory.FromIdentifier(Constants.TIMER_EXPIRED_CATEGORY, new[] { timerExpiredOkAction, timerExpiredCancelAction }, new[] { string.Empty }, UNNotificationCategoryOptions.None);
-            NSSet<UNNotificationCategory> categories = new NSSet<UNNotificationCategory>(new[] { timerExpiredCategory });
-            UNUserNotificationCenter.Current.SetNotificationCategories(categories);
             UNUserNotificationCenter.Current.Delegate = new NotificationCenterDelegate();
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
-            System.Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.Message);
         }
         return base.WillFinishLaunching(application, launchOptions);
     }

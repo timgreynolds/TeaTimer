@@ -1,5 +1,10 @@
-﻿namespace com.mahonkin.tim.maui.TeaTimer.Platforms.iOS
+﻿#pragma warning disable CS1591
+	
+namespace com.mahonkin.tim.maui.TeaTimer.Platforms.iOS
 {
+    /// <summary>
+    /// Some constant values used by the application
+    /// </summary>
     public static class Constants
 	{
 		public const string TIMER_EXPIRED_OK_ACTION = "TimerExpiredOkAction";

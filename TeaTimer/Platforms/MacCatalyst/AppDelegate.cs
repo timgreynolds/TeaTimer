@@ -13,12 +13,18 @@ using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
+/// <summary>
+/// A set of methods to manage shared behaviors for your app.   
+/// </summary>
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     private Log _logger = new Log(Assembly.GetExecutingAssembly().GetName().Name, nameof(AppDelegate));
 
+    /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+
+    /// <inheritdoc cref="MauiUIApplicationDelegate.BuildMenu(IUIMenuBuilder)" />
     public override void BuildMenu(IUIMenuBuilder builder)
     {
         _logger.Log(LogLevel.Debug, "Building MacOS application menu.");
