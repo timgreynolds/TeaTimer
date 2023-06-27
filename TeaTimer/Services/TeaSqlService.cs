@@ -13,14 +13,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
     /// Implementation of <see cref="IDataService{T}">IDataService"</see> using
     /// SQLLite and a database of teas.
     /// </summary>
-    public class TeaSqlService : IDataService<TeaModel>
+    public class TeaSqlService<T> : IDataService<T> where T : TeaModel
     {
         #region Private Fields
         private static readonly string _appConfigFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        private static readonly string _appName = Assembly.GetExecutingAssembly().GetName().Name;
+        private static readonly string _appName = Assembly.GetExecutingAssembly().GetName().Name ?? Assembly.GetExecutingAssembly().GetName().ToString();
         private static readonly string _dbFileName = Path.Combine(_appConfigFolder, _appName, _appName + ".db3");
-        private SQLiteAsyncConnection _asyncConnection;
-        private bool _initialized;
+        private static readonly SQLiteAsyncConnection _asyncConnection = new SQLiteAsyncConnection(_dbFileName, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
+        private static bool _initialized;
         #endregion Private Fields
 
         #region Public Methods
@@ -45,7 +45,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                 Directory.CreateDirectory(Path.Combine(_appConfigFolder, _appName));
                 using (SQLiteConnection connection = new SQLiteConnection(_dbFileName, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
                 {
-                    TableMapping mapping = connection.TableMappings.Where(m => m.TableName.Equals("TeaVarieties", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                    TableMapping mapping = connection.TableMappings.FirstOrDefault(m => m.TableName.Equals("TeaVarieties", StringComparison.OrdinalIgnoreCase));
                     if (mapping is null)
                     {
                         CreateTableResult createTableResult = connection.CreateTable<TeaModel>();
@@ -56,7 +56,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                     }
                     _initialized = true;
                 }
-                _asyncConnection = new SQLiteAsyncConnection(_dbFileName, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
             }
             catch (SQLiteException ex)
             {
@@ -74,12 +73,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// <remarks>
         /// This wraps the async method in a continuation using ContinueWith.
         /// </remarks>
-        public TeaModel Add(object obj)
+        public T Add(object obj)
         {
-            TeaModel tea = null;
-            AddAsync(obj).ContinueWith((t) => { tea = t.Result; })
+            AddAsync(obj).ContinueWith((t) => { obj = t.Result; })
                 .ConfigureAwait(false);
-            return tea;
+            return (T)obj;
         }
 
         /// <summary>
@@ -94,16 +92,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// </returns>
         /// <exception cref="SQLiteException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<TeaModel> AddAsync(object obj)
+        public async Task<T> AddAsync(object obj)
         {
-            TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
             if (_initialized == false)
             {
                 Initialize();
             }
             try
             {
+                TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
                 await _asyncConnection.InsertAsync(tea).ConfigureAwait(false);
+                return (T)tea;
             }
             catch (SQLiteException ex)
             {
@@ -113,7 +112,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             {
                 throw new Exception(ex.Message, ex);
             }
-            return tea;
         }
 
         /// <summary>
@@ -122,12 +120,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// <remarks>
         /// This wraps the async method in a continuation using ContinueWith.
         /// </remarks>
-        public TeaModel Update(object obj)
+        public T Update(object obj)
         {
-            TeaModel tea = null;
-            UpdateAsync(obj).ContinueWith((t) => tea = t.Result)
+            UpdateAsync(obj).ContinueWith((t) => obj = t.Result)
                 .ConfigureAwait(false);
-            return tea;
+            return (T)obj;
         }
 
         /// <summary>
@@ -144,16 +141,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// </returns>
         /// <exception cref="SQLiteException" />
         /// <exception cref="Exception" />
-        public async Task<TeaModel> UpdateAsync(object obj)
+        public async Task<T> UpdateAsync(object obj)
         {
-            TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
             if (_initialized == false)
             {
                 Initialize();
             }
             try
             {
+                TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
                 await _asyncConnection.UpdateAsync(tea).ConfigureAwait(false);
+                return (T)tea;
             }
             catch (SQLiteException ex)
             {
@@ -163,7 +161,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             {
                 throw new Exception(ex.Message, ex);
             }
-            return tea;
         }
 
         /// <summary>
@@ -195,18 +192,19 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// <exception cref="Exception"></exception>
         public async Task<bool> DeleteAsync(object obj)
         {
-            TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
-            bool deleted = false;
             if (_initialized == false)
             {
                 Initialize();
             }
             try
             {
+                bool deleted = false;
+                TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
                 if (await _asyncConnection.DeleteAsync(tea).ConfigureAwait(false) == 1)
                 {
                     deleted = true;
                 }
+                return deleted;
             }
             catch (SQLiteException ex)
             {
@@ -216,7 +214,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             {
                 throw new Exception(ex.Message, ex);
             }
-            return deleted;
         }
 
         /// <summary>
@@ -225,9 +222,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// <remarks>
         /// This wraps the async method in a continuation using ContinueWith.
         /// </remarks>
-        public List<TeaModel> Get()
+        public List<T> Get()
         {
-            List<TeaModel> teas = new List<TeaModel>();
+            List<T> teas = new List<T>();
             GetAsync().ContinueWith((t) => teas = t.Result)
                 .ConfigureAwait(false);
             return teas;
@@ -242,7 +239,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// </returns>
         /// <exception cref="SQLiteException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<List<TeaModel>> GetAsync()
+        public async Task<List<T>> GetAsync()
         {
             if (_initialized == false)
             {
@@ -250,7 +247,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
             try
             {
-                return await _asyncConnection.Table<TeaModel>().ToListAsync().ConfigureAwait(false);
+                List<TeaModel> teas = await _asyncConnection.Table<TeaModel>().ToListAsync().ConfigureAwait(false);
+                return teas as List<T> ?? new List<T>();
             }
             catch (SQLiteException ex)
             {
@@ -268,12 +266,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// <remarks>
         /// This wraps the async method in a continuation using ContinueWith.
         /// </remarks>
-        public TeaModel FindById(object id)
+        public T FindById(object id)
         {
-            TeaModel tea = null;
-            FindByIdAsync(id).ContinueWith((t) => tea = t.Result)
+            FindByIdAsync(id).ContinueWith((t) => id = t.Result)
                 .ConfigureAwait(false);
-            return tea;
+            return (T)id;
         }
 
         /// <summary>
@@ -288,7 +285,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// </returns>
         /// <exception cref="SQLiteException"></exception>
         /// <exception cref="Exception"></exception>
-        public async Task<TeaModel> FindByIdAsync(object obj)
+        public async Task<T> FindByIdAsync(object obj)
         {
             if (_initialized == false)
             {
@@ -296,7 +293,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
             try
             {
-                return await _asyncConnection.FindAsync<TeaModel>(obj).ConfigureAwait(false);
+                TeaModel tea = await _asyncConnection.FindAsync<TeaModel>(obj).ConfigureAwait(false);
+                return (T)tea;
             }
             catch (SQLiteException ex)
             {

@@ -54,7 +54,7 @@ public class AppDelegate : MauiUIApplicationDelegate
     /// Method that is run when the app is about to enter the foreground.
     /// </summary>
     /// <remarks>
-    /// Restores previously saved app state.</br>If the countdown was running
+    /// Restores previously saved app state.<br/>If the countdown was running
     /// when the app entered the background and has not expired while the app
     /// was in the background uses the saved data to calculate the current time
     /// remaining in the countdown and updates the timer appropriately.

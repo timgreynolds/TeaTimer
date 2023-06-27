@@ -8,7 +8,7 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 public partial class App : Application
 {
     /// <inheritdoc cref="Application.Application()" />
-    public App(TeaNavigationService navigationService)
+    public App(INavigationService navigationService)
     {
         InitializeComponent();
         MainPage = new AppShell(navigationService);

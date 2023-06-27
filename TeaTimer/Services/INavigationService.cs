@@ -22,12 +22,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// </summary>
         /// <param name="route"/>
         /// <param name="routeParameters"/>
-        public Task NavigateToAsync(string route, IDictionary<string, object> routeParameters);
+        public Task NavigateToAsync(string route, IDictionary<string, object> routeParameters = null);
 
         /// <summary>
         /// Navigate to the previous page.
         /// </summary>
-        public Task GoBackAsync(bool animate);
+        public Task GoBackAsync(bool animate = true);
 
         /// <summary>
         /// Event that is fired when navigation to the page is complete. 

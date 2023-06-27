@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using com.mahonkin.tim.maui.TeaTimer.Services;
-
+using com.mahonkin.tim.maui.TeaTimer.DataModel;
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
     /// <summary>
@@ -13,19 +13,19 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
         public event PropertyChangedEventHandler PropertyChanged;
         /// <inheritdoc cref="TeaNavigationService" />
-        public readonly TeaNavigationService NavigationService;
+        public readonly INavigationService NavigationService;
         /// <inheritdoc cref="TeaDisplayService" />
-        public readonly TeaDisplayService DisplayService;
+        public readonly IDisplayService DisplayService;
         /// <inheritdoc cref="TeaSqlService{T}"/>
-        public readonly TeaSqlService SqlService;
+        public readonly IDataService<TeaModel> SqlService;
 
         /// <summary>
         /// Base class to be used for viewmodels.
         /// </summary>
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
-        /// <param name="sqlService"><see cref="TeaSqlService"/></param>
-        public BaseViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
+        /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
+        public BaseViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService)
         {
             NavigationService = navigationService;
             DisplayService = displayService;

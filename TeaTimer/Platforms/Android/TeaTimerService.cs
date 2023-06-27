@@ -8,7 +8,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
     {
         private IDispatcherTimer _countdown = null;
 
-        /// <inheritdoc cref="ITimerService.Intervaltej"/>
+        /// <inheritdoc cref="ITimerService.Interval"/>
         public TimeSpan Interval
         {
             get => _countdown.Interval;

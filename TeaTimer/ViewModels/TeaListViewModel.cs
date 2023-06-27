@@ -122,8 +122,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// </summary>
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
-        /// <param name="sqlService"><see cref="TeaSqlService"/></param>
-        public TeaListViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
+        /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
+        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService)
             : base(navigationService, displayService, sqlService)
         {
             RefreshList = new Command(() => RefreshTeas(this, EventArgs.Empty));
@@ -146,7 +146,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         private void AddTea()
         {
-            NavigationService.NavigateToAsync(nameof(Pages.EditPage));
+            NavigationService.NavigateToAsync(nameof(Pages.EditPage), null);
         }
 
         private bool EditDeleteCanExecute(object parameters)
