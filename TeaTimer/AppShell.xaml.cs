@@ -8,7 +8,7 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 public partial class AppShell : Shell
 {
     /// <inheritdoc cref="TeaNavigationService" />
-    public AppShell(TeaNavigationService navigationService)
+    public AppShell(INavigationService navigationService)
     {
         Routing.RegisterRoute(nameof(EditPage), typeof(EditPage));
 
@@ -16,7 +16,7 @@ public partial class AppShell : Shell
         {
             InitializeComponent();
         }
-        catch(System.Exception ex) // Maybe last top-level opportunity to display an exception alert
+        catch (System.Exception ex) // Maybe last top-level opportunity to display an exception alert
         {
             CurrentPage.DisplayAlert("Error!", ex.Message, "OK");
         }

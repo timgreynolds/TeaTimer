@@ -6,7 +6,7 @@ using Microsoft.Maui.Controls;
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
     /// <summary>
-    /// Implementation of <see cref="INavigationService">INavigationService.</see>
+    /// Implementation of <see cref="INavigationService">INavigationService</see>
     /// using Maui Shell Navigation.
     /// </summary>
     public class TeaNavigationService : INavigationService

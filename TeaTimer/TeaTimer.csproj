@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
 		<!-- Uncomment to also build the Android app.  -->
-		<TargetFrameWorks>$(TargetFrameworks);net7.0-android</TargetFrameWorks>
+<!--		<TargetFrameWorks>$(TargetFrameworks);net7.0-android</TargetFrameWorks> -->
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
@@ -29,7 +29,6 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<WarningLevel>4</WarningLevel>
-		<DocumentationFile>bin\Debug\net7.0-ios\iossimulator-x64\TeaTimer.xml</DocumentationFile>
 		<PlatformTarget>anycpu</PlatformTarget>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
@@ -61,11 +60,6 @@
 	<ItemGroup>
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.5" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Constants\Constants.cs">
-			<ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
-		</Compile>
 	</ItemGroup>
 	<Target Name="_FixXMLDocCommentWarning" BeforeTargets="_ComputePublishLocation">
 		<ItemGroup>

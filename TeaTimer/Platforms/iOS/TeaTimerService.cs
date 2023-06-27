@@ -60,7 +60,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// that case a local notification request can also be created using
         /// <see cref="Start(TimeSpan)"/>.
         /// </remarks>
-        /// <seealso cref="DidEnterBackground(UIKit.UIApplication)"/>
         public void CreateTimer() => _countdown ??= AppShell.Current.Dispatcher.CreateTimer();
 
         /// <summary>
