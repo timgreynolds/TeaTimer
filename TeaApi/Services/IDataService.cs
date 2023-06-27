@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace com.mahonkin.tim.maui.TeaTimer.Services
+namespace com.mahonkin.tim.TeaApi.Services
 {
     /// <summary>
     /// Represents an interface that can be used to provide platform-specific

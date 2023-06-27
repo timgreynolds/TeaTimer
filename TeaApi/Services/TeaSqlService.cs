@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using com.mahonkin.tim.maui.TeaTimer.DataModel;
+using com.mahonkin.tim.TeaApi.DataModel;
 using SQLite;
 
-namespace com.mahonkin.tim.maui.TeaTimer.Services
+namespace com.mahonkin.tim.TeaApi.Services
 {
     /// <summary>
     /// Implementation of <see cref="IDataService{T}">IDataService"</see> using
@@ -45,7 +44,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                 Directory.CreateDirectory(Path.Combine(_appConfigFolder, _appName));
                 using (SQLiteConnection connection = new SQLiteConnection(_dbFileName, SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex))
                 {
-                    TableMapping mapping = connection.TableMappings.FirstOrDefault(m => m.TableName.Equals("TeaVarieties", StringComparison.OrdinalIgnoreCase));
+                    TableMapping? mapping = connection.TableMappings.FirstOrDefault(m => m.TableName.Equals("TeaVarieties", StringComparison.OrdinalIgnoreCase));
                     if (mapping is null)
                     {
                         CreateTableResult createTableResult = connection.CreateTable<TeaModel>();

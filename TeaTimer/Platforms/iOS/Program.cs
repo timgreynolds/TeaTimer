@@ -2,22 +2,26 @@
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
+/// <summary>
+/// This is the main entry point of the application.
+/// </summary>
 public class Program
 {
-	// This is the main entry point of the application.
-	static void Main(string[] args)
+	private static CoreFoundation.OSLog _logger = new CoreFoundation.OSLog(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, "Crash");
+
+    /// <inheritdoc cref="UIApplication.Main(string[], System.Type, System.Type)" />
+    static void Main()
 	{
 		// if you want to use a different Application Delegate class from "AppDelegate"
 		// you can specify it here.
 		try
 		{
-			UIApplication.Main(args, null, typeof(AppDelegate));
+			UIApplication.Main(null, null, typeof(AppDelegate));
 		}
 		catch(System.Exception ex)
 		{
-			System.Console.WriteLine($"Application level exception handler. Something went wrong.");
-			System.Console.WriteLine(ex.Message);
-			System.Console.WriteLine(ex.StackTrace);
+            _logger.Log(CoreFoundation.OSLogLevel.Fault, $"Application level exception handler. Something went wrong.\n" +
+                $"{ex.Message}\n{ex.StackTrace}");
 		}
 	}
 }

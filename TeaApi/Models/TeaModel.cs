@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.Text.Json.Serialization;
+using System.Text.Json;
 using SQLite;
 
-namespace com.mahonkin.tim.maui.TeaTimer.DataModel
+namespace com.mahonkin.tim.TeaApi.DataModel
 {
     /// <summary>
     /// Class that defines the tea variety.
@@ -21,6 +22,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// The database-assigned unique ID for this tea record. There should be no reason to set it in code.
         /// </summary>
         [Column("ID"), PrimaryKey, AutoIncrement]
+        [JsonPropertyName("Id")]
         public int Id
         {
             get => _id;
@@ -34,6 +36,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// </br>
         /// </summary>
         [Column("Name"), Unique, NotNull]
+        [JsonPropertyName("Name")]
         public string Name
         {
             get => _name;
@@ -45,6 +48,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <br>If the user tries to set the steep time to a value of 30 minutes or longer an ArgumentException will be thrown.</br>
         /// </summary>
         [Column("Steeptime"), NotNull]
+        [JsonPropertyName("SteepTime")]
         public TimeSpan SteepTime
         {
             get => _steepTime;
@@ -56,6 +60,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <br>If the user attempts to set a temperature value greater than boiling (212 degrees farenheit) the value will be set to 212.</br>
         /// </summary>
         [Column("Brewtemp"), NotNull]
+        [JsonPropertyName("BrewTemp")]
         public int BrewTemp
         {
             get => _brewTemp;
@@ -71,6 +76,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// </summary>
         public TeaModel()
         {
+            _name = string.Empty;
         }
 
         /// <summary>
@@ -90,13 +96,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <exception cref="ArgumentException">ArgumentException</exception>
         public TeaModel(string name, string steepTime = "02:00", int brewTemp = 212)
         {
-            TimeSpan time = TimeSpan.MaxValue;
-            if (TimeSpan.TryParseExact(steepTime, @"mm\:ss", null, out time) == false)
+            if (TimeSpan.TryParseExact(steepTime, @"mm\:ss", null, out TimeSpan time) == false)
             {
                 throw new ArgumentException($"Could not parse provided steep time {steepTime}", nameof(steepTime));
             }
             SteepTime = time <= new TimeSpan(0, 30, 0) ? time : throw new ArgumentException($"Steep times of greater than 30 minutes ({steepTime}) really don't make sense.", nameof(steepTime));
-            Name = name;
+            Name = _name = name;
             BrewTemp = brewTemp <= 212 ? brewTemp : 212;
         }
 
@@ -115,7 +120,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.DataModel
         /// <exception cref="ArgumentException">ArgumentException</exception>
         public TeaModel(string name, TimeSpan steepTime, int brewTemp = 212)
         {
-            Name = name;
+            Name = _name = name;
             SteepTime = steepTime <= new TimeSpan(0, 30, 0) ? steepTime : throw new ArgumentException($"Steep times greater than 30 minutes ({steepTime}) don't really make sense.", nameof(steepTime));
             BrewTemp = brewTemp <= 212 ? brewTemp : 212;
         }

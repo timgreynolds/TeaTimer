@@ -1,44 +1,103 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
+using System.Threading.Tasks;
+using com.mahonkin.tim.TeaApi.DataModel;
+using com.mahonkin.tim.TeaApi.Exceptions;
+using com.mahonkin.tim.TeaApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace TeaApi.Controllers;
+namespace com.mahonkin.tim.TeaApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class TeasController : ControllerBase
 {
-    private readonly ILogger<TeasController> _logger;
+    private readonly IDataService<TeaModel> _sqlService;
 
-    public TeasController(ILogger<TeasController> logger)
+    public TeasController(IDataService<TeaModel> sqlService)
     {
-        _logger = logger;
+        _sqlService = sqlService;
     }
 
-    [HttpGet()]
-    public IActionResult Teas()
+    [HttpGet(), ActionName("Get")]
+    public async Task<IActionResult> Get()
     {
-        _logger.LogTrace("Get Teas Action");
-        return new OkObjectResult(new[] { new { Name = "Earl Grey", SteepTime = TimeSpan.FromMinutes(2), BrewTemp = 212 },
-                                          new { Name = "Lady Grey", SteepTime = TimeSpan.FromSeconds(90), BrewTemp = 185 }});
+        List<TeaModel> teas = await _sqlService.GetAsync();
+        if (teas.Count > 0)
+        {
+            return new OkObjectResult(teas);
+        }
+        return new NotFoundObjectResult(teas);
     }
 
     [HttpGet("{Id}"), ActionName("GetById")]
-    public IActionResult Teas(string Id)
+    public async Task<IActionResult> GetById(string Id)
     {
-        _logger.LogTrace("Get Tea by Id Action");
-        return new OkObjectResult(new[] { new { Id = 1, Name = "Earl Grey", SteepTime = TimeSpan.FromMinutes(2), BrewTemp = 212 } });
+        try
+        {
+            TeaModel tea = await _sqlService.FindByIdAsync(Id);
+            if (tea is null)
+            {
+                return new NotFoundObjectResult(new[] { tea });
+            }
+            return new OkObjectResult(new[] { tea });
+        }
+        catch (Exception exception)
+        {
+            return new InternalServerErrorObjectResult(new ErrorResult(HttpStatusCode.InternalServerError, exception.Message));
+        }
     }
 
-    [HttpPost()]
-    public IActionResult Teas([FromHeader(Name = "Host")] string host, [FromBody] JsonDocument body)
+    [HttpPost(), ActionName("AddTea")]
+    public async Task<IActionResult> AddTea([FromHeader(Name = "Host")] string host, [FromBody] JsonDocument body)
     {
-        int id = 0;
-        if (body.RootElement.TryGetProperty("Id", out JsonElement idElement))
+        try
         {
-            id = idElement.GetInt32();
+            TeaModel tea = body.Deserialize<TeaModel>() ?? new TeaModel();
+            TeaModel newTea = await _sqlService.AddAsync(tea);
+            return new CreatedResult($"http://{host}/api/teas/{newTea.Id}", newTea);
         }
-        _logger.LogTrace($"Post Tea Action {body}");
-        return new CreatedResult($"http://{host}/api/teas/{id}", body);
+        catch (Exception exception)
+        {
+            if (exception.Message.StartsWith("unique constraint fail", StringComparison.OrdinalIgnoreCase))
+            {
+                return new ConflictObjectResult(new ErrorResult(HttpStatusCode.Conflict, exception.Message));
+            }
+            return new InternalServerErrorObjectResult(new ErrorResult(HttpStatusCode.InternalServerError, exception.Message));
+        }
+    }
+
+    [HttpPut(), ActionName("UpdateTea")]
+    public async Task<IActionResult> UpdateTea([FromBody] JsonDocument body)
+    {
+        try
+        {
+            TeaModel tea = body.Deserialize<TeaModel>() ?? new TeaModel();
+            TeaModel updatedTea = await _sqlService.UpdateAsync(tea);
+            return new AcceptedResult();
+        }
+        catch (Exception exception)
+        {
+            return new InternalServerErrorObjectResult(new ErrorResult(HttpStatusCode.InternalServerError, exception.Message));
+        }
+    }
+
+    [HttpDelete(), ActionName("DeleteTea")]
+    public async Task<IActionResult> DeleteTea([FromBody] JsonDocument body)
+    {
+        try
+        {
+            TeaModel tea = body.Deserialize<TeaModel>() ?? new TeaModel();
+            if (await _sqlService.DeleteAsync(tea))
+            {
+                return new OkResult();
+            }
+            return new InternalServerErrorObjectResult(new ErrorResult(HttpStatusCode.InternalServerError, "Could not delete tea for unknown reasons."));
+        }
+        catch (Exception exception)
+        {
+            return new InternalServerErrorObjectResult(new ErrorResult(HttpStatusCode.InternalServerError, exception.Message));
+        }
     }
 }

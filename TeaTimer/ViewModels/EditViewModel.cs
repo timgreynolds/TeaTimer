@@ -8,6 +8,10 @@ using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
+    /// <summary>
+    /// Viewmodel that backs up the <see cref="Pages.EditPage">Edit Tea</see>
+    /// page.
+    /// </summary>
     public class EditViewModel : BaseViewModel, IQueryAttributable
     {
         #region Private Fields
@@ -20,6 +24,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Private Fields
 
         #region Public Properties
+        /// <summary>
+        /// The Name of the tea.
+        /// </summary>
         public string Name
         {
             get => _name;
@@ -34,12 +41,19 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Label to display on the Back Button.
+        /// </summary>
+        [Obsolete()]
         public string BackButtonLabel
         {
             get => _backButtonLabel;
             private set { }
         }
 
+        /// <summary>
+        /// The temperature at which the tea should steep.
+        /// </summary>
         public int BrewTemp
         {
             get => _brewTemp;
@@ -54,14 +68,23 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Whether to display the <see cref="BrewTemp"/> in Celsius or Farenheit degress.
+        /// </summary>
         public bool UseCelsius { get; }
 
+        /// <summary>
+        /// Whether the page should be considered 'dirty' and have the 'Save' button enabled.
+        /// </summary>
         public bool IsPageDirty
         {
             get => _isPageDirty;
             private set => SetProperty(ref _isPageDirty, value);
         }
 
+        /// <summary>
+        /// The amount of time for which the steep.
+        /// </summary>
         public TimeSpan SteepTime
         {
             get => _steepTime;
@@ -76,12 +99,18 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
+        /// <summary>
+        /// Set the command to run when the Back button is selected.
+        /// </summary>
         public ICommand BackButtonCommand
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Set the command to run when the 'Save' button is selected.
+        /// </summary>
         public ICommand SaveBtnPressed
         {
             get;
@@ -89,13 +118,20 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         }
         #endregion Public Properties
 
-        public EditViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService)
+        /// <summary>
+        /// Viewmodel that backs up the Edit Tea page.
+        /// </summary>
+        /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
+        /// <param name="displayService"><see cref="TeaDisplayService"/></param>
+        /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
+        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService)
            : base(navigationService, displayService, sqlService)
         {
             SaveBtnPressed = new Command(async () => await Save());
             BackButtonCommand = new Command(async () => await NavigateBack());
         }
 
+        /// <inheritdoc cref="ApplyQueryAttributes(IDictionary{string, object})" />
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             if (query.TryGetValue("Tea", out object param))
@@ -149,7 +185,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         private async Task  NavigateBack()
         {
-            await NavigationService.GoBackAsync();
+            await NavigationService.GoBackAsync(true);
         }
     }
 }

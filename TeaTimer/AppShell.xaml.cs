@@ -4,9 +4,11 @@ using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
+/// <inheritdoc cref="Shell"/>
 public partial class AppShell : Shell
 {
-    public AppShell(TeaNavigationService navigationService)
+    /// <inheritdoc cref="TeaNavigationService" />
+    public AppShell(INavigationService navigationService)
     {
         Routing.RegisterRoute(nameof(EditPage), typeof(EditPage));
 
@@ -14,7 +16,7 @@ public partial class AppShell : Shell
         {
             InitializeComponent();
         }
-        catch(System.Exception ex) // Maybe last top-level opportunity to display an exception alert
+        catch (System.Exception ex) // Maybe last top-level opportunity to display an exception alert
         {
             CurrentPage.DisplayAlert("Error!", ex.Message, "OK");
         }

@@ -8,6 +8,10 @@ using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
+    /// <summary>
+    /// View model that backs up the <see cref="Pages.TimerPage">
+    /// Timer/Countdown</see> page.
+    /// </summary>
     public partial class TimerViewModel : BaseViewModel
     {
         #region Private Fields
@@ -17,47 +21,63 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private bool _isViewLabelVisible;
         private TimeSpan _countdownLabel = new TimeSpan(0);
         private List<TeaModel> _teas = new List<TeaModel>();
-        private TeaTimerService _timerService;
+        private ITimerService _timerService;
         private TeaModel _selectedTea;
         #endregion Private Fields
 
         #region Public Properties
+        /// <inheritdoc cref="Button.Text"/> 
         public string ButtonText
         {
             get => _buttonText;
             set => SetProperty(ref _buttonText, value);
         }
 
-        public string ViewTitle
-        {
-            get => _viewTitle;
-            set => SetProperty(ref _viewTitle, value);
-        }
+        //public string ViewTitle
+        //{
+        //    get => _viewTitle;
+        //    set => SetProperty(ref _viewTitle, value);
+        //}
 
+        /// <summary>
+        /// Flag used to control the state of the Stop/Start button.
+        /// </summary>
         public bool IsButtonEnabled
         {
             get => _isButtonEnabled;
             set => SetProperty(ref _isButtonEnabled, value);
         }
 
+        /// <summary>
+        /// Flag used to control whether or not the Tea detail label should be shown.
+        /// </summary>
         public bool IsViewLabelVisible
         {
             get => _isViewLabelVisible;
             set => SetProperty(ref _isViewLabelVisible, value);
         }
 
+        /// <summary>
+        /// Label that displays the current minutes and seconds left in the countdown.
+        /// </summary>
         public TimeSpan CountdownLabel
         {
             get => _countdownLabel;
             set => SetProperty(ref _countdownLabel, value);
         }
 
+        /// <summary>
+        /// Lisdt of teas that exist in the data source.
+        /// </summary>
         public List<TeaModel> Teas
         {
             get => _teas;
             set => SetProperty(ref _teas, value);
         }
 
+        /// <summary>
+        /// Tea that was selected from the list.
+        /// </summary>
         public TeaModel SelectedTea
         {
             get => _selectedTea;
@@ -68,6 +88,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
+        /// <inheritdoc cref="ICommand"/>
         public ICommand TimerButtonPressed
         {
             get;
@@ -76,7 +97,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Public Properties
 
         #region Constructor
-        public TimerViewModel(TeaNavigationService navigationService, TeaDisplayService displayService, TeaSqlService sqlService, TeaTimerService timerService)
+        /// <inheritdoc cref="BaseViewModel"/>
+        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ITimerService timerService)
             : base(navigationService, displayService, sqlService)
         {
             _timerService = timerService;
@@ -85,7 +107,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             _timerService.IsRepeating = true;
             _timerService.Tick += (sender, e) => ExecuteTimer();
             TimerButtonPressed = new Command(ExecuteTimerButton, TimerCanExecute);
-            navigationService.ShellNavigated += async (sender, args) => await ShellNavigated(sender, args);
+            NavigationService.ShellNavigated += async (sender, args) => await ShellNavigated(sender, args);
         }
         #endregion Constructor
 
