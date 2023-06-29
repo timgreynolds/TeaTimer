@@ -61,12 +61,12 @@
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.5" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=7.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60" />
+	</ItemGroup>
 	<Target Name="_FixXMLDocCommentWarning" BeforeTargets="_ComputePublishLocation">
 		<ItemGroup>
-			<ResolvedFileToPublish
-					Update="@(ResolvedFileToPublish)"
-					Condition="'%(ResolvedFileToPublish.Extension)' == '.xml' And '%(ResolvedFileToPublish.PublishFolderType)' == ''"
-					PublishFolderType="None" />
+			<ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.xml' And '%(ResolvedFileToPublish.PublishFolderType)' == ''" PublishFolderType="None" />
 		</ItemGroup>
 	</Target>
 </Project>

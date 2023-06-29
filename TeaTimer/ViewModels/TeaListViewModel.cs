@@ -95,7 +95,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             private set;
         }
 
-
         /// <summary>
         /// Displays the Edit Tea page with the information from
         /// <see cref="SelectedTea"/>
@@ -126,21 +125,19 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService)
             : base(navigationService, displayService, sqlService)
         {
-            RefreshList = new Command(() => RefreshTeas(this, EventArgs.Empty));
+            RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(AddTea);
             EditTeaCommand = new Command(async (p) => await EditTea(p), (p) => EditDeleteCanExecute(p));
             DeleteTeaCommand = new Command(async (p) => await DeleteTea(p), (p) => EditDeleteCanExecute(p));
-            navigationService.ShellNavigated += (sender, args) => RefreshTeas(sender, args);
+            navigationService.ShellNavigated += async (sender, args) => await RefreshTeas(sender, args);
         }
         #endregion Constructors
 
         #region Private Methods
-        private void RefreshTeas(object sender, EventArgs args)
+        private async Task RefreshTeas(object sender, EventArgs args)
         {
-            DisplayService.SetIsBusy(true);
-            Teas = SqlService.Get();
-            DisplayService.RefreshView();
-            DisplayService.SetIsBusy(false);
+            IsBusy = true;
+            Teas = await SqlService.GetAsync();
             IsBusy = false;
         }
 

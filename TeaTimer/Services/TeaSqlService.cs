@@ -248,7 +248,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             try
             {
                 List<TeaModel> teas = await _asyncConnection.Table<TeaModel>().ToListAsync().ConfigureAwait(false);
-                return teas as List<T> ?? new List<T>();
+                List<T> returnList = new List<T>();
+                foreach(TeaModel tea in teas)
+                {
+                    returnList.Add(tea as T);
+                }
+                return returnList;
             }
             catch (SQLiteException ex)
             {
