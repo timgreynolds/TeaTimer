@@ -6,13 +6,13 @@
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TimerPage"             
              x:DataType="viewmodels:TimerViewModel"
             BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
-    <VerticalStackLayout
+    <StackLayout
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
-        <VerticalStackLayout.Resources>
+        <StackLayout.Resources>
             <converters:ViewLabelConverter x:Key="ViewLabelConverter" />
-        </VerticalStackLayout.Resources>
+        </StackLayout.Resources>
         <Label x:Name="ViewTitle"
                FontFamily="OpenSansRegular"
                HorizontalOptions="Center"
@@ -54,10 +54,10 @@
         <Button x:Name="TimerButton"
                 Text="{Binding ButtonText}"
                 FontFamily="OpenSansRegular"
-                FontSize="Large"
+                FontSize="Title"
                 SemanticProperties.Hint="Starts or stops the countdown."
                 HorizontalOptions="Center"
                 IsEnabled="{Binding IsButtonEnabled}"
                 Command="{Binding TimerButtonPressed}"/>
-    </VerticalStackLayout>
+    </StackLayout>
 </ContentPage>

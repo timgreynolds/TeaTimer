@@ -198,6 +198,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
             }
             try
             {
+                if (await _asyncConnection.Table<TeaModel>().CountAsync() == 1)
+                {
+                    throw SQLiteException.New(SQLite3.Result.Constraint, "Cannot delete the last remaining tea from the data source.");
+                }
                 bool deleted = false;
                 TeaModel tea = TeaModel.ValidateTea((TeaModel)obj);
                 if (await _asyncConnection.DeleteAsync(tea).ConfigureAwait(false) == 1)
