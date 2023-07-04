@@ -2,7 +2,8 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using com.mahonkin.tim.maui.TeaTimer.Services;
-using com.mahonkin.tim.maui.TeaTimer.DataModel;
+using com.mahonkin.tim.TeaDataService;
+using com.mahonkin.tim.TeaDataService.DataModel;
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
     /// <summary>
