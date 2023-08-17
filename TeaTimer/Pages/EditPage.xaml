@@ -10,14 +10,14 @@
         <BackButtonBehavior Command="{Binding BackButtonCommand}"
                             TextOverride="{Binding BackButtonLabel}" />
     </Shell.BackButtonBehavior>
-    <VerticalStackLayout 
+    <StackLayout 
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
-        <VerticalStackLayout.Resources>
+        <StackLayout.Resources>
             <converters:TemperatureConverter x:Key="TemperatureConverter"/>
             <converters:TimespanConverter x:Key="TimespanConverter"/>
-        </VerticalStackLayout.Resources>
+        </StackLayout.Resources>
         <Grid RowSpacing="25" ColumnSpacing="25">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -89,5 +89,5 @@
                 HorizontalOptions="Center"
                 IsEnabled="{Binding IsPageDirty}"
                 Command="{Binding SaveBtnPressed}" />
-    </VerticalStackLayout>
+    </StackLayout>
 </ContentPage>

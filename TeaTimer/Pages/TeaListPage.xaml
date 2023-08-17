@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage">
-    <VerticalStackLayout x:Name="MainLayout"
-                         BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
+    <StackLayout x:Name="MainLayout"
+                 VerticalOptions="FillAndExpand"
+                 BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
         <ListView x:Name="TeaListView"
                   VerticalOptions="FillAndExpand"
                   ItemsSource="{Binding Teas}"
@@ -19,7 +20,7 @@
                 <converters:TimespanConverter x:Key="TimespanConverter" />
             </ListView.Resources>
             <ListView.Header>
-                <Grid>
+                <Grid VerticalOptions="FillAndExpand">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="2*" />
@@ -61,33 +62,36 @@
             </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                        <ViewCell x:Name="TeaListTeaCell">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*" />
-                                    <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="2*" />
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Path=Name}"
+                    <ViewCell x:Name="TeaListTeaCell">
+                        <Grid VerticalOptions="FillAndExpand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Path=Name}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    Padding="10,10"
                                    VerticalTextAlignment="Center"
+                                   VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="0" />
-                                <Label Text="{Binding Path=BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
+                            <Label Text="{Binding Path=BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    VerticalTextAlignment="Center"
+                                   VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="1" />
-                                <Label Text="{Binding Path=SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
+                            <Label Text="{Binding Path=SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    VerticalTextAlignment="Center"
+                                   VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="2" />
-                            </Grid>
+                        </Grid>
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
                                       Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.EditTeaCommand}"
@@ -97,7 +101,7 @@
                                       Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.DeleteTeaCommand}"
                                       CommandParameter="{Binding}" />
                         </ViewCell.ContextActions>
-                        </ViewCell>
+                    </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.Footer>
@@ -108,10 +112,11 @@
             BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
             <ImageButton x:Name="AddTeaBtn"
                          Source="add_icon_dk.png"
+                         VerticalOptions="End"
                          HorizontalOptions="End"
                          Padding="10,10"
                          Margin="10,10"
                          Command="{Binding AddTeaCommand}" />
         </StackLayout>
-    </VerticalStackLayout>
+    </StackLayout>
 </ContentPage>

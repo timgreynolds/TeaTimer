@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using com.mahonkin.tim.maui.TeaTimer.DataModel;
 using com.mahonkin.tim.maui.TeaTimer.Services;
+using com.mahonkin.tim.TeaDataService.DataModel;
+using com.mahonkin.tim.TeaDataService.Services;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
@@ -44,17 +45,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// </summary>
         public bool IsTeaSelected
         {
-            get
-            {
-                if (_selectedTea == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
+            get => _isSelected;
             private set => SetProperty(ref _isSelected, value);
         }
 
@@ -95,7 +86,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             private set;
         }
 
-
         /// <summary>
         /// Displays the Edit Tea page with the information from
         /// <see cref="SelectedTea"/>
@@ -126,32 +116,26 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService)
             : base(navigationService, displayService, sqlService)
         {
-            RefreshList = new Command(() => RefreshTeas(this, EventArgs.Empty));
+            RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(AddTea);
-            EditTeaCommand = new Command(async (p) => await EditTea(p), (p) => EditDeleteCanExecute(p));
-            DeleteTeaCommand = new Command(async (p) => await DeleteTea(p), (p) => EditDeleteCanExecute(p));
-            navigationService.ShellNavigated += (sender, args) => RefreshTeas(sender, args);
+            EditTeaCommand = new Command(async (p) => await EditTea(p));
+            DeleteTeaCommand = new Command(async (p) => await DeleteTea(p));
+            navigationService.ShellNavigated += async (sender, args) => await RefreshTeas(sender, args);
         }
         #endregion Constructors
 
         #region Private Methods
-        private void RefreshTeas(object sender, EventArgs args)
+        private async Task RefreshTeas(object sender, EventArgs args)
         {
-            DisplayService.SetIsBusy(true);
-            Teas = SqlService.Get();
-            DisplayService.RefreshView();
-            DisplayService.SetIsBusy(false);
+            IsBusy = true;
+            Teas = await SqlService.GetAsync();
+            _selectedTea = Teas[0] as TeaModel;
             IsBusy = false;
         }
 
         private void AddTea()
         {
             NavigationService.NavigateToAsync(nameof(Pages.EditPage), null);
-        }
-
-        private bool EditDeleteCanExecute(object parameters)
-        {
-                return IsTeaSelected;
         }
 
         private async Task DeleteTea(object parameters)
@@ -171,14 +155,26 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
             if (delete)
             {
-                bool success = await SqlService.DeleteAsync(_selectedTea ?? (TeaModel)parameters);
-                if(success)
+                try
                 {
-                    await DisplayService.ShowAlertAsync("Deleted", "Tea was successfully deleted", "OK");
+                    bool success = await SqlService.DeleteAsync(_selectedTea ?? (TeaModel)parameters);
+                    if (success)
+                    {
+                        await DisplayService.ShowAlertAsync("Deleted", "Tea was successfully deleted", "OK");
+                    }
+                    else
+                    {
+                        await DisplayService.ShowAlertAsync("Error", "An error occurred.", "OK");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    await DisplayService.ShowAlertAsync("Error", "An error occurred.", "OK");
+                    await DisplayService.ShowExceptionAsync(ex);
+                }
+                finally
+                {
+                    RefreshList.Execute(null);
+                    DisplayService.RefreshView();
                 }
             }
         }
