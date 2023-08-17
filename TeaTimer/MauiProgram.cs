@@ -1,3 +1,6 @@
+using com.mahonkin.tim.TeaDataService.DataModel;
+using com.mahonkin.tim.TeaDataService.Services;
+using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Xaml;
@@ -46,7 +49,7 @@ public static class MauiProgram
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddSingleton<Services.IDataService<DataModel.TeaModel>, Services.TeaSqlService<DataModel.TeaModel>>();
+        services.AddSingleton<IDataService<TeaModel>, TeaSqlService<TeaModel>>();
         services.AddSingleton<Services.IDisplayService, Services.TeaDisplayService>();
         services.AddSingleton<Services.ITimerService, Services.TeaTimerService>();
         services.AddSingleton<Services.INavigationService, Services.TeaNavigationService>();

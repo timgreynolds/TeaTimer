@@ -1,5 +1,4 @@
-﻿using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
-using System;
+﻿using System;
 using UserNotifications;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Platforms.iOS
@@ -16,11 +15,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.Platforms.iOS
         public override void WillPresentNotification(UNUserNotificationCenter center, UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
         {
             //TODO: Probably should do something here to check if the TimerService countdown is active and cancel if it is.
+            if(AppShell.Current.CurrentPage.BindingContext.GetType().IsAssignableTo(typeof(ViewModels.TimerViewModel)))
+            {
+                Console.WriteLine(notification.Request.Content.Body);
+            }
+            completionHandler(UNNotificationPresentationOptions.Banner);
         }
 
         /// <inheritdoc cref="DidReceiveNotificationResponse(UNUserNotificationCenter, UNNotificationResponse, Action)"/>
-        public override void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action ResponseHandler)
+        public override void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action responseHandler)
         {
+            responseHandler();
         }
     }
 }
