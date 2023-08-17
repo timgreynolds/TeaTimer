@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.Services;
-using com.mahonkin.tim.TeaDataService;
 using com.mahonkin.tim.TeaDataService.DataModel;
+using com.mahonkin.tim.TeaDataService.Services;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
@@ -181,7 +181,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 {
                     DisplayService.ShowAlertAsync("Not Authorized!", "The user has not authorized notifications for this app.");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     DisplayService.ShowExceptionAsync(ex);
                 }

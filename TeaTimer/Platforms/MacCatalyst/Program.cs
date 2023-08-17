@@ -10,9 +10,16 @@ public class Program
     /// <summary>This is the main entry point of the application.</summary>
     static void Main(string[] args)
 	{
-		// if you want to use a different Application Delegate class from "AppDelegate"
-		// you can specify it here.
-		UIApplication.Main(args, null, typeof(AppDelegate));
+        // if you want to use a different Application Delegate class from "AppDelegate"
+        // you can specify it here.
+        try
+        {
+            UIApplication.Main(args, null, typeof(AppDelegate));
+        }
+        catch(System.Exception ex)
+        {
+            System.Console.WriteLine(ex.Message);
+        }
 	}
 }
 
