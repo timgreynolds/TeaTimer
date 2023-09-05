@@ -117,10 +117,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             : base(navigationService, displayService, sqlService)
         {
             RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
-            AddTeaCommand = new Command(AddTea);
+            AddTeaCommand = new Command(async () => await AddTeaAsync());
             EditTeaCommand = new Command(async (p) => await EditTea(p));
             DeleteTeaCommand = new Command(async (p) => await DeleteTea(p));
-            navigationService.ShellNavigated += async (sender, args) => await RefreshTeas(sender, args);
+            NavigationService.ShellNavigated += async (sender, args) => await RefreshTeas(sender, args);
         }
         #endregion Constructors
 
@@ -129,13 +129,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         {
             IsBusy = true;
             Teas = await SqlService.GetAsync();
-            _selectedTea = Teas[0] as TeaModel;
+            SelectedTea = Teas[0] as TeaModel;
             IsBusy = false;
         }
 
-        private void AddTea()
+        private async Task AddTeaAsync()
         {
-            NavigationService.NavigateToAsync(nameof(Pages.EditPage), null);
+            await NavigationService.NavigateToAsync(nameof(Pages.EditPage), null);
         }
 
         private async Task DeleteTea(object parameters)
@@ -181,9 +181,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         private async Task EditTea(object parameters)
         {
-            if (_selectedTea != null)
+            if (SelectedTea != null)
             {
-                await NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", _selectedTea } });
+                await NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", SelectedTea } });
             }
             else if (parameters != null && parameters.GetType().IsAssignableTo(typeof(TeaModel)))
             {
