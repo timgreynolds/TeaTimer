@@ -49,7 +49,7 @@ public static class MauiProgram
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddSingleton<IDataService<TeaModel>, TeaSqlService<TeaModel>>();
+        services.AddSingleton<IDataService<TeaModel>, TeaSqlService>();
         services.AddSingleton<Services.IDisplayService, Services.TeaDisplayService>();
         services.AddSingleton<Services.ITimerService, Services.TeaTimerService>();
         services.AddSingleton<Services.INavigationService, Services.TeaNavigationService>();
