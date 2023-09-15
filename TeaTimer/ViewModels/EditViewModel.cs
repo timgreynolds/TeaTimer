@@ -125,8 +125,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
-        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService)
-           : base(navigationService, displayService, sqlService)
+        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService)
+           : base(navigationService, displayService, sqlService, settingsService)
         {
             SaveBtnPressed = new Command(async () => await Save());
             BackButtonCommand = new Command(async () => await NavigateBack());
@@ -143,12 +143,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 else
                 {
-                    _tea = new TeaModel(string.Empty);
+                    _tea = new TeaModel();
                 }
             }
             else
             {
-                _tea = new TeaModel(string.Empty);
+                _tea = new TeaModel();
             }
             Name = _tea.Name;
             BrewTemp = _tea.BrewTemp;

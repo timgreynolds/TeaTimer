@@ -95,11 +95,11 @@
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
                                       Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.EditTeaCommand}"
-                                      CommandParameter="{Binding}" />
+                                      CommandParameter="{Binding .}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
                                       Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.DeleteTeaCommand}"
-                                      CommandParameter="{Binding}" />
+                                      CommandParameter="{Binding .}" />
                         </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>

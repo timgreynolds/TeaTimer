@@ -2,6 +2,7 @@ using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
@@ -24,35 +25,42 @@ public static class MauiProgram
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
         });
 
-        builder.Services.AddPages();
-        builder.Services.AddViewModels();
-        builder.Services.AddServices();
+        builder.Services
+            .AddPages()
+            .AddViewModels()
+            .AddServices();
+
+        builder.Logging
+            .ClearProviders()
+            .SetMinimumLevel(LogLevel.Debug)
+            .AddSimpleConsole();
 
         return builder.Build();
     }
 
-    private static IServiceCollection AddPages(this IServiceCollection pages)
+    private static IServiceCollection AddPages(this IServiceCollection serviceCollection)
     {
-        pages.AddSingleton<Pages.TimerPage>();
-        pages.AddSingleton<Pages.TeaListPage>();
-        pages.AddSingleton<Pages.EditPage>();
-        return pages;
+        serviceCollection.AddSingleton<Pages.TimerPage>();
+        serviceCollection.AddSingleton<Pages.TeaListPage>();
+        serviceCollection.AddSingleton<Pages.EditPage>();
+        return serviceCollection;
     }
 
-    private static IServiceCollection AddViewModels(this IServiceCollection viewModels)
+    private static IServiceCollection AddViewModels(this IServiceCollection serviceCollection)
     {
-        viewModels.AddSingleton<ViewModels.TimerViewModel>();
-        viewModels.AddSingleton<ViewModels.TeaListViewModel>();
-        viewModels.AddSingleton<ViewModels.EditViewModel>();
-        return viewModels;
+        serviceCollection.AddSingleton<ViewModels.TimerViewModel>();
+        serviceCollection.AddSingleton<ViewModels.TeaListViewModel>();
+        serviceCollection.AddSingleton<ViewModels.EditViewModel>();
+        return serviceCollection;
     }
 
-    private static IServiceCollection AddServices(this IServiceCollection services)
+    private static IServiceCollection AddServices(this IServiceCollection serviceCollection)
     {
-        services.AddSingleton<IDataService<TeaModel>, TeaSqlService>();
-        services.AddSingleton<Services.IDisplayService, Services.TeaDisplayService>();
-        services.AddSingleton<Services.ITimerService, Services.TeaTimerService>();
-        services.AddSingleton<Services.INavigationService, Services.TeaNavigationService>();
-        return services;
+        serviceCollection.AddSingleton<IDataService<TeaModel>, TeaSqlService>();
+        serviceCollection.AddSingleton<Services.IDisplayService, Services.TeaDisplayService>();
+        serviceCollection.AddSingleton<Services.ITimerService, Services.TeaTimerService>();
+        serviceCollection.AddSingleton<Services.INavigationService, Services.TeaNavigationService>();
+        serviceCollection.AddSingleton<Services.ISettingsService, Services.TeaSettingsService>();
+        return serviceCollection;
     }
 }

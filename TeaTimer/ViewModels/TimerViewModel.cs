@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.Services;
+using com.mahonkin.tim.TeaDataService.Exceptions;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
@@ -99,8 +101,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         #region Constructor
         /// <inheritdoc cref="BaseViewModel"/>
-        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ITimerService timerService)
-            : base(navigationService, displayService, sqlService)
+        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ITimerService timerService)
+            : base(navigationService, displayService, sqlService, settingsService)
         {
             _timerService = timerService;
             _timerService.CreateTimer();
@@ -115,7 +117,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Methods
         private async Task RefreshTeas()
         {
-            Teas = await SqlService.GetAsync();
+            try
+            {
+                Teas = await SqlService.GetAsync();
+            }
+            catch (TeaSqlException ex)
+            {
+                await DisplayService.ShowExceptionAsync(ex);
+            }
         }
 
         private void OnSelectedTeaChanged()
@@ -220,9 +229,27 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private async Task ShellNavigated(object sender, EventArgs args)
         {
             Page currentPage = ((AppShell)sender).CurrentPage ?? (AppShell)sender;
-            currentPage.IsBusy = true;
-            Teas = await SqlService.GetAsync();
-            currentPage.IsBusy = false;
+            if (currentPage.GetType().IsAssignableTo(typeof(Pages.TimerPage)))
+            {
+                currentPage.IsBusy = true;
+                try
+                {
+                    Teas = await SqlService.GetAsync();
+                }
+                catch (TeaSqlException ex)
+                {
+                    AppShell.Logger.LogError($"A database error occurred. {ex.GetType().Name} - {ex.Result}: \"{ex.Message}\"");
+                    await DisplayService.ShowAlertAsync(ex.GetType().Name, $" A database error occurred.\n{ex.Result} - \"{ex.Message}\" ");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayService.ShowExceptionAsync(ex);
+                }
+                finally
+                {
+                    currentPage.IsBusy = false;
+                }
+            }
         }
         #endregion Private Methods
 

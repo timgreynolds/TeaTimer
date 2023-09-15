@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.Services;
+using com.mahonkin.tim.TeaDataService.Exceptions;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using Microsoft.Maui.Controls;
@@ -19,6 +20,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Fields
         private bool _isBusy = false;
         private bool _isSelected = false;
+        private bool _useCelsius = false;
         private IList _teas;
         private TeaModel _selectedTea;
         #endregion Private Fields
@@ -28,7 +30,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// Whether to display the Brew Temperature in Celsius or Farenheit
         /// degrees.
         /// </summary>
-        public bool UseCelsius { get; }
+        public bool UseCelsius { get => _useCelsius; }
 
         /// <summary>
         /// Whether the page should be considered 'busy' the waiting symbol or
@@ -37,7 +39,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public bool IsBusy
         {
             get => _isBusy;
-            private set => SetProperty(ref _isBusy, value);
+            set => SetProperty(ref _isBusy, value);
         }
 
         /// <summary>
@@ -113,8 +115,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
-        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService)
-            : base(navigationService, displayService, sqlService)
+        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService)
+            : base(navigationService, displayService, sqlService, settingsService)
         {
             RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(async () => await AddTeaAsync());
@@ -128,36 +130,60 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private async Task RefreshTeas(object sender, EventArgs args)
         {
             IsBusy = true;
-            Teas = await SqlService.GetAsync();
-            SelectedTea = Teas[0] as TeaModel;
-            IsBusy = false;
+            try
+            {
+                Teas = await SqlService.GetAsync();
+                SelectedTea = Teas[0] as TeaModel;
+            }
+            catch (TeaSqlException ex)
+            {
+                await DisplayService.ShowAlertAsync(ex.GetType().Name, $"A database error occurred.\n{ex.Result} - {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                await DisplayService.ShowExceptionAsync(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task AddTeaAsync()
         {
-            await NavigationService.NavigateToAsync(nameof(Pages.EditPage), null);
+            try
+            {
+                await NavigationService.NavigateToAsync(nameof(Pages.EditPage), null);
+            }
+            catch (Exception ex)
+            {
+                await DisplayService.ShowExceptionAsync(ex);
+            }
         }
 
         private async Task DeleteTea(object parameters)
         {
             bool delete = false;
-            if (_selectedTea != null)
+            TeaModel deleteTea = null;
+            if (parameters != null && parameters.GetType().IsAssignableTo(typeof(TeaModel)))
             {
-                delete = await DisplayService.ShowPromptAsync("Delete?", $"Are you sure you want to delete {_selectedTea.Name} from the database?", "Delete", "Cancel");
+                deleteTea = (TeaModel)parameters;
+                delete = await DisplayService.ShowPromptAsync("Delete?", $"Are you sure you want to delete {deleteTea.Name} from the database?", "Delete", "Cancel");
             }
-            else if (parameters != null && parameters.GetType().IsAssignableTo(typeof(TeaModel)))
+            else if (_selectedTea != null)
             {
-                delete = await DisplayService.ShowPromptAsync("Delete?", $"Are you sure you want to delete {((TeaModel)parameters).Name} from the database?", "Delete", "Cancel");
+                deleteTea = _selectedTea;
+                delete = await DisplayService.ShowPromptAsync("Delete?", $"Are you sure you want to delete {deleteTea.Name} from the database?", "Delete", "Cancel");
             }
             else
             {
                 await DisplayService.ShowAlertAsync("Warning!", "No tea selected. Please select a tea and try again.", "OK");
             }
-            if (delete)
+            if (delete && deleteTea is not null)
             {
                 try
                 {
-                    bool success = await SqlService.DeleteAsync(_selectedTea ?? (TeaModel)parameters);
+                    bool success = await SqlService.DeleteAsync(deleteTea);
                     if (success)
                     {
                         await DisplayService.ShowAlertAsync("Deleted", "Tea was successfully deleted", "OK");
@@ -181,13 +207,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         private async Task EditTea(object parameters)
         {
-            if (SelectedTea != null)
-            {
-                await NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", SelectedTea } });
-            }
-            else if (parameters != null && parameters.GetType().IsAssignableTo(typeof(TeaModel)))
+            if (parameters != null && parameters.GetType().IsAssignableTo(typeof(TeaModel)))
             {
                 await NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", (TeaModel)parameters } });
+            }
+            else if (SelectedTea != null)
+            {
+                await NavigationService.NavigateToAsync(nameof(Pages.EditPage), new Dictionary<string, object>() { { "Tea", SelectedTea } });
             }
             else
             {

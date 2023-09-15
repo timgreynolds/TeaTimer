@@ -1,4 +1,5 @@
-﻿using UIKit;
+﻿using System.Reflection;
+using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -7,9 +8,9 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 /// </summary>
 public class Program
 {
-    private static CoreFoundation.OSLog _logger = new CoreFoundation.OSLog(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, "Crash");
+    private static readonly CoreFoundation.OSLog _logger = new CoreFoundation.OSLog(Assembly.GetExecutingAssembly().GetName().Name, "iOS");
 
-    /// <inheritdoc cref="UIApplication.Main(string[], System.Type, System.Type)" />
+    /// <inheritdoc cref="UIApplication.Main(string[], Type, Type)" />
     static void Main()
     {
         // if you want to use a different Application Delegate class from "AppDelegate"

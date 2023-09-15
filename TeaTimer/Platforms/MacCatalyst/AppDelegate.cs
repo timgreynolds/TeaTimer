@@ -19,7 +19,7 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {
-    private Log _logger = new Log(Assembly.GetExecutingAssembly().GetName().Name, nameof(AppDelegate));
+    private static readonly Log _logger = new Log(Assembly.GetExecutingAssembly().GetName().Name, nameof(AppDelegate));
 
     /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
