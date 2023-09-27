@@ -2,7 +2,6 @@ using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer
@@ -16,7 +15,7 @@ namespace com.mahonkin.tim.maui.TeaTimer
             InitializeComponent();
 
             MainPage = new AppShell(navigationService, sqlService, settingsService, loggerFactory);
-            UserAppTheme = AppTheme.Light;
+            UserAppTheme = App.Current.RequestedTheme;
             RequestedThemeChanged += (sender, args) => UserAppTheme = args.RequestedTheme;
         }
     }

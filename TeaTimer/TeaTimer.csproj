@@ -70,6 +70,9 @@
 	<ItemGroup Condition="$(TargetFramework.Contains(ios))">
 		<MauiAsset Include="Platforms\iOS\Settings.bundle\**" LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)"></MauiAsset>
 	</ItemGroup>
+	<ItemGroup Condition="$(TargetFramework.Contains(maccatalyst))">
+		<MauiAsset Include="Platforms\MacCatalyst\Settings.bundle\**" LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)"></MauiAsset>
+	</ItemGroup>
 	<ItemGroup>
 	  <Compile Remove="Models\TeaModel.cs" />
 	  <Compile Remove="Services\IDataService.cs" />
