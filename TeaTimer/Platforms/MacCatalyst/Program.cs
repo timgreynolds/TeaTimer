@@ -20,9 +20,8 @@ public class Program
             UIApplication.Main(args, null, typeof(AppDelegate));
         }
         catch(System.Exception ex)
-        {
-            _logger.Log(CoreFoundation.OSLogLevel.Fault, $"Application level exception handler. Something went wrong.\n" +
-                $"{ex.Message}\n{ex.StackTrace}");
+        {            
+            _logger.Log(CoreFoundation.OSLogLevel.Fault, $"Application level exception handler. Something went wrong.\n{ex.Message}\n{ex.StackTrace}");
         }
 	}
 }

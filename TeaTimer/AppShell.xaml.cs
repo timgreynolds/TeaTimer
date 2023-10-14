@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using com.mahonkin.tim.maui.TeaTimer.Pages;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -8,9 +7,7 @@ using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
 using Microsoft.Maui.Controls;
-
 using Microsoft.Maui.Storage;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
