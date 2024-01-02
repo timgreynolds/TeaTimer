@@ -10,6 +10,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Hosting;
 using UIKit;
+using com.mahonkin.tim.maui.TeaTimer.Services;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -20,6 +21,7 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 public class AppDelegate : MauiUIApplicationDelegate
 {
     private static readonly Log _logger = new Log(Assembly.GetExecutingAssembly().GetName().Name, nameof(AppDelegate));
+    private NSObject _observer;
 
     /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
@@ -48,6 +50,23 @@ public class AppDelegate : MauiUIApplicationDelegate
         base.BuildMenu(builder);
         _logger.Log(LogLevel.Debug, "Menu built; app starting.");
     }
+
+    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    {
+        LoadDefaultPrefs();
+        _observer = NSNotificationCenter.DefaultCenter.AddObserver((NSString)"NSUserDefaultsDidChangeNotification", (n) => DefaultsChanged());
+        DefaultsChanged();
+        return base.FinishedLaunching(application, launchOptions);
+    }
+
+public override void WillTerminate(UIApplication application) 
+{
+    if (_observer != null) 
+    {
+        NSNotificationCenter.DefaultCenter.RemoveObserver(_observer);
+        _observer = null;
+    }
+}
 
     private void DeleteTea()
     {
@@ -110,6 +129,16 @@ public class AppDelegate : MauiUIApplicationDelegate
         }
         _logger.Log(LogLevel.Debug, $"{commandName} can be executing from {page} is {canExecute}");
         return canExecute;
+    }
+
+    private void LoadDefaultPrefs()
+    {
+        new TeaSettingsService().LoadDefaultSettings();
+    }
+
+    private void DefaultsChanged() 
+    {
+        new TeaSettingsService().SettingsChanged();
     }
 }
 

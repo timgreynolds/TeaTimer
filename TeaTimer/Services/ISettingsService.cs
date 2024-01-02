@@ -3,9 +3,10 @@
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
     public interface ISettingsService
-	{
-		bool UseCelsius { get; set; }
-		AppTheme appTheme { get; set; }
-	}
+    {
+        bool UseCelsius { get; set; }
+        AppTheme AppTheme { get; set; }
+        void LoadDefaultSettings();
+        void SettingsChanged();
+    }
 }
-

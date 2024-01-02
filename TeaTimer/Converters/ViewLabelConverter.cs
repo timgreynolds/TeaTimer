@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Media;
-using com.mahonkin.tim.maui.TeaTimer.Services;
+using Microsoft.Maui.Storage;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Converters
 {
@@ -14,18 +14,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         const string csym = "\u2103";
         const string fsym = "\u2109";
         #endregion Constants
-
-        #region Private Fields
-        //private TeaSettingsService _settingsService;
-        #endregion Private Fields
-
-        #region Constructors
-        ///<Summary>Constructor</Summary>
-        public ViewLabelConverter()
-        {
-            //_settingsService = new TeaSettingsService();
-        }
-        #endregion Constructors
 
         #region Interface Methods
         ///<inheritdoc cref="IMultiValueConverter.Convert(object[], Type, object, CultureInfo)" />
@@ -48,14 +36,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.Converters
         #region Private Methods
         private string ConvertBrewTemp(int value)
         {
-            //if (_settingsService.Get<bool>("UseCelsius", false))
-            //{
-            //    return UnitConverters.FahrenheitToCelsius(value).ToString() + csym;
-            //}
-            //else
-            //{
+            if (Preferences.Get("useCelsiusKey", false))
+            {
+                return UnitConverters.FahrenheitToCelsius(value).ToString() + csym;
+            }
+            else
+            {
                 return value + fsym;
-            //}
+            }
         }
         #endregion Private Methods
     }
