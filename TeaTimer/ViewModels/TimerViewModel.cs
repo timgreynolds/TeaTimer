@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -239,7 +240,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 catch (TeaSqlException ex)
                 {
                     AppShell.Logger.LogError($"A database error occurred. {ex.GetType().Name} - {ex.Result}: \"{ex.Message}\"");
-                    await DisplayService.ShowAlertAsync(ex.GetType().Name, $" A database error occurred.\n{ex.Result} - \"{ex.Message}\" ");
+                    await DisplayService.ShowAlertAsync(ex.GetType().Name, $"A database error occurred.\n{ex.Result} - \"{ex.Message}\" ");
                 }
                 catch (Exception ex)
                 {
