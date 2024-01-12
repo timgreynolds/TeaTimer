@@ -10,7 +10,7 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>DIsplay Temperatures in Celsius</string>
+			<string>Display Temperatures in Celsius</string>
 			<key>Key</key>
 			<string>useCelsiusKey</string>
 			<key>DefaultValue</key>
