@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -142,6 +141,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 CountdownLabel = SelectedTea.SteepTime;
                 IsViewLabelVisible = true;
                 IsButtonEnabled = true;
+            }
+            else if (SelectedTea is null) 
+            {
+                _timerService.Stop();
+                CountdownLabel = TimeSpan.FromSeconds(0.0);
+                IsViewLabelVisible = false;
+                IsButtonEnabled = false;
+                ButtonText = "Start";
             }
             else
             {
