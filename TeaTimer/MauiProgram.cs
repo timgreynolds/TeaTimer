@@ -1,12 +1,16 @@
+using System.Linq;
+using com.mahonkin.tim.maui.TeaTimer.Utilities;
+using com.mahonkin.tim.UnifiedLogger.Extensions;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
+using Microsoft.Maui.LifecycleEvents;
+using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -16,6 +20,8 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
+    public static ILogger Logger;
+
     /// <inheritdoc cref="MauiApp.CreateBuilder(bool)" />
     public static MauiApp CreateMauiApp()
     {
@@ -24,6 +30,19 @@ public static class MauiProgram
         .ConfigureFonts(fonts =>
         {
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+        })
+        .ConfigureLifecycleEvents(events =>
+        {
+#if IOS || MACCATALYST
+            events.AddiOS(ios => ios
+            .ApplicationSignificantTimeChange(app => LogEvent("ApplicationSignificantTimeChange"))
+            .OnActivated(MacEvents.OnActivatedEvent)
+            .OnResignActivation(app => LogEvent("OnResignActivation"))
+            .WillEnterForeground(app => LogEvent("WillEnterForeground"))
+            .DidEnterBackground(app => LogEvent("DidEnterBackground"))
+            .WillTerminate(app => LogEvent("WillTerminate"))
+            );
+#endif
         });
 
         builder.Services
@@ -34,9 +53,19 @@ public static class MauiProgram
         builder.Logging
             .ClearProviders()
             .SetMinimumLevel(LogLevel.Debug)
-            .AddSimpleConsole();
+            .AddConsole()
+            .AddDebug()
+            .AddUnifiedLogger();
 
-        return builder.Build();
+        MauiApp app = builder.Build();
+        Logger = app.Services.GetServices<ILoggerFactory>().First().CreateLogger("TeaTimer");
+
+        return app;
+    }
+
+    private static void LogEvent(string eventType)
+    {
+        MauiProgram.Logger.LogDebug("{EventName} event fired.", eventType);
     }
 
     private static IServiceCollection AddPages(this IServiceCollection serviceCollection)

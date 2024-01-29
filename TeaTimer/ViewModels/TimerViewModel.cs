@@ -6,7 +6,6 @@ using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Exceptions;
 using com.mahonkin.tim.TeaDataService.Services;
-using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
@@ -35,12 +34,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             get => _buttonText;
             set => SetProperty(ref _buttonText, value);
         }
-
-        //public string ViewTitle
-        //{
-        //    get => _viewTitle;
-        //    set => SetProperty(ref _viewTitle, value);
-        //}
 
         /// <summary>
         /// Flag used to control the state of the Stop/Start button.
@@ -246,7 +239,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 catch (TeaSqlException ex)
                 {
-                    AppShell.Logger.LogError($"A database error occurred. {ex.GetType().Name} - {ex.Result}: \"{ex.Message}\"");
                     await DisplayService.ShowAlertAsync(ex.GetType().Name, $"A database error occurred.\n{ex.Result} - \"{ex.Message}\" ");
                 }
                 catch (Exception ex)
@@ -262,7 +254,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Private Methods
 
         #region Partial Properties and Methods
-        private partial Task TimerExpired();
+        private partial void TimerExpired();
         #endregion Partial Properties and Methods
     }
 }

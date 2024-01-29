@@ -1,22 +1,29 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AudioToolbox;
-using UserNotifications;
+using Microsoft.Extensions.Logging;
+using com.mahonkin.tim.maui.TeaTimer.Utilities;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
     /// <inheritdoc cref="BaseViewModel"/>
     public partial class TimerViewModel
     {
-        async private partial Task TimerExpired()
+        private async partial void TimerExpired()
         {
-            UNNotificationSettings settings = await UNUserNotificationCenter.Current.GetNotificationSettingsAsync();
-            if (settings.AuthorizationStatus != UNAuthorizationStatus.Authorized)
+            string soundFileName = FileSystemUtils.GetAppDataFileFullName("kettle.mp3");
+
+            if (Uri.TryCreate(soundFileName, UriKind.Absolute, out Uri uri))
             {
-                string soundFileName = @"/System/Library/PrivateFrameworks/ToneLibrary.framework/Versions/A/Resources/AlertTones/alarm.caf";
-                if (Uri.TryCreate(soundFileName, UriKind.Absolute, out Uri uri))
+                try
                 {
-                    await new SystemSound(uri).PlaySystemSoundAsync();
+                    using (SystemSound sound = new SystemSound(uri))
+                    {
+                        await sound.PlayAlertSoundAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MauiProgram.Logger.LogCritical("An error occurred {Message}", ex.Message);
                 }
             }
         }

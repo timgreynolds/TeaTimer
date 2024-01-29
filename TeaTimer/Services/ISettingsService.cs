@@ -2,11 +2,11 @@
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
-    public interface ISettingsService
+    public partial interface ISettingsService
     {
         bool UseCelsius { get; set; }
         AppTheme AppTheme { get; set; }
-        void LoadDefaultSettings();
-        void SettingsChanged();
+        static partial void LoadDefaultSettings();
+        static partial void SettingsChanged();
     }
 }

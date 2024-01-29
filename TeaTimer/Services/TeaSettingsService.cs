@@ -8,8 +8,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         public bool UseCelsius { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public AppTheme AppTheme { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public partial void LoadDefaultSettings();
-        public partial void SettingsChanged();
+        public static partial void LoadDefaultSettings();
+        public static partial void SettingsChanged();
     }
 }
 
