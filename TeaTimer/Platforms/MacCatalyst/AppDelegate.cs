@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using AppKit;
 using com.mahonkin.tim.maui.TeaTimer.Services;
@@ -51,6 +50,7 @@ public class AppDelegate : MauiUIApplicationDelegate
         LoadDefaultPrefs();
         _observer = NSNotificationCenter.DefaultCenter.AddObserver((NSString)"NSUserDefaultsDidChangeNotification", (n) => DefaultsChanged());
         DefaultsChanged();
+        
         return base.FinishedLaunching(application, launchOptions);
     }
 

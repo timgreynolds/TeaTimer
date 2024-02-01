@@ -3,6 +3,7 @@ using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
+using com.mahonkin.tim.UnifiedLogger.Extensions;
 using Foundation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls.Hosting;
@@ -11,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 using UIKit;
-using com.mahonkin.tim.UnifiedLogger.Extensions;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -26,7 +26,7 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         MauiAppBuilder builder = MauiApp.CreateBuilder()
-        .UseMauiApp<App>()
+        .UseMauiApp<TeaTimerApp>()
         .ConfigureFonts(fonts =>
         {
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -52,6 +52,7 @@ public static class MauiProgram
 
         builder.Logging
             .ClearProviders()
+            .SetMinimumLevel(LogLevel.Debug)
 #if IOS || MACCATALYST
             .AddUnifiedLogger()
 #endif
