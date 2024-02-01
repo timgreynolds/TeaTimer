@@ -1,4 +1,3 @@
-using System;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.maui.TeaTimer.ViewModels;
 using Foundation;
@@ -66,11 +65,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.Utilities
             switch (status)
             {
                 case UNAuthorizationStatus.Denied:
-                    await displayService.ShowAlertAsync("Warning!", 
+                    await displayService.ShowAlertAsync("Warning!",
                             "Notifications are not enabled for Tea Timer. You will not receive an alert when the timer expires unless the application is in the foreground. Please enable Notifications in the Settings app.", "OK");
                     break;
                 default:
-                    await displayService.ShowAlertAsync("Note!", 
+                    await displayService.ShowAlertAsync("Note!",
                             "Notifications for Tea Timer have been granted as 'Provisional' or 'Ephemeral'. They may work now, but Notifications should be enabled in the Settings app.", "OK");
                     break;
             }

@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
 		<!-- Uncomment to also build the Android app.  -->
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks> -->
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -81,10 +81,13 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Mahonkin.TeaDataService" Version="1.3.0-9" />
-	  <PackageReference Include="Mahonkin.UnifiedLogger" Version="0.*" />	  
-	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.*" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.*" />
-	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.*" />
+	  <PackageReference Include="Mahonkin.UnifiedLogger" Version="0.0.11" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0" />	  
+	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6+1-sha.87f59a86d4-azdo.8922564" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Utilities\" />

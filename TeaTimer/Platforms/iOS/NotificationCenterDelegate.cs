@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Extensions.Logging;
 using UserNotifications;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Platforms.iOS
@@ -16,10 +15,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Platforms.iOS
         public override void WillPresentNotification(UNUserNotificationCenter center, UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
         {
             //TODO: Probably should do something here to check if the TimerService countdown is active and cancel if it is.
-            if(AppShell.Current.CurrentPage.BindingContext.GetType().IsAssignableTo(typeof(ViewModels.TimerViewModel)))
-            {
-                MauiProgram.Logger.LogDebug(notification.Request.Content.Body);
-            }
             completionHandler(UNNotificationPresentationOptions.Banner);
         }
 

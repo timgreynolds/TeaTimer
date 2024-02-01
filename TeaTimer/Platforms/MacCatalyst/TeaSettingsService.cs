@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using com.mahonkin.tim.maui.TeaTimer.ViewModels;
 using Foundation;
-using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services

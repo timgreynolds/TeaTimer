@@ -1,6 +1,5 @@
 ﻿using System;
 using AudioToolbox;
-using Microsoft.Extensions.Logging;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
@@ -23,7 +22,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MauiProgram.Logger.LogCritical("An error occurred {Message}", ex.Message);
+                   throw new Exception(ex.Message, ex);
                 }
             }
         }

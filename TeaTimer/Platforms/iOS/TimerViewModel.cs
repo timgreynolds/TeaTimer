@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using AudioToolbox;
+﻿using AudioToolbox;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {

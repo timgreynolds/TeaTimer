@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Extensions.Logging;
 using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
@@ -20,8 +19,7 @@ public class Program
         }
         catch (Exception ex)
         {
-            // Console.WriteLine($"Applcation exception {ex.Message}\n{ex.StackTrace}");
-            MauiProgram.Logger.LogCritical("Applcation exception {Message}\n{StackTrace}", ex.Message, ex.StackTrace);
+            Console.WriteLine($"Applcation exception {ex.Message}\n{ex.StackTrace}");
         }
     }
 }

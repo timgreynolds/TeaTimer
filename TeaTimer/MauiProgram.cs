@@ -1,16 +1,17 @@
-using System.Linq;
+
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
-using com.mahonkin.tim.UnifiedLogger.Extensions;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
+using Foundation;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Xaml;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 using UIKit;
+using com.mahonkin.tim.UnifiedLogger.Extensions;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -20,9 +21,8 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
-    public static ILogger Logger;
+    private static readonly string _bundleId = NSBundle.MainBundle.BundleIdentifier;
 
-    /// <inheritdoc cref="MauiApp.CreateBuilder(bool)" />
     public static MauiApp CreateMauiApp()
     {
         MauiAppBuilder builder = MauiApp.CreateBuilder()
@@ -35,12 +35,12 @@ public static class MauiProgram
         {
 #if IOS || MACCATALYST
             events.AddiOS(ios => ios
-            .ApplicationSignificantTimeChange(app => LogEvent("ApplicationSignificantTimeChange"))
+            // .ApplicationSignificantTimeChange(app => LogEvent("ApplicationSignificantTimeChange"))
             .OnActivated(MacEvents.OnActivatedEvent)
-            .OnResignActivation(app => LogEvent("OnResignActivation"))
-            .WillEnterForeground(app => LogEvent("WillEnterForeground"))
-            .DidEnterBackground(app => LogEvent("DidEnterBackground"))
-            .WillTerminate(app => LogEvent("WillTerminate"))
+            // .OnResignActivation(app => LogEvent("OnResignActivation"))
+            // .WillEnterForeground(app => LogEvent("WillEnterForeground"))
+            // .DidEnterBackground(app => LogEvent("DidEnterBackground"))
+            // .WillTerminate(app => LogEvent("WillTerminate"))
             );
 #endif
         });
@@ -52,20 +52,13 @@ public static class MauiProgram
 
         builder.Logging
             .ClearProviders()
-            .SetMinimumLevel(LogLevel.Debug)
-            .AddConsole()
-            .AddDebug()
-            .AddUnifiedLogger();
+#if IOS || MACCATALYST
+            .AddUnifiedLogger()
+#endif
+            .AddDebug();
 
         MauiApp app = builder.Build();
-        Logger = app.Services.GetServices<ILoggerFactory>().First().CreateLogger("TeaTimer");
-
         return app;
-    }
-
-    private static void LogEvent(string eventType)
-    {
-        MauiProgram.Logger.LogDebug("{EventName} event fired.", eventType);
     }
 
     private static IServiceCollection AddPages(this IServiceCollection serviceCollection)

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using System;
 using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
@@ -8,8 +8,6 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 /// </summary>
 public class Program
 {
-    private static readonly CoreFoundation.OSLog _logger = new CoreFoundation.OSLog(Assembly.GetExecutingAssembly().GetName().Name, "iOS");
-
     /// <inheritdoc cref="UIApplication.Main(string[], Type, Type)" />
     static void Main()
     {
@@ -21,8 +19,7 @@ public class Program
         }
         catch (System.Exception ex)
         {
-            _logger.Log(CoreFoundation.OSLogLevel.Fault, $"Application level exception handler. Something went wrong.\n" +
-                $"{ex.Message}\n{ex.StackTrace}");
+            Console.WriteLine($"An error occurred: {ex.Message}");
         }
     }
 }
