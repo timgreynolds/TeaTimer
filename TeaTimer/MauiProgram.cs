@@ -1,14 +1,12 @@
-
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
-using com.mahonkin.tim.UnifiedLogging.Extensions;
-using Foundation;
+using com.mahonkin.tim.logging.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Xaml;
-using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 using UIKit;
@@ -21,8 +19,6 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
-    private static readonly string _bundleId = NSBundle.MainBundle.BundleIdentifier;
-
     public static MauiApp CreateMauiApp()
     {
         MauiAppBuilder builder = MauiApp.CreateBuilder()
@@ -35,12 +31,7 @@ public static class MauiProgram
         {
 #if IOS || MACCATALYST
             events.AddiOS(ios => ios
-            // .ApplicationSignificantTimeChange(app => LogEvent("ApplicationSignificantTimeChange"))
-            .OnActivated(MacEvents.OnActivatedEvent)
-            // .OnResignActivation(app => LogEvent("OnResignActivation"))
-            // .WillEnterForeground(app => LogEvent("WillEnterForeground"))
-            // .DidEnterBackground(app => LogEvent("DidEnterBackground"))
-            // .WillTerminate(app => LogEvent("WillTerminate"))
+                .OnActivated(MacEvents.OnActivatedEvent)
             );
 #endif
         });
