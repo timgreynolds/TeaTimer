@@ -10,6 +10,7 @@ using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 using UIKit;
+using Foundation;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -45,7 +46,10 @@ public static class MauiProgram
             .ClearProviders()
             .SetMinimumLevel(LogLevel.Debug)
 #if IOS || MACCATALYST
-            .AddUnifiedLogger()
+            .AddUnifiedLogger(options => 
+            {
+                options.Subsystem = NSBundle.MainBundle.BundleIdentifier;
+            })
 #endif
             .AddDebug();
 
