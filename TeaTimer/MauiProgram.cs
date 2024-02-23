@@ -2,7 +2,8 @@ using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
-using com.mahonkin.tim.logging.Extensions;
+using com.mahonkin.tim.logging.UnifiedLogging.Extensions;
+using Foundation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
@@ -10,7 +11,7 @@ using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 using UIKit;
-using Foundation;
+using Microsoft.Extensions.Configuration;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -26,7 +27,9 @@ public static class MauiProgram
         .UseMauiApp<TeaTimerApp>()
         .ConfigureFonts(fonts =>
         {
-            fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular")
+                .AddFont("OpenSans-Semibold.ttf", "OpenSansSemiBold")
+                .AddFont("Stencil.ttf", "Stencil");
         })
         .ConfigureLifecycleEvents(events =>
         {
