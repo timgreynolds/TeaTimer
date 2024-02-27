@@ -6,6 +6,7 @@ using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Exceptions;
 using com.mahonkin.tim.TeaDataService.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
@@ -25,6 +26,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private List<TeaModel> _teas = new List<TeaModel>();
         private ITimerService _timerService;
         private TeaModel _selectedTea;
+        private ILogger _logger;
         #endregion Private Fields
 
         #region Public Properties
@@ -94,9 +96,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         #region Constructor
         /// <inheritdoc cref="BaseViewModel"/>
-        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ITimerService timerService)
+        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory, ITimerService timerService)
             : base(navigationService, displayService, sqlService, settingsService)
         {
+            _logger = loggerFactory.CreateLogger<TimerViewModel>();
             _timerService = timerService;
             _timerService.CreateTimer();
             _timerService.Interval = TimeSpan.FromSeconds(1);
@@ -110,12 +113,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Methods
         private async Task RefreshTeas()
         {
+            _logger.LogDebug("Refreshing tea list from the database.");
             try
             {
                 Teas = await SqlService.GetAsync();
+                _logger.LogDebug("Found {number} teas in the database.", Teas.Count);
             }
             catch (TeaSqlException ex)
             {
+                _logger.LogError(ex.Message);
                 await DisplayService.ShowExceptionAsync(ex);
             }
         }

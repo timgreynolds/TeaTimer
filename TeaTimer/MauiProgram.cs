@@ -4,16 +4,14 @@ using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
 using Foundation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
-using Microsoft.Maui.Storage;
 using Microsoft.Maui.LifecycleEvents;
 using UIKit;
-using System.IO;
-using Microsoft.Extensions.Configuration;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
 
@@ -23,6 +21,8 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
+    private static readonly CoreFoundation.OSLog _log = new CoreFoundation.OSLog(NSBundle.MainBundle.BundleIdentifier, "MauiProgram");
+
     public static MauiApp CreateMauiApp()
     {
         MauiAppBuilder builder = MauiApp.CreateBuilder()
@@ -42,12 +42,6 @@ public static class MauiProgram
 #endif
         });
 
-        if (FileSystem.Current.AppPackageFileExistsAsync("appsettings.json").Result)
-        {
-            using Stream settingsStream = FileSystem.Current.OpenAppPackageFileAsync("appsettings.json").Result;
-            builder.Configuration.AddJsonStream(settingsStream);
-        }
-
         builder.Services
             .AddPages()
             .AddViewModels()
@@ -55,19 +49,15 @@ public static class MauiProgram
 
         builder.Logging
             .ClearProviders()
+            .AddConfiguration(GetAppSettings())
+            .SetMinimumLevel(LogLevel.Debug)
 #if IOS || MACCATALYST
-            .AddUnifiedLogger(options =>
-            {
-                options.Subsystem = NSBundle.MainBundle.BundleIdentifier;
-            })
+            .AddUnifiedLogger((o) => o.Subsystem = NSBundle.MainBundle.BundleIdentifier)
 #endif
             .AddConsole()
             .AddDebug();
 
         MauiApp app = builder.Build();
-
-        ILogger logger = app.Services.GetRequiredService<ILogger>();
-        logger.LogDebug("Application built, will run.");
         return app;
     }
 
@@ -95,5 +85,15 @@ public static class MauiProgram
         serviceCollection.AddSingleton<Services.INavigationService, Services.TeaNavigationService>();
         serviceCollection.AddSingleton<Services.ISettingsService, Services.TeaSettingsService>();
         return serviceCollection;
+    }
+
+    private static IConfiguration GetAppSettings()
+    {
+        IConfigurationBuilder builder = new ConfigurationBuilder();
+        if (Microsoft.Maui.Storage.FileSystem.Current.AppPackageFileExistsAsync("logconfig.json").Result)
+        {
+            builder.AddJsonStream(Microsoft.Maui.Storage.FileSystem.Current.OpenAppPackageFileAsync("logconfig.json").Result);
+        }
+        return builder.Build();
     }
 }

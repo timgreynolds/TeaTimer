@@ -81,7 +81,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Mahonkin.TeaDataService" Version="1.3.1" />
-	  <PackageReference Include="Mahonkin.UnifiedLogging" Version="0.0.45" />
+	  <PackageReference Include="Mahonkin.UnifiedLogging" Version="0.0.46" />
 	  <PackageReference Include="Mahonkin.OSLogger" Version="0.0.41" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
@@ -91,7 +91,7 @@
 	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.*" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Remove="Resources/Raw/appsettings.json" />
+	  <None Remove="Resources/Raw/logconfig.json" />
 	  <None Remove="Utilities\" />
 	  <None Remove="Platforms\iOS\Settings.bundle\" />
 	</ItemGroup>

@@ -8,6 +8,7 @@ using com.mahonkin.tim.TeaDataService.Exceptions;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
 using Microsoft.Maui.Controls;
+using Microsoft.Extensions.Logging;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
@@ -115,7 +116,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
-        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService)
+        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
             : base(navigationService, displayService, sqlService, settingsService)
         {
             RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
