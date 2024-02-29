@@ -25,7 +25,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Utilities
             try
             {
                 Directory.CreateDirectory(AppDataPath);
-                using (Stream readStream = await FileSystem.OpenAppPackageFileAsync(targetFile).ConfigureAwait(false))
+                using (Stream readStream = await FileSystem.Current.OpenAppPackageFileAsync(targetFile).ConfigureAwait(false))
                 {
                     using Stream writeStream = File.Create(Path.Combine(AppDataPath, targetFile));
                     await readStream.CopyToAsync(writeStream).ConfigureAwait(false);

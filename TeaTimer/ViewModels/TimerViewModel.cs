@@ -97,9 +97,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Constructor
         /// <inheritdoc cref="BaseViewModel"/>
         public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory, ITimerService timerService)
-            : base(navigationService, displayService, sqlService, settingsService)
+            : base(navigationService, displayService, sqlService, settingsService, loggerFactory)
         {
-            _logger = loggerFactory.CreateLogger<TimerViewModel>();
+            _logger = loggerFactory.CreateLogger(typeof(TimerViewModel));
             _timerService = timerService;
             _timerService.CreateTimer();
             _timerService.Interval = TimeSpan.FromSeconds(1);
@@ -113,15 +113,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Methods
         private async Task RefreshTeas()
         {
-            _logger.LogDebug("Refreshing tea list from the database.");
             try
             {
                 Teas = await SqlService.GetAsync();
-                _logger.LogDebug("Found {number} teas in the database.", Teas.Count);
             }
             catch (TeaSqlException ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogCritical(ex.Message);
                 await DisplayService.ShowExceptionAsync(ex);
             }
         }
@@ -191,14 +189,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 catch (ApplicationException appEx)
                 {
+                    _logger.LogCritical("An unknown application error occurred. {Message}", appEx.Message);
                     DisplayService.ShowAlertAsync(appEx.Message, "An unknown application error occurred.");
                 }
                 catch (UnauthorizedAccessException)
                 {
+                    _logger.LogCritical("The user has not authorized notifications for this app.");
                     DisplayService.ShowAlertAsync("Not Authorized!", "The user has not authorized notifications for this app.");
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogCritical(ex.Message);
                     DisplayService.ShowExceptionAsync(ex);
                 }
             }
@@ -241,14 +242,16 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 currentPage.IsBusy = true;
                 try
                 {
-                    Teas = await SqlService.GetAsync();
+                    await RefreshTeas();
                 }
                 catch (TeaSqlException ex)
                 {
+                    _logger.LogCritical("A dataabse error occurred. {Result} - {Message}", ex.Result, ex.Message);
                     await DisplayService.ShowAlertAsync(ex.GetType().Name, $"A database error occurred.\n{ex.Result} - \"{ex.Message}\" ");
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogCritical(ex.Message);
                     await DisplayService.ShowExceptionAsync(ex);
                 }
                 finally

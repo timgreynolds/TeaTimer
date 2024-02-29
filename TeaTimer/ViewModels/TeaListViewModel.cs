@@ -117,7 +117,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
         public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
-            : base(navigationService, displayService, sqlService, settingsService)
+            : base(navigationService, displayService, sqlService, settingsService, loggerFactory)
         {
             RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(async () => await AddTeaAsync());
