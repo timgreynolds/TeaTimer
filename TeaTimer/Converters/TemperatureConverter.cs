@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using com.mahonkin.tim.maui.TeaTimer.Services;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Media;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Converters
 {

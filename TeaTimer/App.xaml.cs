@@ -1,21 +1,21 @@
 using com.mahonkin.tim.maui.TeaTimer.Services;
-using Microsoft.Maui.ApplicationModel;
+using com.mahonkin.tim.TeaDataService.DataModel;
+using com.mahonkin.tim.TeaDataService.Services;
 using Microsoft.Maui.Controls;
 
-namespace com.mahonkin.tim.maui.TeaTimer;
-
-/// <inheritdoc cref="Application" />
-public partial class App : Application
+namespace com.mahonkin.tim.maui.TeaTimer
 {
-
-    /// <inheritdoc cref="Application.Application()" />
-    public App(INavigationService navigationService)
+    /// <inheritdoc cref="Application" />
+    public partial class TeaTimerApp : Application
     {
-        InitializeComponent();
-
-        MainPage = new AppShell(navigationService);
-        UserAppTheme = AppTheme.Light;
-        RequestedThemeChanged += (sender, args) => UserAppTheme = args.RequestedTheme;
+        /// <inheritdoc cref="Application.Application()" />
+        public TeaTimerApp(INavigationService navigationService, IDataService<TeaModel> sqlService, ISettingsService settingsService)
+        {
+            InitializeComponent();
+            
+            MainPage = new AppShell(navigationService, sqlService, settingsService);
+            UserAppTheme = TeaTimerApp.Current.RequestedTheme;
+            RequestedThemeChanged += (sender, args) => UserAppTheme = args.RequestedTheme;
+        }
     }
 }
-

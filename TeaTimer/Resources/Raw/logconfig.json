@@ -1,0 +1,32 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    },
+    "Debug": {
+      "LogLevel": {
+        "Default": "Debug"
+      }
+    },
+    "Console": {
+      "LogLevel": {
+        "Default": "Warning",
+        "com.mahonkin": "Debug",
+        "Microsoft.Maui": "Information"
+      }
+    },
+    "UnifiedLogging": {
+      "Subsystem": "TeaTimer",
+      "LogLevel": {
+        "Default": "Warning",
+        "com.mahonkin": "Debug",
+        "Microsoft.Maui": "Information"
+      }
+    }
+  },
+  "ConnectionStrings": {
+    "SqliteDB": "/Users/tim/Library/Application Support/TeaTimer/TeaVarieties.db3",
+    "TeaApiUrl": ""
+  },
+  "AllowedHosts": "*"
+}

@@ -62,7 +62,7 @@ public class AppDelegate : MauiUIApplicationDelegate
     public override void WillEnterForeground(UIApplication application)
     {
         DateTime awakeTime = DateTime.UtcNow;
-        TimeSpan elapsedTime = DateTime.UtcNow.Subtract(_backgroundedTime);
+        TimeSpan elapsedTime = awakeTime.Subtract(_backgroundedTime);
 
         if (_currentBindingContext.GetType().IsAssignableTo(typeof(TimerViewModel)))
         {
@@ -85,15 +85,13 @@ public class AppDelegate : MauiUIApplicationDelegate
     /// <inheritdoc cref="MauiUIApplicationDelegate.WillFinishLaunching(UIApplication, NSDictionary)"/>
     public override bool WillFinishLaunching(UIApplication application, NSDictionary launchOptions)
     {
-        try
-        {
-            UNUserNotificationCenter.Current.Delegate = new NotificationCenterDelegate();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
+        UNUserNotificationCenter.Current.Delegate = new NotificationCenterDelegate();
         return base.WillFinishLaunching(application, launchOptions);
+    }
+
+    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    {
+        return base.FinishedLaunching(application, launchOptions);
     }
 }
 
