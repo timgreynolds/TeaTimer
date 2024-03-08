@@ -24,6 +24,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private bool _useCelsius = false;
         private IList _teas;
         private TeaModel _selectedTea;
+        private ILogger _logger;
         #endregion Private Fields
 
         #region Public Properties
@@ -117,8 +118,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
         public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
-            : base(navigationService, displayService, sqlService, settingsService, loggerFactory)
+            : base(navigationService, displayService, sqlService, settingsService)
         {
+            _logger = loggerFactory.CreateLogger(this.GetType().FullName);
             RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(async () => await AddTeaAsync());
             EditTeaCommand = new Command(async (p) => await EditTea(p));

@@ -1,3 +1,4 @@
+using System.IO;
 using com.mahonkin.tim.logging.UnifiedLogging.Extensions;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
@@ -21,8 +22,6 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
-    private static readonly CoreFoundation.OSLog _log = new CoreFoundation.OSLog(NSBundle.MainBundle.BundleIdentifier, "MauiProgram");
-
     public static MauiApp CreateMauiApp()
     {
         MauiAppBuilder builder = MauiApp.CreateBuilder()
@@ -30,8 +29,8 @@ public static class MauiProgram
         .ConfigureFonts(fonts =>
         {
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular")
-                .AddFont("OpenSans-Semibold.ttf", "OpenSansSemiBold")
-                .AddFont("Stencil.ttf", "Stencil");
+                 .AddFont("OpenSans-Semibold.ttf", "OpenSansSemiBold")
+                 .AddFont("Stencil.ttf", "Stencil");
         })
         .ConfigureLifecycleEvents(events =>
         {
@@ -42,6 +41,8 @@ public static class MauiProgram
 #endif
         });
 
+        builder.Configuration.AddJsonFile(GetAppConfig());
+
         builder.Services
             .AddPages()
             .AddViewModels()
@@ -49,10 +50,11 @@ public static class MauiProgram
 
         builder.Logging
             .ClearProviders()
-            .AddConfiguration(GetAppSettings())
-            .SetMinimumLevel(LogLevel.Debug)
+            .AddConfiguration(builder.Configuration.GetSection("Logging"))
 #if IOS || MACCATALYST
-            .AddUnifiedLogger((o) => o.Subsystem = NSBundle.MainBundle.BundleIdentifier)
+            .AddUnifiedLogger(o => {
+                o.Subsystem = NSBundle.MainBundle.BundleIdentifier;
+            })
 #endif
             .AddConsole()
             .AddDebug();
@@ -87,13 +89,12 @@ public static class MauiProgram
         return serviceCollection;
     }
 
-    private static IConfiguration GetAppSettings()
+    private static string GetAppConfig()
     {
-        IConfigurationBuilder builder = new ConfigurationBuilder();
-        if (Microsoft.Maui.Storage.FileSystem.Current.AppPackageFileExistsAsync("logconfig.json").Result)
+        if (FileSystemUtils.AppDataFileExists("appsettings.json") == false)
         {
-            builder.AddJsonStream(Microsoft.Maui.Storage.FileSystem.Current.OpenAppPackageFileAsync("logconfig.json").Result);
+            Microsoft.Maui.Storage.FileSystem.Current.OpenAppPackageFileAsync("appsettings.json").Wait();
         }
-        return builder.Build();
+        return FileSystemUtils.GetAppDataFileFullName("appsettings.json");
     }
 }
