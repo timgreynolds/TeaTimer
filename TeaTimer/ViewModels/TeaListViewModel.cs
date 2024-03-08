@@ -117,10 +117,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
-        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
+        public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILogger<TeaListViewModel> logger)
             : base(navigationService, displayService, sqlService, settingsService)
         {
-            _logger = loggerFactory.CreateLogger(this.GetType().FullName);
+            _logger = logger;
             RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(async () => await AddTeaAsync());
             EditTeaCommand = new Command(async (p) => await EditTea(p));
@@ -140,10 +140,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
             catch (TeaSqlException ex)
             {
+                _logger.LogCritical("A database error occurred.\n{Result} - {Message}", ex.Result, ex.Message);
                 await DisplayService.ShowAlertAsync(ex.GetType().Name, $"A database error occurred.\n{ex.Result} - {ex.Message}");
             }
             catch (Exception ex)
             {
+                _logger.LogCritical("An exception was thrown: {Type} - {Message}", ex.GetType().Name, ex.Message);
                 await DisplayService.ShowExceptionAsync(ex);
             }
             finally
@@ -160,6 +162,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
             catch (Exception ex)
             {
+                _logger.LogCritical("An exception was thrown: {Type} - {Message}", ex.GetType().Name, ex.Message);
                 await DisplayService.ShowExceptionAsync(ex);
             }
         }
@@ -198,6 +201,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogCritical("An exception was thrown: {Type} - {Message}", ex.GetType().Name, ex.Message);
                     await DisplayService.ShowExceptionAsync(ex);
                 }
                 finally

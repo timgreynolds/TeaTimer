@@ -96,10 +96,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         #region Constructor
         /// <inheritdoc cref="BaseViewModel"/>
-        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory, ITimerService timerService)
+        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILogger<TimerViewModel> logger, ITimerService timerService)
             : base(navigationService, displayService, sqlService, settingsService)
         {
-            _logger = loggerFactory.CreateLogger(typeof(TimerViewModel).FullName);
+            _logger = logger;
             _timerService = timerService;
             _timerService.CreateTimer();
             _timerService.Interval = TimeSpan.FromSeconds(1);

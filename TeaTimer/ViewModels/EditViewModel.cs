@@ -17,12 +17,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class EditViewModel : BaseViewModel, IQueryAttributable
     {
         #region Private Fields
-        private static string _name;
-        private static string _backButtonLabel = "Back";
-        private static int _brewTemp = 212;
-        private static bool _isPageDirty;
-        private static TimeSpan _steepTime = TimeSpan.FromMinutes(2);
-        private static TeaModel _tea = new TeaModel(string.Empty, _steepTime, _brewTemp);
+        private string _name = string.Empty;
+        private string _backButtonLabel = "Back";
+        private int _brewTemp = 212;
+        private bool _isPageDirty = false;
+        private TimeSpan _steepTime = default;
+        private readonly ILogger _logger = default;
+        private TeaModel _tea = default;
         #endregion Private Fields
 
         #region Public Properties
@@ -126,9 +127,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
-        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
+        public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILogger<EditViewModel> logger)
            : base(navigationService, displayService, sqlService, settingsService)
         {
+            _logger = logger;
             SaveBtnPressed = new Command(async () => await Save());
             BackButtonCommand = new Command(async () => await NavigateBack());
         }
@@ -168,6 +170,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogCritical("An exception was thrown: {Type} - {Message}", ex.GetType().Name, ex.Message);
                     await DisplayService.ShowExceptionAsync(ex);
                 }
             }
@@ -180,6 +183,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogCritical("An exception was thrown: {Type} - {Message}", ex.GetType().Name, ex.Message);
                     await DisplayService.ShowExceptionAsync(ex);
                 }
             }
