@@ -5,7 +5,7 @@
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TimerPage"             
              x:DataType="viewmodels:TimerViewModel"
-            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
     <StackLayout
             Spacing="25"
             Padding="30,0"
