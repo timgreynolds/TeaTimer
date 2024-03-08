@@ -186,8 +186,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             {
                 try
                 {
-                    bool success = await SqlService.DeleteAsync(deleteTea);
-                    if (success)
+                    var success = await SqlService.DeleteAsync(deleteTea);
+                    if ((bool)success)
                     {
                         await DisplayService.ShowAlertAsync("Deleted", "Tea was successfully deleted", "OK");
                     }

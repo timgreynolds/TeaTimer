@@ -3,8 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
-             xmlns:datamodel="clr-namespace:com.mahonkin.tim.TeaDataService.DataModel"
-             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage">
+             xmlns:datamodel="clr-namespace:com.mahonkin.tim.TeaDataService.DataModel;assembly=TeaDataService"
+             x:DataType="viewmodels:TeaListViewModel"
+             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage"
+             Title="Tea List"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
     <StackLayout x:Name="MainLayout"
                  VerticalOptions="FillAndExpand"
                  BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
@@ -63,7 +66,7 @@
                 </Grid>
             </ListView.Header>
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="datamodel:TeaModel">
                     <ViewCell x:Name="TeaListTeaCell">
                         <Grid VerticalOptions="FillAndExpand">
                             <Grid.ColumnDefinitions>
@@ -71,7 +74,7 @@
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Source={x:Reference TeaListView}, Path=Name}"
+                            <Label Text="{Binding Name}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    Padding="10,10"
@@ -79,14 +82,14 @@
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="0" />
-                            <Label Text="{Binding Source={x:Reference TeaListView}, Path=BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
+                            <Label Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="1" />
-                            <Label Text="{Binding Source={x:Reference TeaListView}, Path=SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
+                            <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    VerticalTextAlignment="Center"
@@ -107,19 +110,18 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.Footer>
-                <Label />
+            <StackLayout>
+                <ImageButton x:Name="AddTeaBtn"
+                             x:DataType="viewmodels:TeaListViewModel"
+                             Scale="1.5"
+                             Source="add_icon_dk.png"
+                             VerticalOptions="End"
+                             HorizontalOptions="End"
+                             Padding="10,10"
+                             Margin="10,10"
+                             Command="{Binding AddTeaCommand}" />
+            </StackLayout>
             </ListView.Footer>
         </ListView>
-        <StackLayout
-            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
-            <ImageButton x:Name="AddTeaBtn"
-                         x:DataType="viewmodels:TeaListViewModel"
-                         Source="add_icon_dk.png"
-                         VerticalOptions="End"
-                         HorizontalOptions="End"
-                         Padding="10,10"
-                         Margin="10,10"
-                         Command="{Binding AddTeaCommand}" />
-        </StackLayout>
     </StackLayout>
 </ContentPage>

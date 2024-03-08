@@ -1,4 +1,3 @@
-using System.IO;
 using com.mahonkin.tim.logging.UnifiedLogging.Extensions;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
@@ -41,7 +40,7 @@ public static class MauiProgram
 #endif
         });
 
-        builder.Configuration.AddJsonFile(GetAppConfig());
+        builder.Configuration.AddAppSettings();
 
         builder.Services
             .AddPages()
@@ -52,7 +51,8 @@ public static class MauiProgram
             .ClearProviders()
             .AddConfiguration(builder.Configuration.GetSection("Logging"))
 #if IOS || MACCATALYST
-            .AddUnifiedLogger(o => {
+            .AddUnifiedLogger(o =>
+            {
                 o.Subsystem = NSBundle.MainBundle.BundleIdentifier;
             })
 #endif
@@ -89,12 +89,17 @@ public static class MauiProgram
         return serviceCollection;
     }
 
-    private static string GetAppConfig()
+    private static IConfigurationBuilder AddAppSettings(this IConfigurationBuilder builder)
     {
         if (FileSystemUtils.AppDataFileExists("appsettings.json") == false)
         {
-            Microsoft.Maui.Storage.FileSystem.Current.OpenAppPackageFileAsync("appsettings.json").Wait();
+            FileSystemUtils.CopyBundleAppDataResource("appsettings.json").Wait();
+            builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
         }
-        return FileSystemUtils.GetAppDataFileFullName("appsettings.json");
+        else
+        {
+            builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
+        }
+        return builder;
     }
 }
