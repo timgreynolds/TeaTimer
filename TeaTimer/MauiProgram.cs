@@ -19,7 +19,7 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 /// <summary>
 /// Maui entry point and application builder.
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Compile)]
+[XamlCompilation(XamlCompilationOptions.Skip)]
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()

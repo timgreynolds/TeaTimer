@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
-             xmlns:datamodel="clr-namespace:com.mahonkin.tim.TeaDataService.DataModel"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage">
     <StackLayout x:Name="MainLayout"
                  VerticalOptions="FillAndExpand"
@@ -71,22 +70,23 @@
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Source={x:Reference TeaListView}, Path=Name}"
+                            <Label Text="{Binding Name}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    Padding="10,10"
+                                   Margin="10,0,0,0"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="0" />
-                            <Label Text="{Binding Source={x:Reference TeaListView}, Path=BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
+                            <Label Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="1" />
-                            <Label Text="{Binding Source={x:Reference TeaListView}, Path=SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
+                            <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    VerticalTextAlignment="Center"
@@ -96,11 +96,11 @@
                         </Grid>
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
-                                      Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.EditTeaCommand}"
+                                      Command="{Binding Source={x:Reference TeaListView}, Path=EditTeaCommand}"
                                       CommandParameter="{Binding .}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
-                                      Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.DeleteTeaCommand}"
+                                      Command="{Binding Source={x:Reference TeaListView}, Path=DeleteTeaCommand}"
                                       CommandParameter="{Binding .}" />
                         </ViewCell.ContextActions>
                     </ViewCell>
