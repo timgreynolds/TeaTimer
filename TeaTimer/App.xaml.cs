@@ -1,6 +1,7 @@
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer
@@ -9,11 +10,11 @@ namespace com.mahonkin.tim.maui.TeaTimer
     public partial class TeaTimerApp : Application
     {
         /// <inheritdoc cref="Application.Application()" />
-        public TeaTimerApp(INavigationService navigationService, IDataService<TeaModel> sqlService, ISettingsService settingsService)
+        public TeaTimerApp(INavigationService navigationService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory factory)
         {
             InitializeComponent();
             
-            MainPage = new AppShell(navigationService, sqlService, settingsService);
+            MainPage = new AppShell(navigationService, sqlService, settingsService, factory);
             UserAppTheme = TeaTimerApp.Current.RequestedTheme;
             RequestedThemeChanged += (sender, args) => UserAppTheme = args.RequestedTheme;
         }
