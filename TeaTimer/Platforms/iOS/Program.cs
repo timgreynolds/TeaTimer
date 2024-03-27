@@ -1,4 +1,5 @@
 ﻿using System;
+using CoreFoundation;
 using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
@@ -11,15 +12,16 @@ public class Program
     /// <inheritdoc cref="UIApplication.Main(string[], Type, Type)" />
     static void Main()
     {
+        CoreFoundation.OSLog log = new(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, "Main");
         // if you want to use a different Application Delegate class from "AppDelegate"
         // you can specify it here.
         try
         {
             UIApplication.Main(null, null, typeof(AppDelegate));
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            log.Log(OSLogLevel.Fault, $"An application error has occurred.\n{ex.GetType().Name} - {ex.Message}\n{ex.StackTrace}");
         }
     }
 }

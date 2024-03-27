@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Services
 {
@@ -32,28 +33,28 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// <summary>
         /// Event that is fired when navigation to the page is complete. 
         /// </summary>
-        public event EventHandler<EventArgs> NavigatedTo;
+        public event EventHandler<NavigatedToEventArgs> NavigatedTo;
 
         /// <summary>
         /// Event that is fired when navigation away from the page is complete.
         /// </summary> 
-        public event EventHandler<EventArgs> NavigatedFrom;
+        public event EventHandler<NavigatedFromEventArgs> NavigatedFrom;
 
         /// <summary>
         /// Event that is fired when navigation away from the page is about to
         /// be performed.
         /// </summary>
-        public event EventHandler<EventArgs> NavigatingFrom;
+        public event EventHandler<NavigatingFromEventArgs> NavigatingFrom;
 
         /// <summary>
         /// Event that is fired when shell navigation has completed.
         /// </summary>
-        public event EventHandler<EventArgs> ShellNavigated;
+        public event EventHandler<ShellNavigatedEventArgs> ShellNavigated;
 
         /// <summary>
         /// Event that is fired when shell navigation is about to be performed.
         /// </summary>
-        public event EventHandler<EventArgs> ShellNavigating;
+        public event EventHandler<ShellNavigatingEventArgs> ShellNavigating;
     }
 
 }

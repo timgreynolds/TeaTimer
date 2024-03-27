@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using com.mahonkin.tim.maui.TeaTimer.Pages;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
