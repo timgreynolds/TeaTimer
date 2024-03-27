@@ -17,7 +17,7 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 /// <summary>
 /// Maui entry point and application builder.
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Skip)]
+[XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -39,7 +39,7 @@ public static class MauiProgram
 #endif
         });
 
-        builder.Configuration.AddAppConfig();
+        builder.Configuration.AddAppSettings();
 
         builder.Services
             .AddPages()
@@ -55,7 +55,6 @@ public static class MauiProgram
                 opts.Subsystem = NSBundle.MainBundle.BundleIdentifier;
             })
 #endif
-            .AddConsole()
             .AddDebug();
 
         MauiApp app = builder.Build();
@@ -88,7 +87,7 @@ public static class MauiProgram
         return serviceCollection;
     }
 
-    private static IConfigurationBuilder AddAppConfig(this IConfigurationBuilder builder)
+    private static IConfigurationBuilder AddAppSettings(this IConfigurationBuilder builder)
     {
         if (FileSystemUtils.AppDataFileExists("appsettings.json") == false)
         {

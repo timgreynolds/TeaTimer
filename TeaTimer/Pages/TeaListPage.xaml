@@ -96,11 +96,11 @@
                         </Grid>
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
-                                      Command="{Binding Source={x:Reference TeaListView}, Path=EditTeaCommand}"
+                                      Command="{Binding Source={x:Type viewmodels:TeaListViewModel}, Path=EditTeaCommand}"
                                       CommandParameter="{Binding .}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
-                                      Command="{Binding Source={x:Reference TeaListView}, Path=DeleteTeaCommand}"
+                                      Command="{Binding Source={x:Type viewmodels:TeaListViewModel}, Path=DeleteTeaCommand}"
                                       CommandParameter="{Binding .}" />
                         </ViewCell.ContextActions>
                     </ViewCell>

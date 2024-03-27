@@ -30,7 +30,7 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<WarningLevel>4</WarningLevel>
 		<PlatformTarget>anycpu</PlatformTarget>
-		<NoWarn>1701;1702;0022</NoWarn>
+		<NoWarn>1701;1702</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 		<CreatePackage>false</CreatePackage>
@@ -80,7 +80,7 @@
 	  <Compile Remove="Services\TeaSqlService.cs" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Mahonkin.TeaDataService" Version="2.0.0-938" />
+	  <PackageReference Include="Mahonkin.TeaDataService" Version="2.0.0-11052" />
 	  <PackageReference Include="Mahonkin.UnifiedLogging" Version="1.0.0-rc4" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />

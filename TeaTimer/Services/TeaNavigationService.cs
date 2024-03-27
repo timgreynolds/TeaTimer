@@ -41,10 +41,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// Use the Shell Navigation event handlers if possible. <br/>
         /// EventArgs is an instance of <see cref="NavigatedToEventArgs"/>.
         /// </remarks>
-        public event EventHandler<EventArgs> NavigatedTo
+        public event EventHandler<NavigatedToEventArgs> NavigatedTo
         {
-            add => AppShell.Current.CurrentPage.NavigatedTo += (sender, args) => value(AppShell.Current, args);
-            remove => AppShell.Current.CurrentPage.NavigatedTo -= (sender, args) => value(AppShell.Current, args);
+            add => AppShell.Current.CurrentPage.NavigatedTo += (sender, args) => value(AppShell.Current.CurrentPage, args);
+            remove => AppShell.Current.CurrentPage.NavigatedTo -= (sender, args) => value(AppShell.Current.CurrentPage, args);
         }
 
         /// <inheritdoc cref="INavigationService.NavigatedFrom" />
@@ -52,7 +52,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// Use the Shell Navigation event handlers if possible. <br/>
         /// EventArgs is an instance of <see cref="NavigatedFromEventArgs"/>.
         /// </remarks>
-        public event EventHandler<EventArgs> NavigatedFrom
+        public event EventHandler<NavigatedFromEventArgs> NavigatedFrom
         {
             add => AppShell.Current.CurrentPage.NavigatedFrom += (sender, args) => value(AppShell.Current, args);
             remove => AppShell.Current.CurrentPage.NavigatedFrom -= (sender, args) => value(AppShell.Current, args);
@@ -63,7 +63,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// Use the Shell Navigation event handlers if possible. <br/>
         /// EventArgs is an instance of <see cref="NavigatingFromEventArgs"/>.
         /// </remarks>
-        public event EventHandler<EventArgs> NavigatingFrom
+        public event EventHandler<NavigatingFromEventArgs> NavigatingFrom
         {
             add => AppShell.Current.CurrentPage.NavigatingFrom += (sender, args) => value(AppShell.Current, args);
             remove => AppShell.Current.CurrentPage.NavigatingFrom -= (sender, args) => value(AppShell.Current, args);
@@ -75,7 +75,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// <remarks>
         /// EventArgs is an instance of <see cref="ShellNavigatedEventArgs" />.
         /// </remarks>
-        public event EventHandler<EventArgs> ShellNavigated
+        public event EventHandler<ShellNavigatedEventArgs> ShellNavigated
         {
             add => AppShell.Current.Navigated += (sender, args) => value(AppShell.Current, args);
             remove => AppShell.Current.Navigated -= (sender, args) => value(AppShell.Current, args);
@@ -87,7 +87,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// <remarks>
         /// EventArgs is an instance of <see cref="ShellNavigatingEventArgs"/>.
         /// </remarks>
-        public event EventHandler<EventArgs> ShellNavigating
+        public event EventHandler<ShellNavigatingEventArgs> ShellNavigating
         {
             add => AppShell.Current.Navigating += (sender, args) => value(AppShell.Current, args);
             remove => AppShell.Current.Navigating -= (sender, args) => value(AppShell.Current, args);
