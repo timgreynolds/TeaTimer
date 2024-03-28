@@ -3,7 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
-             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage">
+             xmlns:datamodel="clr-namespace:com.mahonkin.tim.TeaDataService.DataModel;assembly=TeaDataService"
+             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage"
+             x:DataType="viewmodels:TeaListViewModel"
+             Routing.Route="TeaListPage"
+             Title="Tea List"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
     <StackLayout x:Name="MainLayout"
                  VerticalOptions="FillAndExpand"
                  BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
@@ -62,7 +67,7 @@
                 </Grid>
             </ListView.Header>
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="{x:Type datamodel:TeaModel}">
                     <ViewCell x:Name="TeaListTeaCell">
                         <Grid VerticalOptions="FillAndExpand">
                             <Grid.ColumnDefinitions>
@@ -110,8 +115,7 @@
                 <Label />
             </ListView.Footer>
         </ListView>
-        <StackLayout
-            BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
+        <StackLayout>
             <ImageButton x:Name="AddTeaBtn"
                          x:DataType="viewmodels:TeaListViewModel"
                          Source="add_icon_dk.png"
