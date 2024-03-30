@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
+using Microsoft.Extensions.Logging;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
@@ -20,6 +21,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public readonly IDisplayService DisplayService;
         /// <inheritdoc cref="TeaSqlService{T}"/>
         public readonly IDataService<TeaModel> SqlService;
+        /// <inheritdoc cref="ISettingsService"/>
+        public readonly ISettingsService SettingsService;
 
         /// <summary>
         /// Base class to be used for viewmodels.
@@ -27,10 +30,11 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
-        public BaseViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService)
+        public BaseViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
         {
             NavigationService = navigationService;
             DisplayService = displayService;
+            SettingsService = settingsService;
             SqlService = sqlService;
         }
 

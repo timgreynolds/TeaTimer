@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows.Input;
 using AppKit;
+using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.maui.TeaTimer.ViewModels;
-using Log = CoreFoundation.OSLog;
-using LogLevel = CoreFoundation.OSLogLevel;
 using Foundation;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
@@ -19,7 +17,7 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {
-    private Log _logger = new Log(Assembly.GetExecutingAssembly().GetName().Name, nameof(AppDelegate));
+    private NSObject _observer;
 
     /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
@@ -27,7 +25,6 @@ public class AppDelegate : MauiUIApplicationDelegate
     /// <inheritdoc cref="MauiUIApplicationDelegate.BuildMenu(IUIMenuBuilder)" />
     public override void BuildMenu(IUIMenuBuilder builder)
     {
-        _logger.Log(LogLevel.Debug, "Building MacOS application menu.");
         builder.RemoveMenu(UIMenuIdentifier.Format.GetConstant());
         builder.RemoveMenu(UIMenuIdentifier.Services.GetConstant());
         builder.RemoveMenu(UIMenuIdentifier.View.GetConstant());
@@ -46,48 +43,57 @@ public class AppDelegate : MauiUIApplicationDelegate
         builder.InsertChildMenuAtStart(teasMenu, UIMenuIdentifier.Edit.GetConstant());
 
         base.BuildMenu(builder);
-        _logger.Log(LogLevel.Debug, "Menu built; app starting.");
+    }
+
+    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    {
+        LoadDefaultPrefs();
+        _observer = NSNotificationCenter.DefaultCenter.AddObserver((NSString)"NSUserDefaultsDidChangeNotification", (n) => DefaultsChanged());
+        DefaultsChanged();
+        
+        return base.FinishedLaunching(application, launchOptions);
+    }
+
+    public override void WillTerminate(UIApplication application)
+    {
+        if (_observer != null)
+        {
+            NSNotificationCenter.DefaultCenter.RemoveObserver(_observer);
+            _observer = null;
+        }
     }
 
     private void DeleteTea()
     {
-        _logger.Log(LogLevel.Debug, "Delete Tea menu item selected.");
         if (CanExecute(AppShell.Current.CurrentPage, "DeleteTeaCommand", out ICommand deleteCommand))
         {
             deleteCommand.Execute(null);
-            _logger.Log(LogLevel.Debug, "Delete command request executed.");
         }
         else
         {
             NotSupported();
-            _logger.Log(LogLevel.Debug, "Delete is not currently supported.");
         }
     }
 
     private void EditTea()
     {
-        _logger.Log(LogLevel.Debug, "Edit Tea menu item selected.");
         if (CanExecute(AppShell.Current.CurrentPage, "EditTeaCommand", out ICommand editCommand))
         {
             editCommand.Execute(null);
-            _logger.Log(LogLevel.Debug, "Edit command request executed.");
         }
         else
         {
             NotSupported();
-            _logger.Log(LogLevel.Debug, "Delete is not currently supported.");
         }
     }
 
     private void NotSupported()
     {
         AppShell.Current.CurrentPage.DisplayAlert("Not Supported", "The requested action is not supported in the current context.", "OK");
-        _logger.Log(LogLevel.Debug, "Action not supported alert displayed.");
     }
 
     private bool CanExecute(Page page, string commandName, out ICommand command)
     {
-        _logger.Log(LogLevel.Debug, $"Checking whether {commandName} can be executed from {page}");
         bool canExecute = false;
         command = null;
         if (page.BindingContext is TeaListViewModel)
@@ -108,8 +114,16 @@ public class AppDelegate : MauiUIApplicationDelegate
                 canExecute = true;
             }
         }
-        _logger.Log(LogLevel.Debug, $"{commandName} can be executing from {page} is {canExecute}");
         return canExecute;
     }
-}
 
+    private void LoadDefaultPrefs()
+    {
+        TeaSettingsService.LoadDefaultSettings();
+    }
+
+    private void DefaultsChanged()
+    {
+        TeaSettingsService.SettingsChanged();
+    }
+}

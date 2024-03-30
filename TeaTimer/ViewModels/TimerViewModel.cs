@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.DataModel;
+using com.mahonkin.tim.TeaDataService.Exceptions;
 using com.mahonkin.tim.TeaDataService.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
@@ -24,6 +26,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private List<TeaModel> _teas = new List<TeaModel>();
         private ITimerService _timerService;
         private TeaModel _selectedTea;
+        private ILogger _logger;
         #endregion Private Fields
 
         #region Public Properties
@@ -33,12 +36,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             get => _buttonText;
             set => SetProperty(ref _buttonText, value);
         }
-
-        //public string ViewTitle
-        //{
-        //    get => _viewTitle;
-        //    set => SetProperty(ref _viewTitle, value);
-        //}
 
         /// <summary>
         /// Flag used to control the state of the Stop/Start button.
@@ -99,9 +96,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         #region Constructor
         /// <inheritdoc cref="BaseViewModel"/>
-        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ITimerService timerService)
-            : base(navigationService, displayService, sqlService)
+        public TimerViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory, ITimerService timerService)
+            : base(navigationService, displayService, sqlService, settingsService, loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger(typeof(TimerViewModel));
             _timerService = timerService;
             _timerService.CreateTimer();
             _timerService.Interval = TimeSpan.FromSeconds(1);
@@ -115,7 +113,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Methods
         private async Task RefreshTeas()
         {
-            Teas = await SqlService.GetAsync();
+            try
+            {
+                Teas = await SqlService.GetAsync();
+            }
+            catch (TeaSqlException ex)
+            {
+                _logger.LogCritical(ex.Message);
+                await DisplayService.ShowExceptionAsync(ex);
+            }
         }
 
         private void OnSelectedTeaChanged()
@@ -132,6 +138,14 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 CountdownLabel = SelectedTea.SteepTime;
                 IsViewLabelVisible = true;
                 IsButtonEnabled = true;
+            }
+            else if (SelectedTea is null) 
+            {
+                _timerService.Stop();
+                CountdownLabel = TimeSpan.FromSeconds(0.0);
+                IsViewLabelVisible = false;
+                IsButtonEnabled = false;
+                ButtonText = "Start";
             }
             else
             {
@@ -175,14 +189,17 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 catch (ApplicationException appEx)
                 {
+                    _logger.LogCritical("An unknown application error occurred. {Message}", appEx.Message);
                     DisplayService.ShowAlertAsync(appEx.Message, "An unknown application error occurred.");
                 }
                 catch (UnauthorizedAccessException)
                 {
+                    _logger.LogCritical("The user has not authorized notifications for this app.");
                     DisplayService.ShowAlertAsync("Not Authorized!", "The user has not authorized notifications for this app.");
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogCritical(ex.Message);
                     DisplayService.ShowExceptionAsync(ex);
                 }
             }
@@ -220,14 +237,33 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private async Task ShellNavigated(object sender, EventArgs args)
         {
             Page currentPage = ((AppShell)sender).CurrentPage ?? (AppShell)sender;
-            currentPage.IsBusy = true;
-            Teas = await SqlService.GetAsync();
-            currentPage.IsBusy = false;
+            if (currentPage.GetType().IsAssignableTo(typeof(Pages.TimerPage)))
+            {
+                currentPage.IsBusy = true;
+                try
+                {
+                    await RefreshTeas();
+                }
+                catch (TeaSqlException ex)
+                {
+                    _logger.LogCritical("A dataabse error occurred. {Result} - {Message}", ex.Result, ex.Message);
+                    await DisplayService.ShowAlertAsync(ex.GetType().Name, $"A database error occurred.\n{ex.Result} - \"{ex.Message}\" ");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogCritical(ex.Message);
+                    await DisplayService.ShowExceptionAsync(ex);
+                }
+                finally
+                {
+                    currentPage.IsBusy = false;
+                }
+            }
         }
         #endregion Private Methods
 
         #region Partial Properties and Methods
-        private partial Task TimerExpired();
+        private partial void TimerExpired();
         #endregion Partial Properties and Methods
     }
 }

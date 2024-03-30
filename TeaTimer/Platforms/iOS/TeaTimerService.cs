@@ -81,7 +81,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
         /// </remarks>
         public void Start(TimeSpan duration)
         {
-            _currentCtr.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound, ProcessAuthRequest);
+            // _currentCtr.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound, ProcessAuthRequest);
             _currentCtr.GetNotificationSettings((settings) => _authorizationStatus = settings.AuthorizationStatus);
 
             if (_applicationException is not null)
@@ -163,22 +163,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                 _applicationException = new ApplicationException(error.LocalizedFailureReason);
                 _applicationException.Data.Add(nameof(error.LocalizedRecoveryOptions), error.LocalizedRecoveryOptions);
                 _applicationException.Data.Add(nameof(error.LocalizedRecoverySuggestion), error.LocalizedRecoverySuggestion);
-            }
-        }
-
-        private void ProcessAuthRequest(bool auth, NSError error)
-        {
-            if (error is not null)
-            {
-                ErrorHandler(error);
-            }
-            if (auth)
-            {
-                _authorizationStatus = UNAuthorizationStatus.Authorized;
-            }
-            else
-            {
-                _authorizationStatus = UNAuthorizationStatus.NotDetermined;
             }
         }
         #endregion Private Methods

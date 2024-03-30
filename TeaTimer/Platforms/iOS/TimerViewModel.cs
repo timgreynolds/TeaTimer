@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using AudioToolbox;
+﻿using AudioToolbox;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {
@@ -17,10 +16,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <summary>
         /// Action to perform when the timer expires.
         /// </summary>
-        async private partial Task TimerExpired()
+        private partial void TimerExpired()
         {
             SystemSound alarmSound = new SystemSound(1005);
-            await alarmSound.PlaySystemSoundAsync();
+            alarmSound.PlaySystemSound();
         }
     }
 }
