@@ -74,7 +74,11 @@
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
+<<<<<<< HEAD
                             <Label Text="{Binding Name}"
+=======
+                            <Label Text="{Binding Source=Name}"
+>>>>>>> 97044cbec0099e14eacd2062754973958f1e0e3a
                                    TextColor="White"
                                    FontFamily="OpenSansRegular"
                                    Padding="10,10"
@@ -123,5 +127,18 @@
             </StackLayout>
             </ListView.Footer>
         </ListView>
+<<<<<<< HEAD
+=======
+        <StackLayout>
+            <ImageButton x:Name="AddTeaBtn"
+                         x:DataType="viewmodels:TeaListViewModel"
+                         Source="add_icon_dk.png"
+                         VerticalOptions="End"
+                         HorizontalOptions="End"
+                         Padding="10,10"
+                         Margin="10,10"
+                         Command="{Binding AddTeaCommand}" />
+        </StackLayout>
+>>>>>>> 97044cbec0099e14eacd2062754973958f1e0e3a
     </StackLayout>
 </ContentPage>
