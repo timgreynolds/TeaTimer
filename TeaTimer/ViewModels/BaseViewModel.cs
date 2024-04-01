@@ -30,7 +30,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <param name="navigationService"><see cref="TeaNavigationService"/></param>
         /// <param name="displayService"><see cref="TeaDisplayService"/></param>
         /// <param name="sqlService"><see cref="TeaSqlService{TeaModel}"/></param>
-        public BaseViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
+        public BaseViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService)
         {
             NavigationService = navigationService;
             DisplayService = displayService;

@@ -19,9 +19,6 @@ public class AppDelegate : MauiUIApplicationDelegate
 {
     private NSObject _observer;
 
-    /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-
     /// <inheritdoc cref="MauiUIApplicationDelegate.BuildMenu(IUIMenuBuilder)" />
     public override void BuildMenu(IUIMenuBuilder builder)
     {
@@ -126,4 +123,7 @@ public class AppDelegate : MauiUIApplicationDelegate
     {
         TeaSettingsService.SettingsChanged();
     }
+
+     /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }
