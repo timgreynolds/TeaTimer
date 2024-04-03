@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AudioToolbox;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 
@@ -7,7 +8,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     /// <inheritdoc cref="BaseViewModel"/>
     public partial class TimerViewModel
     {
-        private async partial void TimerExpired()
+        private partial async Task TimerExpired()
         {
             string soundFileName = FileSystemUtils.GetAppDataFileFullName("kettle.mp3");
 

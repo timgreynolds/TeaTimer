@@ -263,7 +263,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Private Methods
 
         #region Partial Properties and Methods
-        private partial void TimerExpired();
+        private partial Task TimerExpired();
         #endregion Partial Properties and Methods
     }
 }

@@ -1,4 +1,5 @@
 ﻿using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
+using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using System;
 using Foundation;
 using Microsoft.Maui.Dispatching;
@@ -124,7 +125,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.Services
                 UNMutableNotificationContent content = new UNMutableNotificationContent()
                 {
                     Title = Constants.TITLE,
-                    Sound = UNNotificationSound.DefaultCriticalSound
+                    Subtitle = Constants.SUBTITLE,
+                    Body = Constants.REQUEST_BODY,
+                    Sound = UNNotificationSound.GetSound("kettle.mp3")
                 };
                 UNTimeIntervalNotificationTrigger trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(countdown.TotalSeconds, false);
                 UNNotificationRequest request = UNNotificationRequest.FromIdentifier(Constants.TIMER_REQUEST, content, trigger);
