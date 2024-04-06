@@ -27,10 +27,9 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             {
                 try
                 {
-                    using (SystemSound sound = new SystemSound(uri))
-                    {
-                        await sound.PlayAlertSoundAsync();
-                    }
+                    ToggleTeaListNavigation(true);
+                    using SystemSound sound = new SystemSound(uri);
+                    await sound.PlayAlertSoundAsync();
                 }
                 catch (Exception ex)
                 {
