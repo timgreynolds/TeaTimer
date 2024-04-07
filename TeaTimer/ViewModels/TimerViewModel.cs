@@ -139,7 +139,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 IsViewLabelVisible = true;
                 IsButtonEnabled = true;
             }
-            else if (SelectedTea is null) 
+            else if (SelectedTea is null)
             {
                 _timerService.Stop();
                 CountdownLabel = TimeSpan.FromSeconds(0.0);
@@ -158,28 +158,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 
         private void ExecuteTimerButton()
         {
-            IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
             if (_timerService.IsRunning)
             {
                 _timerService.Stop();
-                while (enumerator.MoveNext())
-                {
-                    if (enumerator.Current.IsEnabled == false)
-                    {
-                        enumerator.Current.IsEnabled = true;
-                    }
-                }
+                ToggleTeaListNavigation(true);
                 ButtonText = "Start";
             }
             else
             {
-                while (enumerator.MoveNext())
-                {
-                    if (enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
-                    {
-                        enumerator.Current.IsEnabled = false;
-                    }
-                }
+                ToggleTeaListNavigation(false);
 
                 ButtonText = "Stop";
 
@@ -223,13 +210,18 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 SelectedTea = null;
                 ButtonText = "Start";
                 IsButtonEnabled = false;
-                IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
-                while (enumerator.MoveNext())
+                ToggleTeaListNavigation(true);
+            }
+        }
+
+        private static void ToggleTeaListNavigation(bool enabled)
+        {
+            IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
                 {
-                    if (enumerator.Current.IsEnabled == false)
-                    {
-                        enumerator.Current.IsEnabled = true;
-                    }
+                    enumerator.Current.IsEnabled = enabled;
                 }
             }
         }
@@ -263,7 +255,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #endregion Private Methods
 
         #region Partial Properties and Methods
-        private partial void TimerExpired();
+        private partial Task TimerExpired();
         #endregion Partial Properties and Methods
     }
 }

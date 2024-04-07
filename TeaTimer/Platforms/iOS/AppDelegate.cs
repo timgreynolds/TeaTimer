@@ -36,6 +36,8 @@ public class AppDelegate : MauiUIApplicationDelegate
     /// </remarks>
     public override void DidEnterBackground(UIApplication application)
     {
+        base.DidEnterBackground(application);
+
         _backgroundedTime = DateTime.UtcNow;
         _currentBindingContext = AppShell.Current.CurrentPage.BindingContext;
 
@@ -46,8 +48,6 @@ public class AppDelegate : MauiUIApplicationDelegate
                 _timeLeft = ((TimerViewModel)_currentBindingContext).CountdownLabel;
             }
         }
-
-        base.DidEnterBackground(application);
     }
 
     /// <summary>
@@ -61,6 +61,8 @@ public class AppDelegate : MauiUIApplicationDelegate
     /// </remarks>
     public override void WillEnterForeground(UIApplication application)
     {
+        base.WillEnterForeground(application);
+
         DateTime awakeTime = DateTime.UtcNow;
         TimeSpan elapsedTime = awakeTime.Subtract(_backgroundedTime);
 
@@ -79,7 +81,6 @@ public class AppDelegate : MauiUIApplicationDelegate
                 }
             }
         }
-        base.WillEnterForeground(application);
     }
 
     /// <inheritdoc cref="MauiUIApplicationDelegate.WillFinishLaunching(UIApplication, NSDictionary)"/>
