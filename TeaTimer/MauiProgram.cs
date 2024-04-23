@@ -2,7 +2,6 @@ using com.mahonkin.tim.logging.UnifiedLogging.Extensions;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
-using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
 using Foundation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -80,7 +80,7 @@
 	  <Compile Remove="Services\TeaSqlService.cs" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Mahonkin.TeaDataService" Version="2.0.0-11052" />
+	  <PackageReference Include="Mahonkin.TeaDataService" Version="2.0.0-52840" />
 	  <PackageReference Include="Mahonkin.UnifiedLogging" Version="1.0.0-rc4" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
