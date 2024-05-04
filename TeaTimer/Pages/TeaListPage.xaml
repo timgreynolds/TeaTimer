@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
@@ -8,8 +8,7 @@
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage"
              Title="Tea List"
              BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
-    <StackLayout x:Name="MainLayout"
-                 VerticalOptions="FillAndExpand"
+    <StackLayout VerticalOptions="FillAndExpand"
                  BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
         <ListView x:Name="TeaListView"
                   VerticalOptions="FillAndExpand"
@@ -48,12 +47,14 @@
                             <DataTrigger TargetType="Label"
                                          Binding="{Binding UseCelsius}"
                                          Value="True">
-                                <Setter Property="Text" Value="Brew Temp &#x2103;" />
+                                <Setter Property="Text"
+                                        Value="Brew Temp ℃" />
                             </DataTrigger>
                             <DataTrigger TargetType="Label"
                                          Binding="{Binding UseCelsius}"
                                          Value="False">
-                                <Setter Property="Text" Value="Brew Temp &#x2109;" />
+                                <Setter Property="Text"
+                                        Value="Brew Temp ℉" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
@@ -99,26 +100,27 @@
                         </Grid>
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
-                                      Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.EditTeaCommand}"
+                                      IsDestructive="false"
+                                      Command="{x:Reference TeaListView.EditTeaCommand}"
                                       CommandParameter="{Binding .}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
-                                      Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.DeleteTeaCommand}"
+                                      Command="{x:Reference TeaListView.DeleteTeaCommand}"
                                       CommandParameter="{Binding .}" />
                         </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.Footer>
-            <StackLayout>
-                <ImageButton x:Name="AddTeaBtn"
-                             x:DataType="viewmodels:TeaListViewModel"
-                             Margin="20,0"
-                             Source="add_icon_dk.png"
-                             VerticalOptions="End"
-                             HorizontalOptions="End"
-                             Command="{Binding AddTeaCommand}" />
-            </StackLayout>
+                <StackLayout>
+                    <ImageButton x:Name="AddTeaBtn"
+                                 x:DataType="viewmodels:TeaListViewModel"
+                                 Margin="20,0"
+                                 Source="add_icon_dk.png"
+                                 VerticalOptions="End"
+                                 HorizontalOptions="End"
+                                 Command="{Binding AddTeaCommand}" />
+                </StackLayout>
             </ListView.Footer>
         </ListView>
     </StackLayout>

@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.mahonkin.tim.maui.teatimer</string>
+	<string>com.mahonkin.tim.maui.TeaTimer</string>
 	<key>UIDeviceFamily</key>
 	<array>
-		<integer>1</integer>
 		<integer>2</integer>
+		<integer>1</integer>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>

@@ -1,106 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<!-- Uncomment to also build the Android app.  -->
-		<!-- <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks> -->
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
-		<OutputType>Exe</OutputType>
-		<RootNamespace>com.mahonkin.tim.maui.TeaTimer</RootNamespace>
-		<UseMaui>true</UseMaui>
-		<SkipValidateMauiImplicitPackageReferences>false</SkipValidateMauiImplicitPackageReferences>
-		<SingleProject>true</SingleProject>
-		<ImplicitUsings>disable</ImplicitUsings>
-		<!-- Display name -->
-		<ApplicationTitle>Tea Timer</ApplicationTitle>
-		<!-- App Identifier -->
-		<ApplicationId>com.mahonkin.tim.maui.teatimer</ApplicationId>
-		<ApplicationIdGuid>ff927a3d-99ec-4731-b26e-cdb66201a5c5</ApplicationIdGuid>
-		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.1</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.2</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<WarningLevel>4</WarningLevel>
-		<PlatformTarget>anycpu</PlatformTarget>
-		<NoWarn>1701;1702</NoWarn>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-		<CreatePackage>false</CreatePackage>
-		<CodesignProvision>Automatic</CodesignProvision>
-		<CodesignKey>Apple Development: tim@mahonkin.com (R62H93RXZD)</CodesignKey>
-		<BuildIpa>true</BuildIpa>
-		<MtouchLink>None</MtouchLink>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
-		<CreatePackage>false</CreatePackage>
-		<CodesignKey>Mac Developer</CodesignKey>
-		<PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
-		<MtouchLink>None</MtouchLink>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
-	  <CreatePackage>true</CreatePackage>
-	  <CodesignProvision>Automatic</CodesignProvision>
-	  <CodesignKey>iPhone Developer</CodesignKey>
-	  <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-	  <DebugSymbols>true</DebugSymbols>
-	  <WarningLevel>4</WarningLevel>
-	</PropertyGroup>
-	<ItemGroup>
-		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" />
-		<!-- Images -->
-		<MauiImage Include="Resources\Images\*svg" />
-		<MauiImage Include="Resources\Images\*bmp" />
-		<!-- Fonts -->
-		<MauiFont Include="Resources\Fonts\*" />
-		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.Contains(ios))">
-		<MauiAsset Include="Platforms\iOS\Settings.bundle\**" LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)"></MauiAsset>
-	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.Contains(maccatalyst))">
-		<MauiAsset Include="Platforms\MacCatalyst\Settings.bundle\**" LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)"></MauiAsset>
-	</ItemGroup>
-	<ItemGroup>
-	  <Compile Remove="Models\TeaModel.cs" />
-	  <Compile Remove="Services\IDataService.cs" />
-	  <Compile Remove="Services\TeaSqlService.cs" />
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Include="Mahonkin.TeaDataService" Version="2.0.0-52840" />
-	  <PackageReference Include="Mahonkin.UnifiedLogging" Version="1.0.0-rc4" />
-	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0" />	  
-	  <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.*" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="Resources/Raw/appsettings.json" />
-	  <None Remove="Utilities\" />
-	  <None Remove="Platforms\iOS\Settings.bundle\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Utilities\" />
-	  <Folder Include="Platforms\iOS\Settings.bundle\" />
-	</ItemGroup>
-	<Target Name="_FixXMLDocCommentWarning" BeforeTargets="_ComputePublishLocation">
-		<ItemGroup>
-			<ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.xml' And '%(ResolvedFileToPublish.PublishFolderType)' == ''" PublishFolderType="None" />
-		</ItemGroup>
-	</Target>
+    <PropertyGroup>
+        <TargetFrameworks>net9.0-maccatalyst;net9.0-ios</TargetFrameworks>
+        <!-- <TargetFrameworks>net8.0-ios;net8.0-maccatalyst</TargetFrameworks> -->
+        <OutputType>Exe</OutputType>
+        <!-- <RestoreProjectStyle>PackagesConfig</RestoreProjectStyle> -->
+        <RootNamespace>com.mahonkin.tim.maui.TeaTimer</RootNamespace>
+        <UseMaui>true</UseMaui>
+        <SkipValidateMauiImplicitPackageReferences>false</SkipValidateMauiImplicitPackageReferences>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+	<BuildInParallel>false</BuildInParallel>
+        <!-- Display name -->
+        <ApplicationTitle>Tea Timer</ApplicationTitle>
+        <!-- App Identifier -->
+        <ApplicationId>com.mahonkin.tim.maui.TeaTimer</ApplicationId>
+        <ApplicationIdGuid>ff927a3d-99ec-4731-b26e-cdb66201a5c5</ApplicationIdGuid>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.1</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.2</SupportedOSPlatformVersion>
+        <Authors>Timothy Reynolds</Authors>
+        <Company />
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <WarningLevel>4</WarningLevel>
+        <PlatformTarget>anycpu</PlatformTarget>
+        <NoWarn>1701;1702</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
+        <!-- <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'"> -->
+        <!-- <ArchiveOnBuild>true</ArchiveOnBuild>
+        <CreatePackage>false</CreatePackage> -->
+        <CodesignProvision>Automatic</CodesignProvision>
+        <CodesignKey>Apple Development: tim@mahonkin.com (R62H93RXZD)</CodesignKey>
+        <BuildIpa>false</BuildIpa>
+        <MtouchLink>None</MtouchLink>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
+        <!-- <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'"> -->
+        <!-- <ArchiveOnBuild>true</ArchiveOnBuild>
+        <CreatePackage>false</CreatePackage> -->
+        <CodesignKey>Apple Development: tim@mahonkin.com (R62H93RXZD)</CodesignKey>
+        <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
+        <MtouchLink>None</MtouchLink>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugSymbols>false</DebugSymbols>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+        <!-- <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'"> -->
+        <!-- <ArchiveOnBuild>true</ArchiveOnBuild>
+        <CreatePackage>true</CreatePackage> -->
+        <BuildIpa>true</BuildIpa>
+        <CodesignProvision>Automatic</CodesignProvision>
+        <CodesignKey>Apple Development: tim@mahonkin.com (R62H93RXZD)</CodesignKey>
+        <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- App Icon -->
+        <MauiIcon Include="Resources\AppIcon\appicon.svg"
+                  ForegroundFile="Resources\AppIcon\appiconfg.svg"
+                  Color="#512BD4" />
+        <!-- Splash Screen -->
+        <MauiSplashScreen Include="Resources\Splash\splash.svg" />
+        <!-- Images -->
+        <MauiImage Include="Resources\Images\*svg" />
+        <MauiImage Include="Resources\Images\*bmp" />
+        <MauiImage Include="Resources\Images\*png" />
+        <MauiImage Include="Resources\Images\*jpg" />
+        <!-- Fonts -->
+        <MauiFont Include="Resources\Fonts\*" />
+        <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+        <MauiAsset Include="Resources\Raw\**"
+                   LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework.Contains(ios))">
+        <MauiAsset Include="Platforms\iOS\Settings.bundle\**"
+                   LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+    <ItemGroup Condition="$(TargetFramework.Contains(maccatalyst))">
+        <MauiAsset Include="Platforms\MacCatalyst\Settings.bundle\**"
+                   LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Models\TeaModel.cs" />
+        <Compile Remove="Services\IDataService.cs" />
+        <Compile Remove="Services\TeaSqlService.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Mahonkin.TeaDataService"
+                          Version="2.0.2-3032" />
+        <PackageReference Include="Mahonkin.UnifiedLogging"
+                          Version="1.0.2-3094" />
+        <!-- <PackageReference Include="Microsoft.Extensions.Configuration"
+                          Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json"
+                          Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Configuration"
+                          Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console"
+                          Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug"
+                          Version="8.0.0" />
+        <PackageReference Include="Microsoft.Maui.Controls"
+                          Version="8.0.21+0-sha.44a1673f7d-azdo.9442930" /> -->
+        <PackageReference Include="Microsoft.Extensions.Configuration"
+                          Version="9.0.0-preview.3.24172.9" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json"
+                          Version="9.0.0-preview.3.24172.9" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Configuration"
+                          Version="9.0.0-preview.3.24172.9" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console"
+                          Version="9.0.0-preview.3.24172.9" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug"
+                          Version="9.0.0-preview.3.24172.9" />
+        <PackageReference Include="Microsoft.Maui.Controls"
+                          Version="9.0.0-preview.3.10457+sha.fe707721f2-azdo.9385021" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources/Raw/appsettings.json" />
+        <None Remove="Utilities\" />
+        <None Remove="Platforms\iOS\Settings.bundle\" />
+        <none Remove="Platforms\MacCatalyst\Settings.bundle\" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Utilities\" />
+        <Folder Include="Platforms\iOS\Settings.bundle\" />
+        <Folder Include="Platforms\MacCatalyst\Settings.bundle\" />
+    </ItemGroup>
+    <Target Name="_FixXMLDocCommentWarning"
+            BeforeTargets="_ComputePublishLocation">
+        <ItemGroup>
+            <ResolvedFileToPublish Update="@(ResolvedFileToPublish)"
+                                   Condition="'%(ResolvedFileToPublish.Extension)' == '.xml' And '%(ResolvedFileToPublish.PublishFolderType)' == ''"
+                                   PublishFolderType="None" />
+        </ItemGroup>
+    </Target>
 </Project>
