@@ -1,26 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
-             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TimerPage"             
+             x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TimerPage"
              x:DataType="viewmodels:TimerViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
-    <StackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <StackLayout Spacing="25"
+                 Padding="30,0"
+                 VerticalOptions="Center">
         <StackLayout.Resources>
             <converters:ViewLabelConverter x:Key="ViewLabelConverter" />
         </StackLayout.Resources>
         <Label x:Name="ViewTitle"
                FontFamily="OpenSansRegular"
+               FontSize="Large"
                HorizontalOptions="Center"
                VerticalOptions="Start"
                HorizontalTextAlignment="Center"
                IsVisible="{Binding IsViewLabelVisible}">
             <Label.Text>
-                <MultiBinding Converter="{StaticResource ViewLabelConverter}" StringFormat="{}{0} {1} {2}">
+                <MultiBinding Converter="{StaticResource ViewLabelConverter}"
+                              StringFormat="{}{0} {1} {2}">
                     <Binding Path="SelectedTea.Name" />
                     <Binding Path="SelectedTea.BrewTemp" />
                     <Binding Path="SelectedTea.SteepTime" />
@@ -28,7 +29,7 @@
             </Label.Text>
         </Label>
         <Label x:Name="CountdownLabel"
-               Text="{Binding CountdownLabel, StringFormat='{}{0:m\\:ss}'}" 
+               Text="{Binding CountdownLabel, StringFormat='{}{0:m\\:ss}'}"
                FontFamily="OpenSansRegular"
                FontSize="Title"
                FontAttributes="Bold"
@@ -41,9 +42,10 @@
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Picker x:Name="TeaPicker"                    
+            <Picker x:Name="TeaPicker"
                     Grid.Column="1"
                     FontFamily="OpenSansRegular"
+                    FontSize="Title"
                     HorizontalOptions="CenterAndExpand"
                     HorizontalTextAlignment="Center"
                     Title="Select a Tea Variety"
@@ -58,6 +60,6 @@
                 SemanticProperties.Hint="Starts or stops the countdown."
                 HorizontalOptions="Center"
                 IsEnabled="{Binding IsButtonEnabled}"
-                Command="{Binding TimerButtonPressed}"/>
+                Command="{Binding TimerButtonPressed}" />
     </StackLayout>
 </ContentPage>

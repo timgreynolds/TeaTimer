@@ -392,6 +392,5 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
-#My stupid helper script
-StartSim
-
+##
+Provisioning/

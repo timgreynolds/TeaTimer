@@ -1,5 +1,4 @@
 ﻿using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
-using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using System;
 using Foundation;
 using Microsoft.Maui.Dispatching;
