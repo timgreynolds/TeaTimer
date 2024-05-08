@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.Maui.Storage;
 
 namespace com.mahonkin.tim.maui.TeaTimer.Utilities
@@ -20,15 +19,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.Utilities
             return Path.Combine(AppDataPath, fileName);
         }
 
-        public static async Task CopyBundleAppDataResource(string targetFile)
+        public static void CopyBundleAppDataResource(string targetFile)
         {
             try
             {
                 Directory.CreateDirectory(AppDataPath);
-                using (Stream readStream = await FileSystem.Current.OpenAppPackageFileAsync(targetFile).ConfigureAwait(false))
+                using (Stream readStream = FileSystem.Current.OpenAppPackageFileAsync(targetFile).Result)
                 {
                     using Stream writeStream = File.Create(Path.Combine(AppDataPath, targetFile));
-                    await readStream.CopyToAsync(writeStream).ConfigureAwait(false);
+                    readStream.CopyTo(writeStream);
                 }
             }
             catch (Exception ex)

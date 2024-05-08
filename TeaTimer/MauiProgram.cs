@@ -92,13 +92,10 @@ public static class MauiProgram
     {
         if (FileSystemUtils.AppDataFileExists("appsettings.json") == false)
         {
-            FileSystemUtils.CopyBundleAppDataResource("appsettings.json").Wait();
-            builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
+         FileSystemUtils.CopyBundleAppDataResource("appsettings.json");
         }
-        else
-        {
-            builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
-        }
+        builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
+
         return builder;
     }
 }

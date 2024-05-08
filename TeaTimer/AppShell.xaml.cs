@@ -22,12 +22,12 @@ public partial class AppShell : Shell
 
         if (FileSystemUtils.AppDataFileExists("kettle.mp3") == false) 
         {
-            FileSystemUtils.CopyBundleAppDataResource("kettle.mp3").Wait();
+            FileSystemUtils.CopyBundleAppDataResource("kettle.mp3");
         }
 
         try
         {
-            InitDatabase(sqlService).Wait();
+            InitDatabase(sqlService);
         }
         catch (Exception ex) // Last opportunity to capture bubbled-up exceptions.
         {
@@ -40,7 +40,7 @@ public partial class AppShell : Shell
         }
     }
 
-    private static async Task InitDatabase(IDataService<TeaModel> sqlService)
+    private static void InitDatabase(IDataService<TeaModel> sqlService)
     {
         try
         {
@@ -52,7 +52,7 @@ public partial class AppShell : Shell
             else
             {
                 Console.WriteLine("No database file found. Unpacking from the app bundle.");
-                await FileSystemUtils.CopyBundleAppDataResource(dbFile);
+                FileSystemUtils.CopyBundleAppDataResource(dbFile);
                 sqlService.Initialize(FileSystemUtils.GetAppDataFileFullName(dbFile));
             }
 
