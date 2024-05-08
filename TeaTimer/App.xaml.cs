@@ -14,7 +14,8 @@ namespace com.mahonkin.tim.maui.TeaTimer
             InitializeComponent();
             
             MainPage = new AppShell(navigationService, sqlService, settingsService);
-            UserAppTheme = TeaTimerApp.Current.RequestedTheme;
+            // UserAppTheme = TeaTimerApp.Current.RequestedTheme;
+            UserAppTheme = Microsoft.Maui.ApplicationModel.AppTheme.Light;
             RequestedThemeChanged += (sender, args) => UserAppTheme = args.RequestedTheme;
         }
     }
