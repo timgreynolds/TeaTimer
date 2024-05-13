@@ -4,14 +4,14 @@
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
              xmlns:datamodel="clr-namespace:com.mahonkin.tim.TeaDataService.DataModel;assembly=TeaDataService"
+             x:Name="MainPage"
              x:DataType="viewmodels:TeaListViewModel"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage"
              Title="Tea List"
              BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
     <StackLayout VerticalOptions="FillAndExpand"
                  BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
-        <ListView x:Name="TeaListView"
-                  VerticalOptions="FillAndExpand"
+        <ListView VerticalOptions="FillAndExpand"
                   ItemsSource="{Binding Teas}"
                   IsPullToRefreshEnabled="True"
                   RefreshCommand="{Binding RefreshList}"
@@ -101,11 +101,11 @@
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
                                       IsDestructive="false"
-                                      Command="{x:Reference TeaListView.EditTeaCommand}"
+                                      Command="{Binding Source={x:Reference MainPage}}, Path=EditTeaCommand}"
                                       CommandParameter="{Binding .}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
-                                      Command="{x:Reference TeaListView.DeleteTeaCommand}"
+                                      Command="{Binding Source={x:Reference MainPage}}, Path=DeleteTeaCommand}"
                                       CommandParameter="{Binding .}" />
                         </ViewCell.ContextActions>
                     </ViewCell>

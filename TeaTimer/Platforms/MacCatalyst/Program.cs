@@ -19,7 +19,7 @@ public class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Applcation exception {ex.Message}\n{ex.StackTrace}");
+            Console.WriteLine($"Application exception {ex.Message}\n{ex.StackTrace}");
         }
     }
 }
