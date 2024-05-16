@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
@@ -101,12 +101,10 @@
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
                                       IsDestructive="false"
-                                      Command="{Binding Source={x:Reference MainPage}}, Path=EditTeaCommand}"
-                                      CommandParameter="{Binding .}" />
+                                      Command="{Binding Path=EditTeaCommand, Source={x:Reference TeaListView}}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
-                                      Command="{Binding Source={x:Reference MainPage}}, Path=DeleteTeaCommand}"
-                                      CommandParameter="{Binding .}" />
+                                      Command="{Binding Path=DeleteTeaCommand, Source={x:Reference TeaListView}}" />
                         </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
