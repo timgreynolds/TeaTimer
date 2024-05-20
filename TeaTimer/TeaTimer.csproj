@@ -3,7 +3,6 @@
     <Import Project="$(MSBuildProjectDirectory)\Version.props" />
     <PropertyGroup>
         <TargetFrameworks>net9.0-maccatalyst;net9.0-ios</TargetFrameworks>
-        <!-- <TargetFrameworks>net8.0-ios;net8.0-maccatalyst</TargetFrameworks> -->
         <OutputType>Exe</OutputType>
         <RootNamespace>com.mahonkin.tim.maui.TeaTimer</RootNamespace>
         <UseMaui>true</UseMaui>
@@ -37,7 +36,6 @@
         <NoWarn>1701;1702</NoWarn>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
-        <!-- <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'"> -->
         <ArchiveOnBuild>false</ArchiveOnBuild>
         <CreatePackage>false</CreatePackage>
         <CodesignProvision>Automatic</CodesignProvision>
@@ -46,7 +44,6 @@
         <MtouchLink>None</MtouchLink>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
-        <!-- <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'"> -->
         <ArchiveOnBuild>false</ArchiveOnBuild>
         <CreatePackage>false</CreatePackage>
         <CodesignKey>Apple Development: tim@mahonkin.com (R62H93RXZD)</CodesignKey>
@@ -58,7 +55,6 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
-        <!-- <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'"> -->
         <ArchiveOnBuild>true</ArchiveOnBuild>
         <CreatePackage>true</CreatePackage>
         <BuildIpa>true</BuildIpa>
