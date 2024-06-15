@@ -1,4 +1,5 @@
-using com.mahonkin.tim.logging.UnifiedLogging.Extensions;
+using System.Collections.Generic;
+using com.mahonkin.tim.extensions.Logging;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
@@ -20,6 +21,8 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
+    private static ILogger _logger;
+
     public static MauiApp CreateMauiApp()
     {
         MauiAppBuilder builder = MauiApp.CreateBuilder()
@@ -59,6 +62,9 @@ public static class MauiProgram
             .AddDebug();
 
         MauiApp app = builder.Build();
+        _logger = app.Services.GetRequiredService<ILoggerFactory>().CreateLogger(typeof(MauiProgram));
+        InitDatabase(app.Services.GetRequiredService<IDataService<TeaModel>>());
+
         return app;
     }
 
@@ -92,10 +98,46 @@ public static class MauiProgram
     {
         if (FileSystemUtils.AppDataFileExists("appsettings.json") == false)
         {
-         FileSystemUtils.CopyBundleAppDataResource("appsettings.json");
+            FileSystemUtils.CopyBundleAppDataResource("appsettings.json");
         }
         builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
-
+        
         return builder;
+    }
+
+    private static void InitDatabase(IDataService<TeaModel> sqlService)
+    {
+        if (FileSystemUtils.AppDataFileExists("kettle.mp3") == false)
+        {
+            _logger.LogDebug("Copying kettle whistle sound file from the bundle to the device.");
+            FileSystemUtils.CopyBundleAppDataResource("kettle.mp3");
+        }
+
+        string dbFile = "TeaVarieties.db3";
+        _logger.LogDebug("Database initialization using {FileName}.", dbFile);
+        try
+        {
+            if (FileSystemUtils.AppDataFileExists(dbFile))
+            {
+                _logger.LogDebug("Found database {FileName} file.", dbFile);
+                sqlService.Initialize(FileSystemUtils.GetAppDataFileFullName(dbFile));
+            }
+            else
+            {
+                _logger.LogDebug("Did not find {FileName} file. Copying from the bundle to the device.", dbFile);
+                FileSystemUtils.CopyBundleAppDataResource(dbFile);
+                sqlService.Initialize(FileSystemUtils.GetAppDataFileFullName(dbFile));
+            }
+
+            List<TeaModel> teas = sqlService.Get();
+            if (teas.Count < 1)
+            {
+                _logger.LogInformation("No teas found in the tea database.");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogCritical("An exception occurred. {Type} - {Message}", ex.GetType().Name, ex.Message);
+        }
     }
 }
