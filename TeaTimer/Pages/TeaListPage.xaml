@@ -32,14 +32,14 @@
                     </Grid.ColumnDefinitions>
                     <Label Text="Tea Name"
                            TextColor="White"
-                           FontFamily="OpenSansRegular"
+                           FontFamily="SFPro"
                            Padding="10"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="0" />
                     <Label Text=""
                            TextColor="White"
-                           FontFamily="OpenSansRegular"
+                           FontFamily="SFPro"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="1">
@@ -60,7 +60,7 @@
                     </Label>
                     <Label Text="Steep Time"
                            TextColor="White"
-                           FontFamily="OpenSansRegular"
+                           FontFamily="SFPro"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="2" />
@@ -77,7 +77,7 @@
                             </Grid.ColumnDefinitions>
                             <Label Text="{Binding Name}"
                                    TextColor="White"
-                                   FontFamily="OpenSansRegular"
+                                   FontFamily="SFPro"
                                    Padding="10,10"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
@@ -85,14 +85,14 @@
                                    Grid.Column="0" />
                             <Label Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
                                    TextColor="White"
-                                   FontFamily="OpenSansRegular"
+                                   FontFamily="SFPro"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="1" />
                             <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
                                    TextColor="White"
-                                   FontFamily="OpenSansRegular"
+                                   FontFamily="SFPro"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"

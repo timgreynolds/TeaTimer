@@ -13,7 +13,7 @@
             <converters:ViewLabelConverter x:Key="ViewLabelConverter" />
         </StackLayout.Resources>
         <Label x:Name="ViewTitle"
-               FontFamily="OpenSansRegular"
+               FontFamily="SFPro"
                FontSize="Large"
                HorizontalOptions="Center"
                VerticalOptions="Start"
@@ -30,7 +30,7 @@
         </Label>
         <Label x:Name="CountdownLabel"
                Text="{Binding CountdownLabel, StringFormat='{}{0:m\\:ss}'}"
-               FontFamily="OpenSansRegular"
+               FontFamily="SFMono"
                FontSize="Title"
                FontAttributes="Bold"
                HorizontalOptions="Center"
@@ -44,18 +44,17 @@
             </Grid.ColumnDefinitions>
             <Picker x:Name="TeaPicker"
                     Grid.Column="1"
-                    FontFamily="OpenSansRegular"
+                    FontFamily="SFPro"
                     FontSize="Title"
-                    HorizontalOptions="CenterAndExpand"
+                    HorizontalOptions="FillAndExpand"
                     HorizontalTextAlignment="Center"
-                    Title="Select a Tea Variety"
                     ItemsSource="{Binding Teas}"
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedTea}" />
         </Grid>
         <Button x:Name="TimerButton"
                 Text="{Binding ButtonText}"
-                FontFamily="OpenSansRegular"
+                FontFamily="SFPro"
                 FontSize="Title"
                 SemanticProperties.Hint="Starts or stops the countdown."
                 HorizontalOptions="Center"

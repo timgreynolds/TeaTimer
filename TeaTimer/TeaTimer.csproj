@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="$(MSBuildProjectDirectory)\Version.props" />
     <PropertyGroup>
-        <TargetFrameworks>net9.0-maccatalyst;net9.0-ios</TargetFrameworks>
+        <TargetFrameworks>net8.0-maccatalyst;net8.0-ios;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
         <OutputType>Exe</OutputType>
         <RootNamespace>com.mahonkin.tim.maui.TeaTimer</RootNamespace>
         <UseMaui>true</UseMaui>
@@ -70,9 +70,7 @@
     </PropertyGroup>
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg"
-                  ForegroundFile="Resources\AppIcon\appiconfg.svg"
-                  Color="#512BD4" />
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" />
         <!-- Images -->
@@ -83,16 +81,13 @@
         <!-- Fonts -->
         <MauiFont Include="Resources\Fonts\*" />
         <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-        <MauiAsset Include="Resources\Raw\**"
-                   LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
     <ItemGroup Condition="$(TargetFramework.Contains(ios))">
-        <MauiAsset Include="Platforms\iOS\Settings.bundle\**"
-                   LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)" />
+        <MauiAsset Include="Platforms\iOS\Settings.bundle\**" LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
     <ItemGroup Condition="$(TargetFramework.Contains(maccatalyst))">
-        <MauiAsset Include="Platforms\MacCatalyst\Settings.bundle\**"
-                   LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)" />
+        <MauiAsset Include="Platforms\MacCatalyst\Settings.bundle\**" LogicalName="Settings.bundle\%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
     <ItemGroup>
         <Compile Remove="Models\TeaModel.cs" />
@@ -100,34 +95,22 @@
         <Compile Remove="Services\TeaSqlService.cs" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Mahonkin.TeaDataService"
-                          Version="2.0.2-3032" />
-        <PackageReference Include="Mahonkin.UnifiedLogging"
-                          Version="1.0.2-3094" />
-        <!-- <PackageReference Include="Microsoft.Extensions.Configuration"
-                          Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json"
-                          Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Configuration"
-                          Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console"
-                          Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug"
-                          Version="8.0.0" />
-        <PackageReference Include="Microsoft.Maui.Controls"
-                          Version="8.0.21+0-sha.44a1673f7d-azdo.9442930" /> -->
-        <PackageReference Include="Microsoft.Extensions.Configuration"
-                          Version="9.0.0-preview.3.24172.9" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json"
-                          Version="9.0.0-preview.3.24172.9" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Configuration"
-                          Version="9.0.0-preview.3.24172.9" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console"
-                          Version="9.0.0-preview.3.24172.9" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug"
-                          Version="9.0.0-preview.3.24172.9" />
-        <PackageReference Include="Microsoft.Maui.Controls"
-                          Version="9.0.0-preview.3.10457+sha.fe707721f2-azdo.9385021" />
+        <PackageReference Include="Mahonkin.TeaDataService" Version="2.0.4" />
+        <PackageReference Include="Mahonkin.UnifiedLogging" Version="1.0.3" />
+        <PackageReference Condition="$(TargetFramework.Contains(net8.0))" Include="system.Text.Json" Version="8.0.*" />
+        <PackageReference Condition="$(TargetFramework.Contains(net9.0))" Include="system.Text.Json" Version="9.0.0-preview.7.24405.7" />
+        <PackageReference Condition="$(TargetFramework.Contains(net8.0))" Include="Microsoft.Extensions.Configuration" Version="8.0" />
+        <PackageReference Condition="$(TargetFramework.Contains(net9.0))" Include="Microsoft.Extensions.Configuration" Version="9.0.0-preview.7.24405.7" />
+        <PackageReference Condition="$(TargetFramework.Contains(net8.0))" Include="Microsoft.Extensions.Configuration.Json" Version="8.0" />
+        <PackageReference Condition="$(TargetFramework.Contains(net9.0))" Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0-preview.7.24405.7" />
+        <PackageReference Condition="$(TargetFramework.Contains(net8.0))" Include="Microsoft.Extensions.Logging.Configuration" Version="8.0" />
+        <PackageReference Condition="$(TargetFramework.Contains(net9.0))" Include="Microsoft.Extensions.Logging.Configuration" Version="9.0.0-preview.7.24405.7" />
+        <PackageReference Condition="$(TargetFramework.Contains(net8.0))" Include="Microsoft.Extensions.Logging.Console" Version="8.0" />
+        <PackageReference Condition="$(TargetFramework.Contains(net9.0))" Include="Microsoft.Extensions.Logging.Console" Version="9.0.0-preview.7.24405.7" />
+        <PackageReference Condition="$(TargetFramework.Contains(net8.0))" Include="Microsoft.Extensions.Logging.Debug" Version="8.0" />
+        <PackageReference Condition="$(TargetFramework.Contains(net9.0))" Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0-preview.7.24405.7" />
+        <PackageReference Condition="$(TargetFramework.Contains(net8.0))" Include="Microsoft.Maui.Controls" Version="8.0.*" />
+        <PackageReference Condition="$(TargetFramework.Contains(net9.0))" Include="Microsoft.Maui.Controls" Version="9.0.0-preview.7.24407.4" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Resources/Raw/appsettings.json" />
@@ -140,12 +123,9 @@
         <Folder Include="Platforms\iOS\Settings.bundle\" />
         <Folder Include="Platforms\MacCatalyst\Settings.bundle\" />
     </ItemGroup>
-    <Target Name="_FixXMLDocCommentWarning"
-            BeforeTargets="_ComputePublishLocation">
+    <Target Name="_FixXMLDocCommentWarning" BeforeTargets="_ComputePublishLocation">
         <ItemGroup>
-            <ResolvedFileToPublish Update="@(ResolvedFileToPublish)"
-                                   Condition="'%(ResolvedFileToPublish.Extension)' == '.xml' And '%(ResolvedFileToPublish.PublishFolderType)' == ''"
-                                   PublishFolderType="None" />
+            <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.xml' And '%(ResolvedFileToPublish.PublishFolderType)' == ''" PublishFolderType="None" />
         </ItemGroup>
     </Target>
 </Project>

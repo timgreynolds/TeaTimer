@@ -31,11 +31,11 @@
             </Grid.ColumnDefinitions>
             <Label x:Name="TeaNameLabel"
                    Text="Tea Name"
-                   FontFamily="OpenSansRegular"
+                   FontFamily="SFPro"
                    VerticalOptions="Center" 
                    HorizontalOptions="End" />
             <Label x:Name="BrewTempLabel"
-                   FontFamily="OpenSansRegular"
+                   FontFamily="SFPro"
                    VerticalOptions="Center" 
                    HorizontalOptions="End"
                    Grid.Row="1">
@@ -54,21 +54,21 @@
             </Label>
             <Label x:Name="SteepTimeLabel"
                    Text="Steep Time"
-                   FontFamily="OpenSansRegular"
+                   FontFamily="SFPro"
                    VerticalOptions="Center" 
                    HorizontalOptions="End"
                    Grid.Row="2"/>
             <Entry x:Name="TeaNameEntry"
                    Placeholder="Tea Name"
                    Text="{Binding Name}"
-                   FontFamily="OpenSansRegular"
+                   FontFamily="SFPro"
                    VerticalOptions="Center"
                    HorizontalOptions="Fill"
                    Grid.Column="1"/>
             <Entry x:Name="BrewTempEntry"
                    Placeholder="Brew Temperature"
                    Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{0:D}'}"
-                   FontFamily="OpenSansRegular"
+                   FontFamily="SFPro"
                    VerticalOptions="Center"
                    HorizontalOptions="Fill"
                    Grid.Column="1"
@@ -76,7 +76,7 @@
             <Entry x:Name="SteepTimeEntry"
                    Placeholder="Steep Time"
                    Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
-                   FontFamily="OpenSansRegular"
+                   FontFamily="SFPro"
                    VerticalOptions="Center"
                    HorizontalOptions="Fill"
                    Grid.Column="1" 
@@ -84,7 +84,7 @@
         </Grid>
         <Button x:Name="SaveBtn"
                 Text="Save"
-                FontFamily="OpenSansRegular"
+                FontFamily="SFPro"
                 SemanticProperties.Hint="Saves the current tea information to the database."
                 VerticalOptions="Center"
                 HorizontalOptions="Center"

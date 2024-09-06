@@ -20,6 +20,7 @@ public class Program
         catch (Exception ex)
         {
             Console.WriteLine($"Application exception {ex.Message}\n{ex.StackTrace}");
+            throw new Exception(ex.Message, ex);
         }
     }
 }
