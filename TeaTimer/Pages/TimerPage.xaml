@@ -13,7 +13,6 @@
             <converters:ViewLabelConverter x:Key="ViewLabelConverter" />
         </StackLayout.Resources>
         <Label x:Name="ViewTitle"
-               FontFamily="SFPro"
                FontSize="Large"
                HorizontalOptions="Center"
                VerticalOptions="Start"
@@ -44,7 +43,6 @@
             </Grid.ColumnDefinitions>
             <Picker x:Name="TeaPicker"
                     Grid.Column="1"
-                    FontFamily="SFPro"
                     FontSize="Title"
                     HorizontalOptions="FillAndExpand"
                     HorizontalTextAlignment="Center"
@@ -54,7 +52,6 @@
         </Grid>
         <Button x:Name="TimerButton"
                 Text="{Binding ButtonText}"
-                FontFamily="SFPro"
                 FontSize="Title"
                 SemanticProperties.Hint="Starts or stops the countdown."
                 HorizontalOptions="Center"

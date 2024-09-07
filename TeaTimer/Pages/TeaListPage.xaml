@@ -4,8 +4,6 @@
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
              xmlns:datamodel="clr-namespace:com.mahonkin.tim.TeaDataService.DataModel;assembly=TeaDataService"
-             x:Name="MainPage"
-             x:DataType="viewmodels:TeaListViewModel"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage"
              Title="Tea List"
              BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
@@ -31,15 +29,11 @@
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
                     <Label Text="Tea Name"
-                           TextColor="White"
-                           FontFamily="SFPro"
                            Padding="10"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="0" />
                     <Label Text=""
-                           TextColor="White"
-                           FontFamily="SFPro"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="1">
@@ -59,8 +53,6 @@
                         </Label.Triggers>
                     </Label>
                     <Label Text="Steep Time"
-                           TextColor="White"
-                           FontFamily="SFPro"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="2" />
@@ -76,23 +68,17 @@
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
                             <Label Text="{Binding Name}"
-                                   TextColor="White"
-                                   FontFamily="SFPro"
                                    Padding="10,10"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="0" />
                             <Label Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
-                                   TextColor="White"
-                                   FontFamily="SFPro"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="1" />
                             <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
-                                   TextColor="White"
-                                   FontFamily="SFPro"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"

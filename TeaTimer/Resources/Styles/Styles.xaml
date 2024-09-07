@@ -26,7 +26,7 @@
     <Style TargetType="Button">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource Gray200}}" />
-        <Setter Property="FontFamily" Value="SFPro"/>
+        <Setter Property="FontFamily" Value="SFCompact"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="CornerRadius" Value="8"/>
         <Setter Property="Padding" Value="14,10"/>
@@ -188,7 +188,7 @@
         <Setter Property="TextColor" Value="White" />
         <Setter Property="TitleColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="SFPro" />
+        <Setter Property="FontFamily" Value="SFCompact" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
