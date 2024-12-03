@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
 using com.mahonkin.tim.maui.TeaTimer.ViewModels;
 using Foundation;
@@ -22,7 +23,7 @@ public class AppDelegate : MauiUIApplicationDelegate
     #endregion Private Fields
 
     /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp().Result;
 
     /// <summary>
     /// Method that is run when the app enters the background. 

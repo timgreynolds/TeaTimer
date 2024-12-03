@@ -1,3 +1,5 @@
+using System.IO;
+using System.Threading.Tasks;
 using com.mahonkin.tim.extensions.Logging;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
@@ -10,6 +12,7 @@ using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
+using Microsoft.Maui.Storage;
 using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
@@ -20,7 +23,7 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
-    public static MauiApp CreateMauiApp()
+    public static async Task<MauiApp> CreateMauiApp()
     {
         MauiAppBuilder builder = MauiApp.CreateBuilder()
         .UseMauiApp<TeaTimerApp>()
@@ -39,7 +42,7 @@ public static class MauiProgram
 #endif
         });
 
-        builder.Configuration.AddAppSettings();
+        await builder.Configuration.AddAppSettings();
 
         builder.Services
             .AddPages()
@@ -50,9 +53,16 @@ public static class MauiProgram
             .ClearProviders()
             .AddConfiguration(builder.Configuration.GetSection("Logging"))
 #if IOS || MACCATALYST
-            .AddUnifiedLogger(o =>
+            .AddUnifiedLogger(opts =>
             {
-                o.Subsystem = NSBundle.MainBundle.BundleIdentifier;
+                if (string.IsNullOrEmpty(NSBundle.MainBundle.BundleIdentifier))
+                {
+                    opts.Subsystem = typeof(TeaTimerApp).FullName; //NSBundle.MainBundle.PrincipalClass.GetType().FullName;
+                }
+                else
+                {
+                    opts.Subsystem = NSBundle.MainBundle.BundleIdentifier;
+                }
             })
 #endif
             .AddConsole()
@@ -89,14 +99,10 @@ public static class MauiProgram
         return serviceCollection;
     }
 
-    private static IConfigurationBuilder AddAppSettings(this IConfigurationBuilder builder)
+    private static async Task<IConfigurationBuilder> AddAppSettings(this IConfigurationBuilder builder)
     {
-        if (FileSystemUtils.AppDataFileExists("appsettings.json") == false)
-        {
-            FileSystemUtils.CopyBundleAppDataResource("appsettings.json");
-        }
-        builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
-        
+        Stream stream = await FileSystem.Current.OpenAppPackageFileAsync("appsettings.json");
+        builder.AddJsonStream(stream);
         return builder;
     }
 
@@ -122,7 +128,7 @@ public static class MauiProgram
         }
         catch (System.Exception ex)
         {
-           throw new System.Exception(ex.Message, ex);
-         }
+            throw new System.Exception(ex.Message, ex);
+        }
     }
 }
