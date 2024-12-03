@@ -14,6 +14,7 @@ namespace com.mahonkin.tim.maui.TeaTimer
         private IDataService<TeaModel> _sqlService;
         private ISettingsService _settingsService;
         private ILoggerFactory _loggerFactory;
+        private ILogger<TeaTimerApp> _logger;
 
         /// <inheritdoc cref="Application.Application()" />
         public TeaTimerApp(INavigationService navigationService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
@@ -22,8 +23,8 @@ namespace com.mahonkin.tim.maui.TeaTimer
             _sqlService = sqlService;
             _settingsService = settingsService;
             _loggerFactory = loggerFactory;
-
-            _loggerFactory.CreateLogger<TeaTimerApp>().LogTrace("Constructor entered.");
+            _logger = loggerFactory.CreateLogger<TeaTimerApp>();
+            _logger.LogTrace("Constructor entered.");
 
             InitializeComponent();
 
@@ -33,6 +34,7 @@ namespace com.mahonkin.tim.maui.TeaTimer
 
         protected override Window CreateWindow(IActivationState activationState)
         {
+            _logger.LogTrace("Create Window.");
             return new Window(new AppShell(_navigationService, _sqlService, _settingsService, _loggerFactory));
         }
     }
