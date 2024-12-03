@@ -5,6 +5,8 @@
              xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
              xmlns:datamodel="clr-namespace:com.mahonkin.tim.TeaDataService.DataModel;assembly=TeaDataService"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage"
+             x:DataType="viewmodels:TeaListViewModel"
+             x:Name="teaListPage"
              Title="Tea List"
              BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
     <StackLayout VerticalOptions="FillAndExpand"
@@ -87,10 +89,10 @@
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
                                       IsDestructive="false"
-                                      Command="{Binding Path=EditTeaCommand, Source={x:Reference TeaListView}}" />
+                                      Command="{Binding EditTeaCommand, x:DataType=viewmodels:TeaListViewModel}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
-                                      Command="{Binding Path=DeleteTeaCommand, Source={x:Reference TeaListView}}" />
+                                      Command="{Binding DeleteTeaCommand, x:DataType=viewmodels:TeaListViewModel}" />
                         </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
