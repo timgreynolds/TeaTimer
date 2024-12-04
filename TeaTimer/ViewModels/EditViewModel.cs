@@ -17,12 +17,13 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public class EditViewModel : BaseViewModel, IQueryAttributable
     {
         #region Private Fields
-        private static string _name;
-        private static string _backButtonLabel = "Back";
-        private static int _brewTemp = 212;
-        private static bool _isPageDirty;
-        private static TimeSpan _steepTime = TimeSpan.FromMinutes(2);
-        private static TeaModel _tea = new TeaModel(string.Empty, _steepTime, _brewTemp);
+        private string _name;
+        private string _backButtonLabel = "Back";
+        private int _brewTemp = 212;
+        private bool _isPageDirty;
+        private TimeSpan _steepTime = TimeSpan.FromMinutes(2);
+        private TeaModel _tea = new TeaModel(string.Empty);
+        private ILogger<EditViewModel> _logger;
         #endregion Private Fields
 
         #region Public Properties
@@ -104,7 +105,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <summary>
         /// Set the command to run when the Back button is selected.
         /// </summary>
-        public ICommand BackButtonCommand
+        public Command BackButtonCommand
         {
             get;
             private set;
@@ -113,7 +114,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <summary>
         /// Set the command to run when the 'Save' button is selected.
         /// </summary>
-        public ICommand SaveBtnPressed
+        public Command SaveBtnPressed
         {
             get;
             private set;
@@ -129,6 +130,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public EditViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
            : base(navigationService, displayService, sqlService, settingsService)
         {
+            _logger = loggerFactory.CreateLogger<EditViewModel>();
+            _logger.LogTrace("Constructor entered.");
             SaveBtnPressed = new Command(async () => await Save());
             BackButtonCommand = new Command(async () => await NavigateBack());
         }
