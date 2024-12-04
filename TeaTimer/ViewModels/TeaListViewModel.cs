@@ -18,7 +18,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
     public partial class TeaListViewModel : BaseViewModel
     {
         #region Private Fields
-        private bool _isBusy = false;
         private bool _isSelected = false;
         private bool _useCelsius = false;
         private IList _teas;
@@ -32,16 +31,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// degrees.
         /// </summary>
         public bool UseCelsius { get => _useCelsius; }
-
-        /// <summary>
-        /// Whether the page should be considered 'busy' the waiting symbol or
-        /// animation should be displayed.
-        /// </summary>
-        public bool IsBusy
-        {
-            get => _isBusy;
-            set => SetProperty(ref _isBusy, value);
-        }
 
         /// <summary>
         /// Whether a tea variety has been selected.
@@ -68,16 +57,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         {
             get => _selectedTea;
             set => SetProperty(ref _selectedTea, value);
-        }
-
-        /// <summary>
-        /// Refreshes the list of teas from the data provider and resets the
-        /// contents of the list.
-        /// </summary>
-        public Command RefreshList
-        {
-            get;
-            private set;
         }
 
         /// <summary>
@@ -121,7 +100,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         {
             _logger = loggerFactory.CreateLogger<TeaListViewModel>();
             _logger.LogTrace("Constructor entered.");
-            RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(async () => await AddTeaAsync());
             EditTeaCommand = new Command<TeaModel>(async (p) => await EditTea(p));
             DeleteTeaCommand = new Command<TeaModel>(async (p) => await DeleteTea(p));
@@ -132,11 +110,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Methods
         private async Task RefreshTeas(object sender, EventArgs args)
         {
-            IsBusy = true;
+            // IsBusy = true;
             try
             {
                 Teas = await SqlService.GetAsync();
-                SelectedTea = Teas[0] as TeaModel;
             }
             catch (TeaSqlException ex)
             {
@@ -145,10 +122,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             catch (Exception ex)
             {
                 await DisplayService.ShowExceptionAsync(ex);
-            }
-            finally
-            {
-                IsBusy = false;
             }
         }
 
@@ -210,7 +183,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
                 }
                 finally
                 {
-                    RefreshList.Execute(null);
+                    await RefreshTeas(this, EventArgs.Empty);
                     DisplayService.RefreshView();
                 }
             }
