@@ -29,6 +29,8 @@
         </Label>
         <Label x:Name="CountdownLabel"
                Text="{Binding CountdownLabel, StringFormat='{}{0:m\\:ss}'}"
+               FontFamily="SFMono"
+               FontSize="Title"
                HorizontalOptions="Center"
                HorizontalTextAlignment="Center"
                VerticalOptions="Start" />

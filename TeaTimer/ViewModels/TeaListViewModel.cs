@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.Exceptions;
 using com.mahonkin.tim.TeaDataService.DataModel;
@@ -24,7 +23,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         private bool _useCelsius = false;
         private IList _teas;
         private TeaModel _selectedTea;
-        private ILogger _logger;
+        private ILogger<TeaListViewModel> _logger;
         #endregion Private Fields
 
         #region Public Properties
@@ -75,7 +74,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// Refreshes the list of teas from the data provider and resets the
         /// contents of the list.
         /// </summary>
-        public ICommand RefreshList
+        public Command RefreshList
         {
             get;
             private set;
@@ -84,7 +83,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <summary>
         /// Displays the Add Tea page.
         /// </summary>
-        public ICommand AddTeaCommand
+        public Command AddTeaCommand
         {
             get;
             private set;
@@ -94,7 +93,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// Displays the Edit Tea page with the information from
         /// <see cref="SelectedTea"/>
         /// </summary>
-        public ICommand EditTeaCommand
+        public Command<TeaModel> EditTeaCommand
         {
             get;
             private set;
@@ -103,7 +102,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         /// <summary>
         /// Deletes the <see cref="SelectedTea" />
         /// </summary>
-        public ICommand DeleteTeaCommand
+        public Command<TeaModel> DeleteTeaCommand
         {
             get;
             private set;
@@ -120,11 +119,12 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         public TeaListViewModel(INavigationService navigationService, IDisplayService displayService, IDataService<TeaModel> sqlService, ISettingsService settingsService, ILoggerFactory loggerFactory)
             : base(navigationService, displayService, sqlService, settingsService)
         {
-            _logger = loggerFactory.CreateLogger(this.GetType().FullName);
+            _logger = loggerFactory.CreateLogger<TeaListViewModel>();
+            _logger.LogTrace("Constructor entered.");
             RefreshList = new Command(async () => await RefreshTeas(this, EventArgs.Empty));
             AddTeaCommand = new Command(async () => await AddTeaAsync());
-            EditTeaCommand = new Command(async (p) => await EditTea(p));
-            DeleteTeaCommand = new Command(async (p) => await DeleteTea(p));
+            EditTeaCommand = new Command<TeaModel>(async (p) => await EditTea(p));
+            DeleteTeaCommand = new Command<TeaModel>(async (p) => await DeleteTea(p));
             NavigationService.ShellNavigated += async (sender, args) => await RefreshTeas(sender, args);
         }
         #endregion Constructors
