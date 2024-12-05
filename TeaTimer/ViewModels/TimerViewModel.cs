@@ -110,6 +110,20 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         }
         #endregion Constructor
 
+        #region Public Methods
+        public void ToggleTeaListNavigation(bool enabled)
+        {
+            IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
+                {
+                    enumerator.Current.IsEnabled = enabled;
+                }
+            }
+        }
+        #endregion Public Methods
+
         #region Private Methods
         private async Task RefreshTeas()
         {
@@ -214,22 +228,10 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
-        private static void ToggleTeaListNavigation(bool enabled)
-        {
-            IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                if (enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
-                {
-                    enumerator.Current.IsEnabled = enabled;
-                }
-            }
-        }
-
         private async Task ShellNavigated(object sender, EventArgs args)
         {
             ShellNavigatedEventArgs navArgs = args as ShellNavigatedEventArgs;
-            _logger.LogDebug($"Shell navigation completed. {navArgs.Previous.Location} to {navArgs.Current.Location} for {navArgs.Source}");
+            _logger.LogDebug($"Shell navigation completed. {navArgs?.Previous?.Location} to {navArgs?.Current?.Location} for {navArgs?.Source}");
             Page currentPage = ((AppShell)sender).CurrentPage ?? (AppShell)sender;
             if (currentPage.GetType().IsAssignableTo(typeof(Pages.TimerPage)))
             {

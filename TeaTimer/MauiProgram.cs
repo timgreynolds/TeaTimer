@@ -32,16 +32,14 @@ public static class MauiProgram
             fonts.AddFont("SF-Pro.ttf", "SFPro")
                 .AddFont("SF-Compact.ttf", "SFCompact")
                 .AddFont("SF-Mono-Regular.otf", "SFMono");
-        })
-        .ConfigureLifecycleEvents(events =>
-        {
-#if IOS || MACCATALYST
-            events.AddiOS(ios => ios
-                .OnActivated(MacEvents.OnActivatedEvent)
-            );
-#endif
         });
 
+#if IOS || MACCATALYST
+        builder.ConfigureLifecycleEvents(events =>
+            events.AddiOS(ios => ios
+                .OnActivated(MacEvents.OnActivatedEvent)
+            ));
+#endif
         await builder.Configuration.AddAppSettings();
 
         builder.Services

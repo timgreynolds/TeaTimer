@@ -11,6 +11,7 @@
     <StackLayout VerticalOptions="FillAndExpand"
                  BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
         <ListView VerticalOptions="FillAndExpand"
+                  SeparatorVisibility="None"
                   ItemsSource="{Binding Teas}"
                   CachingStrategy="RecycleElement"
                   SelectionMode="Single"
@@ -28,10 +29,12 @@
                     </Grid.ColumnDefinitions>
                     <Label Text="Tea Name"
                            Padding="10"
+                           FontSize="16"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="0" />
                     <Label Text=""
+                           FontSize="16"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="1">
@@ -51,6 +54,7 @@
                         </Label.Triggers>
                     </Label>
                     <Label Text="Steep Time"
+                           FontSize="16"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="2" />
