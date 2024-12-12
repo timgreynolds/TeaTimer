@@ -110,7 +110,6 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
         #region Private Methods
         private async Task RefreshTeas(object sender, EventArgs args)
         {
-            // IsBusy = true;
             try
             {
                 Teas = await SqlService.GetAsync();

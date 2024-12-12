@@ -6,10 +6,8 @@
         <OutputType>Exe</OutputType>
         <RootNamespace>com.mahonkin.tim.maui.TeaTimer</RootNamespace>
         <UseMaui>true</UseMaui>
-        <!--
         <SkipValidateMauiImplicitPackageReferences>false</SkipValidateMauiImplicitPackageReferences>
         <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
-        -->
         <SingleProject>true</SingleProject>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
