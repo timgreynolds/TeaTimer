@@ -39,7 +39,7 @@ public class AppDelegate : MauiUIApplicationDelegate
 
         builder.InsertChildMenuAtStart(teasMenu, UIMenuIdentifier.Edit.GetConstant());
 
-        base.BuildMenu(builder);
+        builder.System.SetNeedsRebuild();
     }
 
     public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
@@ -47,7 +47,7 @@ public class AppDelegate : MauiUIApplicationDelegate
         LoadDefaultPrefs();
         _observer = NSNotificationCenter.DefaultCenter.AddObserver((NSString)"NSUserDefaultsDidChangeNotification", (n) => DefaultsChanged());
         DefaultsChanged();
-        
+
         return base.FinishedLaunching(application, launchOptions);
     }
 
@@ -124,6 +124,6 @@ public class AppDelegate : MauiUIApplicationDelegate
         TeaSettingsService.SettingsChanged();
     }
 
-     /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+    /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp().Result;
 }

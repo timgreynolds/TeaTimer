@@ -1,4 +1,5 @@
 ﻿using System;
+using com.mahonkin.tim.logging;
 using com.mahonkin.tim.maui.TeaTimer.Platforms.iOS;
 using com.mahonkin.tim.maui.TeaTimer.ViewModels;
 using Foundation;
@@ -19,10 +20,15 @@ public class AppDelegate : MauiUIApplicationDelegate
     private TimeSpan _timeLeft = TimeSpan.Zero;
     private DateTime _backgroundedTime = DateTime.MinValue;
     private object _currentBindingContext;
+    private nint _logPtr = OSLogger.Create(typeof(TeaTimerApp).FullName, typeof(AppDelegate).FullName);
     #endregion Private Fields
 
     /// <inheritdoc cref="MauiProgram.CreateMauiApp()"/>
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+    protected override MauiApp CreateMauiApp()
+    {
+        OSLogger.LogTrace(_logPtr, "Creating MauiApp instance.");
+        return MauiProgram.CreateMauiApp().Result;
+    }
 
     /// <summary>
     /// Method that is run when the app enters the background. 
@@ -36,6 +42,7 @@ public class AppDelegate : MauiUIApplicationDelegate
     /// </remarks>
     public override void DidEnterBackground(UIApplication application)
     {
+        OSLogger.LogTrace(_logPtr, "Application did enter background.");
         base.DidEnterBackground(application);
 
         _backgroundedTime = DateTime.UtcNow;
@@ -46,6 +53,7 @@ public class AppDelegate : MauiUIApplicationDelegate
             if (((TimerViewModel)_currentBindingContext).IsTimerRunning)
             {
                 _timeLeft = ((TimerViewModel)_currentBindingContext).CountdownLabel;
+                OSLogger.LogInformation(_logPtr, $"Active timer countdown entering background at {_backgroundedTime.ToString("MM/dd/yy HH:mm:ss.fff")} with {_timeLeft.Minutes.ToString("D2")}:{_timeLeft.Seconds.ToString("D2")} remaining.");
             }
         }
     }
@@ -61,6 +69,7 @@ public class AppDelegate : MauiUIApplicationDelegate
     /// </remarks>
     public override void WillEnterForeground(UIApplication application)
     {
+        OSLogger.LogTrace(_logPtr, "Application will enter foreground.");
         base.WillEnterForeground(application);
 
         DateTime awakeTime = DateTime.UtcNow;
@@ -70,14 +79,18 @@ public class AppDelegate : MauiUIApplicationDelegate
         {
             if (((TimerViewModel)_currentBindingContext).IsTimerRunning)
             {
+                OSLogger.LogInformation(_logPtr, $"Active timer countdown entering foreground at {awakeTime.ToString("MM/dd/yy HH:mm:ss.fff")} after {elapsedTime.Hours}:{elapsedTime.Minutes.ToString("D2")}:{elapsedTime.Seconds.ToString("D2")}.");
                 if (elapsedTime < _timeLeft)
                 {
+                    OSLogger.LogInformation(_logPtr, $"Timer is still running.");
                     ((TimerViewModel)_currentBindingContext).CountdownLabel = _timeLeft.Subtract(elapsedTime);
                 }
                 else
                 {
+                    OSLogger.LogInformation(_logPtr, $"Timer expired; resetting user interface.");
                     ((TimerViewModel)_currentBindingContext).SelectedTea = null;
                     ((TimerViewModel)_currentBindingContext).IsButtonEnabled = false;
+                    ((TimerViewModel)_currentBindingContext).ToggleTeaListNavigation(true);
                 }
             }
         }
@@ -86,13 +99,15 @@ public class AppDelegate : MauiUIApplicationDelegate
     /// <inheritdoc cref="MauiUIApplicationDelegate.WillFinishLaunching(UIApplication, NSDictionary)"/>
     public override bool WillFinishLaunching(UIApplication application, NSDictionary launchOptions)
     {
+        OSLogger.LogTrace(_logPtr, "Application will finish launching.");
         UNUserNotificationCenter.Current.Delegate = new NotificationCenterDelegate();
         return base.WillFinishLaunching(application, launchOptions);
     }
 
+    /// <inheritdoc cref="MauiUIApplicationDelegate.FinishedLaunching(UIApplication, NSDictionary)"/>
     public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
     {
+        OSLogger.LogTrace(_logPtr, "Application did finish launching.");
         return base.FinishedLaunching(application, launchOptions);
     }
 }
-

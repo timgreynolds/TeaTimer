@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Exceptions;
@@ -86,8 +85,8 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
-        /// <inheritdoc cref="ICommand"/>
-        public ICommand TimerButtonPressed
+        /// <inheritdoc cref="Command"/>
+        public Command TimerButtonPressed
         {
             get;
             private set;
@@ -100,6 +99,7 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             : base(navigationService, displayService, sqlService, settingsService)
         {
             _logger = loggerFactory.CreateLogger(typeof(TimerViewModel).FullName);
+            _logger.LogTrace("Constructor entered.");
             _timerService = timerService;
             _timerService.CreateTimer();
             _timerService.Interval = TimeSpan.FromSeconds(1);
@@ -109,6 +109,20 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             NavigationService.ShellNavigated += async (sender, args) => await ShellNavigated(sender, args);
         }
         #endregion Constructor
+
+        #region Public Methods
+        public void ToggleTeaListNavigation(bool enabled)
+        {
+            IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
+                {
+                    enumerator.Current.IsEnabled = enabled;
+                }
+            }
+        }
+        #endregion Public Methods
 
         #region Private Methods
         private async Task RefreshTeas()
@@ -214,24 +228,15 @@ namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
             }
         }
 
-        private static void ToggleTeaListNavigation(bool enabled)
-        {
-            IEnumerator<ShellSection> enumerator = AppShell.Current.Items[0].Items.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                if (enumerator.Current.Route.Equals(nameof(Pages.TeaListPage)))
-                {
-                    enumerator.Current.IsEnabled = enabled;
-                }
-            }
-        }
-
         private async Task ShellNavigated(object sender, EventArgs args)
         {
+            ShellNavigatedEventArgs navArgs = args as ShellNavigatedEventArgs;
+            _logger.LogDebug($"Shell navigation completed. {navArgs?.Previous?.Location} to {navArgs?.Current?.Location} for {navArgs?.Source}");
             Page currentPage = ((AppShell)sender).CurrentPage ?? (AppShell)sender;
             if (currentPage.GetType().IsAssignableTo(typeof(Pages.TimerPage)))
             {
                 currentPage.IsBusy = true;
+
                 try
                 {
                     await RefreshTeas();

@@ -1,22 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:com.mahonkin.tim.maui.TeaTimer.Converters"
              xmlns:viewmodels="clr-namespace:com.mahonkin.tim.maui.TeaTimer.ViewModels"
              xmlns:datamodel="clr-namespace:com.mahonkin.tim.TeaDataService.DataModel;assembly=TeaDataService"
-             x:DataType="viewmodels:TeaListViewModel"
              x:Class="com.mahonkin.tim.maui.TeaTimer.Pages.TeaListPage"
+             x:DataType="viewmodels:TeaListViewModel"
              Title="Tea List"
              BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
-    <StackLayout x:Name="MainLayout"
-                 VerticalOptions="FillAndExpand"
+    <StackLayout VerticalOptions="FillAndExpand"
                  BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}">
-        <ListView x:Name="TeaListView"
-                  VerticalOptions="FillAndExpand"
+        <ListView VerticalOptions="FillAndExpand"
+                  SeparatorVisibility="None"
                   ItemsSource="{Binding Teas}"
-                  IsPullToRefreshEnabled="True"
-                  RefreshCommand="{Binding RefreshList}"
-                  IsRefreshing="{Binding IsBusy}"
                   CachingStrategy="RecycleElement"
                   SelectionMode="Single"
                   SelectedItem="{Binding SelectedTea}">
@@ -32,15 +28,13 @@
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
                     <Label Text="Tea Name"
-                           TextColor="White"
-                           FontFamily="OpenSansRegular"
                            Padding="10"
+                           FontSize="16"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="0" />
                     <Label Text=""
-                           TextColor="White"
-                           FontFamily="OpenSansRegular"
+                           FontSize="16"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="1">
@@ -48,18 +42,19 @@
                             <DataTrigger TargetType="Label"
                                          Binding="{Binding UseCelsius}"
                                          Value="True">
-                                <Setter Property="Text" Value="Brew Temp &#x2103;" />
+                                <Setter Property="Text"
+                                        Value="Brew Temp ℃" />
                             </DataTrigger>
                             <DataTrigger TargetType="Label"
                                          Binding="{Binding UseCelsius}"
                                          Value="False">
-                                <Setter Property="Text" Value="Brew Temp &#x2109;" />
+                                <Setter Property="Text"
+                                        Value="Brew Temp ℉" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
                     <Label Text="Steep Time"
-                           TextColor="White"
-                           FontFamily="OpenSansRegular"
+                           FontSize="16"
                            VerticalTextAlignment="Center"
                            HorizontalTextAlignment="Start"
                            Grid.Column="2" />
@@ -75,23 +70,17 @@
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
                             <Label Text="{Binding Name}"
-                                   TextColor="White"
-                                   FontFamily="OpenSansRegular"
                                    Padding="10,10"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="0" />
                             <Label Text="{Binding BrewTemp, Converter={StaticResource TemperatureConverter}, StringFormat='{}{0:D}'}"
-                                   TextColor="White"
-                                   FontFamily="OpenSansRegular"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
                                    Grid.Column="1" />
                             <Label Text="{Binding SteepTime, Converter={StaticResource TimespanConverter}, StringFormat='{}{0:m\\:ss}'}"
-                                   TextColor="White"
-                                   FontFamily="OpenSansRegular"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="FillAndExpand"
                                    HorizontalTextAlignment="Start"
@@ -99,26 +88,27 @@
                         </Grid>
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
-                                      Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.EditTeaCommand}"
+                                      IsDestructive="false"
+                                      Command="{Binding Path=EditTeaCommand, Source={RelativeSource AncestorType={x:Type viewmodels:TeaListViewModel}}, x:DataType=viewmodels:TeaListViewModel}"
                                       CommandParameter="{Binding .}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
-                                      Command="{Binding Source={x:Reference TeaListView}, Path=BindingContext.DeleteTeaCommand}"
+                                      Command="{Binding Path=DeleteTeaCommand, Source={RelativeSource AncestorType={x:Type viewmodels:TeaListViewModel}}, x:DataType=viewmodels:TeaListViewModel}"
                                       CommandParameter="{Binding .}" />
                         </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.Footer>
-            <StackLayout>
-                <ImageButton x:Name="AddTeaBtn"
-                             x:DataType="viewmodels:TeaListViewModel"
-                             Margin="20,0"
-                             Source="add_icon_dk.png"
-                             VerticalOptions="End"
-                             HorizontalOptions="End"
-                             Command="{Binding AddTeaCommand}" />
-            </StackLayout>
+                <StackLayout>
+                    <ImageButton x:Name="AddTeaBtn"
+                                 x:DataType="viewmodels:TeaListViewModel"
+                                 Margin="20,0"
+                                 Source="add_icon_dk.png"
+                                 VerticalOptions="End"
+                                 HorizontalOptions="End"
+                                 Command="{Binding AddTeaCommand}" />
+                </StackLayout>
             </ListView.Footer>
         </ListView>
     </StackLayout>

@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using com.mahonkin.tim.maui.TeaTimer.Services;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
-using Microsoft.Extensions.Logging;
 
 namespace com.mahonkin.tim.maui.TeaTimer.ViewModels
 {

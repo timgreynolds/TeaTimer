@@ -1,8 +1,9 @@
-using com.mahonkin.tim.logging.UnifiedLogging.Extensions;
+using System.IO;
+using System.Threading.Tasks;
+using com.mahonkin.tim.extensions.Logging;
 using com.mahonkin.tim.maui.TeaTimer.Utilities;
 using com.mahonkin.tim.TeaDataService.DataModel;
 using com.mahonkin.tim.TeaDataService.Services;
-using com.mahonkin.tim.TeaDataService.Services.TeaSqLiteService;
 using Foundation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Controls.Xaml;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
+using Microsoft.Maui.Storage;
 using UIKit;
 
 namespace com.mahonkin.tim.maui.TeaTimer;
@@ -21,26 +23,24 @@ namespace com.mahonkin.tim.maui.TeaTimer;
 [XamlCompilation(XamlCompilationOptions.Compile)]
 public static class MauiProgram
 {
-    public static MauiApp CreateMauiApp()
+    public static async Task<MauiApp> CreateMauiApp()
     {
         MauiAppBuilder builder = MauiApp.CreateBuilder()
         .UseMauiApp<TeaTimerApp>()
         .ConfigureFonts(fonts =>
         {
-            fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular")
-                 .AddFont("OpenSans-Semibold.ttf", "OpenSansSemiBold")
-                 .AddFont("Stencil.ttf", "Stencil");
-        })
-        .ConfigureLifecycleEvents(events =>
-        {
-#if IOS || MACCATALYST
-            events.AddiOS(ios => ios
-                .OnActivated(MacEvents.OnActivatedEvent)
-            );
-#endif
+            fonts.AddFont("SF-Pro.ttf", "SFPro")
+                .AddFont("SF-Compact.ttf", "SFCompact")
+                .AddFont("SF-Mono-Regular.otf", "SFMono");
         });
 
-        builder.Configuration.AddAppSettings();
+#if IOS || MACCATALYST
+        builder.ConfigureLifecycleEvents(events =>
+            events.AddiOS(ios => ios
+                .OnActivated(MacEvents.OnActivatedEvent)
+            ));
+#endif
+        await builder.Configuration.AddAppSettings();
 
         builder.Services
             .AddPages()
@@ -51,15 +51,23 @@ public static class MauiProgram
             .ClearProviders()
             .AddConfiguration(builder.Configuration.GetSection("Logging"))
 #if IOS || MACCATALYST
-            .AddUnifiedLogger(o =>
+            .AddUnifiedLogger(opts =>
             {
-                o.Subsystem = NSBundle.MainBundle.BundleIdentifier;
+                if (string.IsNullOrEmpty(NSBundle.MainBundle.BundleIdentifier))
+                {
+                    opts.Subsystem = typeof(TeaTimerApp).FullName; //NSBundle.MainBundle.PrincipalClass.GetType().FullName;
+                }
+                else
+                {
+                    opts.Subsystem = NSBundle.MainBundle.BundleIdentifier;
+                }
             })
 #endif
             .AddConsole()
             .AddDebug();
 
         MauiApp app = builder.Build();
+        InitDatabase(app.Services.GetRequiredService<IDataService<TeaModel>>());
         return app;
     }
 
@@ -89,17 +97,36 @@ public static class MauiProgram
         return serviceCollection;
     }
 
-    private static IConfigurationBuilder AddAppSettings(this IConfigurationBuilder builder)
+    private static async Task<IConfigurationBuilder> AddAppSettings(this IConfigurationBuilder builder)
     {
-        if (FileSystemUtils.AppDataFileExists("appsettings.json") == false)
-        {
-            FileSystemUtils.CopyBundleAppDataResource("appsettings.json").Wait();
-            builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
-        }
-        else
-        {
-            builder.AddJsonFile(FileSystemUtils.GetAppDataFileFullName("appsettings.json"));
-        }
+        Stream stream = await FileSystem.Current.OpenAppPackageFileAsync("appsettings.json");
+        builder.AddJsonStream(stream);
         return builder;
+    }
+
+    private static void InitDatabase(IDataService<TeaModel> sqlService)
+    {
+        if (FileSystemUtils.AppDataFileExists("kettle.mp3") == false)
+        {
+            FileSystemUtils.CopyBundleAppDataResource("kettle.mp3");
+        }
+
+        string dbFile = "TeaVarieties.db3";
+        try
+        {
+            if (FileSystemUtils.AppDataFileExists(dbFile))
+            {
+                sqlService.Initialize(FileSystemUtils.GetAppDataFileFullName(dbFile));
+            }
+            else
+            {
+                FileSystemUtils.CopyBundleAppDataResource(dbFile);
+                sqlService.Initialize(FileSystemUtils.GetAppDataFileFullName(dbFile));
+            }
+        }
+        catch (System.Exception ex)
+        {
+            throw new System.Exception(ex.Message, ex);
+        }
     }
 }
