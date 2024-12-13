@@ -89,11 +89,11 @@
                         <ViewCell.ContextActions>
                             <MenuItem Text="Edit"
                                       IsDestructive="false"
-                                      Command="{Binding EditTeaCommand, x:DataType=viewmodels:TeaListViewModel}"
+                                      Command="{Binding Path=EditTeaCommand, Source={RelativeSource AncestorType={x:Type viewmodels:TeaListViewModel}}, x:DataType=viewmodels:TeaListViewModel}"
                                       CommandParameter="{Binding .}" />
                             <MenuItem Text="Delete"
                                       IsDestructive="True"
-                                      Command="{Binding DeleteTeaCommand, x:DataType=viewmodels:TeaListViewModel}"
+                                      Command="{Binding Path=DeleteTeaCommand, Source={RelativeSource AncestorType={x:Type viewmodels:TeaListViewModel}}, x:DataType=viewmodels:TeaListViewModel}"
                                       CommandParameter="{Binding .}" />
                         </ViewCell.ContextActions>
                     </ViewCell>
